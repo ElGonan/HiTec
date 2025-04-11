@@ -12,3 +12,8 @@
 4. Eliminar inscripcion
 5. Recibir resultados u horario
 
+### RESTRICCIONES ###
+1. Al inscribirse 40 alumnos, se debe cerrar la clase
+2. El alumno podrá entrar y editar su selección de clases
+3. El alumno podrá inscribirse a un total de 8 clases <- Falta confirmación de Sven.
+
