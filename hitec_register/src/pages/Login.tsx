@@ -17,8 +17,8 @@ const Login = () => {
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
-        if (!strPhone) {
-            alert("Favor de llenar el valor de telefono")
+        if (!strPhone || strPhone.toString().length !== 10) {
+            alert("Favor de llenar el valor de telefono, los telefonos tienen 10 digitos")
             return
         }
         const alumno_phone = Number(strPhone)
@@ -27,12 +27,13 @@ const Login = () => {
             alert("El teléfono no es válido")
             return
         }
+
         const { data, error } = await supabaseGet("alumno", "alumno_phone", alumno_phone)
         if (error) {
             alert(error.message)
             return
         }
-        if (!data || data.length === 0) {
+        if (!data || data.length === 0) {  
             if (window.confirm("No se encontró el número de teléfono \n¿Deseas registrarte?")) {
                 navigate("/register?phone=" + strPhone);
             }
@@ -53,7 +54,7 @@ useEffect(() => {
             <div>
                 <h2>Por favor, ingresa con tu número de teléfono</h2>
                 <form onSubmit={handleSubmit}>
-                    <input type="string" placeholder="xxx-xxx-xxxx" name="phone" value={strPhone || ''} onChange={handleInputChange}></input>
+                    <input type="number" placeholder="xxx-xxx-xxxx" name="phone" value={strPhone || ''} onChange={handleInputChange} ></input>
                     <br></br> <br></br>
                     <button type="submit">Enviar datos</button>
                 </form>

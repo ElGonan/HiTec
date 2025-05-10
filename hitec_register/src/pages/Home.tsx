@@ -50,9 +50,12 @@ useEffect(() => {
             <div>
             <select>
                 <option value="">Selecciona una clase</option>
-                {data?.map((Class, index) => (
+ {data?.map((Class, index) => (
                     <option key={`${Class.clase_id}-${index}`} value={Class.clase_id}>
-                        {Class.nombre_clase}
+                    profesor: {Class.instructor} <br></br>
+                        nombre de la clase: {Class.nombre_clase} <br></br>
+                        fecha y hora: {Class.fecha_hora} <br></br>
+                        capacidad de la clase: {Class.capacidad_clase} <br></br>
                     </option>
                 ))}
 
@@ -60,9 +63,12 @@ useEffect(() => {
             <br></br>
             <select>
                <option value="">Selecciona una clase</option>
-                {data?.map((Class, index) => (
+ {data?.map((Class, index) => (
                     <option key={`${Class.clase_id}-${index}`} value={Class.clase_id}>
-                        {Class.nombre_clase}
+                    profesor: {Class.instructor} <br></br>
+                        nombre de la clase: {Class.nombre_clase} <br></br>
+                        fecha y hora: {Class.fecha_hora} <br></br>
+                        capacidad de la clase: {Class.capacidad_clase} <br></br>
                     </option>
                 ))}
 
@@ -70,9 +76,12 @@ useEffect(() => {
             <br></br>
             <select>
                <option value="">Selecciona una clase</option>
-                {data?.map((Class, index) => (
+    {data?.map((Class, index) => (
                     <option key={`${Class.clase_id}-${index}`} value={Class.clase_id}>
-                        {Class.nombre_clase}
+                    profesor: {Class.instructor} <br></br>
+                        nombre de la clase: {Class.nombre_clase} <br></br>
+                        fecha y hora: {Class.fecha_hora} <br></br>
+                        capacidad de la clase: {Class.capacidad_clase} <br></br>
                     </option>
                 ))}
 
@@ -80,30 +89,30 @@ useEffect(() => {
             <br></br>
             <select>
                <option value="">Selecciona una clase</option>
-                {data?.map((Class, index) => (
+         {data?.map((Class, index) => (
                     <option key={`${Class.clase_id}-${index}`} value={Class.clase_id}>
-                        {Class.instructor}
-                        {Class.nombre_clase}
-                        {Class.fecha_hora}
-                        {Class.capacidad_clase}
+                    profesor: {Class.instructor} <br></br>
+                        nombre de la clase: {Class.nombre_clase} <br></br>
+                        fecha y hora: {Class.fecha_hora} <br></br>
+                        capacidad de la clase: {Class.capacidad_clase} <br></br>
                     </option>
                 ))}
-
             </select>
             <br></br>
             <select>
                <option value="">Selecciona una clase</option>
-                {data?.map((Class, index) => (
+               {data?.map((Class, index) => (
                     <option key={`${Class.clase_id}-${index}`} value={Class.clase_id}>
-                        {Class.nombre_clase}
+                    profesor: {Class.instructor} <br></br>
+                        nombre de la clase: {Class.nombre_clase} <br></br>
+                        fecha y hora: {Class.fecha_hora} <br></br>
+                        capacidad de la clase: {Class.capacidad_clase} <br></br>
                     </option>
                 ))}
             </select>
             <br></br>
             <br></br>
             <button onClick={handleSubmit}>Inscribirme a clase</button>
-            </div>
-            <div className="Alumnos">
             </div>
         </div>
         </>

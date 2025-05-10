@@ -1,8 +1,5 @@
 import supabase from '../supabase/supabaseClient'
 import { useEffect, useState } from 'react'
-import useSupabaseRead from '../hooks/useSupabaseRead'
-import { PostgrestError } from '@supabase/supabase-js'
-
 
 
 const RegisterClass = () => {
@@ -52,7 +49,12 @@ const RegisterClass = () => {
     if(data)
     {
       alert("Clase creada correctamente")
-
+      setInstructor("")
+        setFecha("")
+        setHora("")
+        setCapacidad(0)
+        setNombre("")
+        return
     }
 
   }
@@ -71,9 +73,9 @@ useEffect(() => {
         <h3>Nombre del instructor:</h3>
         <input type="text" id="instructor_name" name="instructor_name" value={instructor} onChange={(e) => setInstructor(e.target.value)} placeholder='Osito Snev'></input>
         <h3>Fecha de la clase:</h3>
-        <input type="date" id="fecha_hora" name="fecha_hora" value={fecha} onChange={(e) => setFecha(e.target.value)} placeholder='500'></input>
+        <input type="date" id="fecha" name="fecha" value={fecha} onChange={(e) => setFecha(e.target.value)} placeholder='30/03/2003'></input>
         <h3>Hora de la clase:</h3>
-        <input type="time" id="hora_clase" name="hora_clase" value={hora} onChange={(e) => setHora(e.target.value)} placeholder='500'></input>
+        <input type="time" id="hora" name="hora" value={hora} onChange={(e) => setHora(e.target.value)} placeholder='15:50'></input>
         <h3>Capacidad de la clase:</h3>
         <input type="text" id="capacidad_clase" name="capacidad_clase" value={capacidad_clase} onChange={(e) => setCapacidad(Number(e.target.value))} placeholder='5132'></input>
         <h3>Nombre de la clase:</h3>
