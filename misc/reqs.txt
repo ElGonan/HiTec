@@ -1,12 +1,12 @@
 ### ADMIN ###
-1. Crear clase
+1. Crear clase ✅ 
 2. Eliminar clase
 3. Editar clase
 4. Iniciar sesion 
 5. Exportar todas las clases y sus inscripciones a CSV o a Excel
 
 ### ALUMNO ###
-1. Iniciar sesion
+1. Iniciar sesion ✅ 
 2. Inscribirse a clase
 3. Editar inscripcion
 4. Eliminar inscripcion

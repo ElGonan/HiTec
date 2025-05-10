@@ -5,6 +5,7 @@ import Test from './pages/Test'
 import Terms from './pages/Terms'
 import Home from './pages/Home'
 import RegisterClass from './pages/RegisterClass'
+import RegisterUser from './pages/RegisterUser'
 
 function App() {
 
@@ -18,6 +19,7 @@ function App() {
           <Route path="/terms" element={<Terms />} />
           <Route path="/home" element={<Home />} />
           <Route path="/registerClass" element={<RegisterClass />} />
+          <Route path="/register" element={<RegisterUser />} />
         </Routes>
       </Router>
     </>
