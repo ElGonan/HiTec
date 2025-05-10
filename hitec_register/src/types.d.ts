@@ -1,7 +1,7 @@
 type Student = {
-    id : number
-    name : string
-    phone : number
+    //id : number
+    alumno_name : string
+    alumno_phone : number
 }
 
 type Class = {
