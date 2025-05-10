@@ -1,3 +1,26 @@
+import supabase from './supabase/supabaseClient'
+
+const App = () => {
+
+  console.log(supabase)
+
+  return(
+
+    <div>
+      <h1>Hitec Register</h1>
+      <p>Welcome to the Hitec Register app!</p>
+      <p>Check the console for Supabase client details.</p>
+    </div>
+
+  )
+
+}
+export default App
+
+
+// Just while I do testing, I'll comment the whole page out
+
+/*
 import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
@@ -33,3 +56,4 @@ function App() {
 }
 
 export default App
+*/
