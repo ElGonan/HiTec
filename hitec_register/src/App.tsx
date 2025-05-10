@@ -1,32 +1,17 @@
 import supabase from './supabase/supabaseClient'
 import { useEffect, useState } from 'react'
+import useSupabaseRead from './hooks/useSupabaseRead'
 import { PostgrestError } from '@supabase/supabase-js'
 
 
 
 const App = () => {
-  const [error, setError] = useState<PostgrestError | null | String>(null)
-  const [data, setData] = useState<any[] | null>(null)
+  const [error, setError] = useState<PostgrestError | null | string>(null)
   const [clases, setClases] = useState<any[] | null>(null)
   const [alumno_name, setName] = useState<string>("")
   const [strPhone, setStrPhone] = useState<string>("")
   const [alumno_phone, setPhone] = useState<number>(0)
 
-  const fetchData = async () => {
-    const { data, error } = await supabase
-      .from('alumno')
-      .select()
-  
-      if (error) {
-        setError(error)
-        setData(null)
-        console.error('Error fetching data:', error)
-      }
-      if (data) {
-        setData(data)
-        setError(null)
-      }
-  }
 
   const fetchClases = async () => {
     const { data, error } = await supabase
@@ -61,12 +46,12 @@ const App = () => {
       setError("Teléfono inválido")
       return
     }
+    setPhone(parsedPhone)
 
     setError(null)
 
-    setPhone(parsedPhone)
-
-    const estudiante: Student = { alumno_name, alumno_phone: parsedPhone}
+   
+    const estudiante: Student = { alumno_name, alumno_phone}
 
 
     console.log(estudiante)
@@ -95,11 +80,11 @@ const App = () => {
 
   }
 
+  const {data} = useSupabaseRead('alumnos')
+
 
 useEffect(() => {
-
-fetchClases(),
-fetchData()
+fetchClases()
   }, [])
 
   return(
@@ -133,11 +118,11 @@ fetchData()
         <div>
         {error && (<h2>Error: {error?.toString()}</h2>)}        
       </div>
+      <label>phone: </label>
+        <input type="text" id="Student_phone" name="phone" value={strPhone} onChange={(e) => setStrPhone(e.target.value)}></input>
+        <br></br>
         <label>Full name: </label>
         <input type="text" id="Student_name" name="Nombre" value={alumno_name} onChange={(e) => setName(e.target.value)}></input>
-        <br></br>
-        <label>phone: </label>
-        <input type="text" id="Student_phone" name="phone" value={strPhone} onChange={(e) => setStrPhone(e.target.value)}></input>
         <br></br>
         <button onClick={(e) => addStudent(e)}>Enviar datos</button>
       
