@@ -1,11 +1,12 @@
 import supabase from '../supabase/supabaseClient'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { PostgrestError } from '@supabase/supabase-js'
 
 const useSupabaseRead = (table: string) => {
   const [error, setError] = useState<PostgrestError | null>(null)
-  const [data, setData] = useState<any[] | null>(null)
+  const [data, setData] = useState<Student[] | null>(null)
 
+  useEffect(() => {
   const fetchData = async () => {
     const { data, error } = await supabase
       .from(table)
@@ -22,8 +23,10 @@ const useSupabaseRead = (table: string) => {
       setError(null)
     }
   }
-
-  return { data, error, fetchData }
+  fetchData()
+  },[table])
+  
+  return { data, error }
 }
 
   export default useSupabaseRead
