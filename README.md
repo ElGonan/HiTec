@@ -13,3 +13,4 @@ npm
 dotenv
 supabase-js
 postgres
+react-router-dom
