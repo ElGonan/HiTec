@@ -1,13 +1,13 @@
 type Student = {
-    id : number 
+    alumno_id : number 
     alumno_name : string
     alumno_phone : number
 }
 
 type Class = {
-    id : number
+    clase_id : number
     instructor : string
-    date : string
-    capacity : number
-    className : string
+    fecha_hora : string
+    capacidad_clase : number
+    nombre_clase : string
 }

@@ -34,11 +34,11 @@ const Login = () => {
         }
         if (!data || data.length === 0) {
             if (window.confirm("No se encontró el número de teléfono \n¿Deseas registrarte?")) {
-                navigate("/register");
+                navigate("/register?phone=" + strPhone);
             }
         }
         else{
-            console.log("Data fetched successfully:", data)
+            navigate("home?phone=" + strPhone);
         }
         }
 

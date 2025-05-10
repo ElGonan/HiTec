@@ -2,9 +2,9 @@ import supabase from '../supabase/supabaseClient'
 import { useEffect, useState } from 'react'
 import { PostgrestError } from '@supabase/supabase-js'
 
-const useSupabaseRead = (table: string) => {
-  const [error, setError] = useState<PostgrestError | null>(null)
-  const [data, setData] = useState<Student[] | null>(null)
+const useSupabaseRead = <T,>(table: string): { data: T[] | null; error: PostgrestError | null } => {
+   const [error, setError] = useState<PostgrestError | null>(null)
+    const [data, setData] = useState<T[] | null>(null)
 
   useEffect(() => {
   const fetchData = async () => {
