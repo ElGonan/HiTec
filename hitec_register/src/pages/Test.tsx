@@ -95,7 +95,7 @@ fetchClases()
       <p>Check the console for Supabase client details.</p>
       <div className="Alumnos">
         {data?.map((alumno, index) => (
-          <div key={`${alumno.id}-${index}`}>
+          <div key={`${alumno.alumno_id}-${index}`}>
             <p>Nombre del alumno: {alumno.alumno_name}</p>
             <p>Teléfono del alumno: {alumno.alumno_phone}</p>
           </div>

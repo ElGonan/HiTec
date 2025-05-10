@@ -3,7 +3,8 @@ import Login from './pages/Login'
 import './App.css'
 import Test from './pages/Test'
 import Terms from './pages/Terms'
-
+import Home from './pages/Home'
+import RegisterClass from './pages/RegisterClass'
 
 function App() {
 
@@ -13,8 +14,10 @@ function App() {
       <Router>
         <Routes>
           <Route path="/" element={<Login />} />
-          <Route path="test" element={<Test />} />
-          <Route path="terms" element={<Terms />} />
+          <Route path="/test" element={<Test />} />
+          <Route path="/terms" element={<Terms />} />
+          <Route path="/home" element={<Home />} />
+          <Route path="/registerClass" element={<RegisterClass />} />
         </Routes>
       </Router>
     </>
