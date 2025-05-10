@@ -5,9 +5,12 @@ import { PostgrestError } from '@supabase/supabase-js'
 
 
 const App = () => {
-  const [error, setError] = useState<PostgrestError | null>(null)
+  const [error, setError] = useState<PostgrestError | null | String>(null)
   const [data, setData] = useState<any[] | null>(null)
   const [clases, setClases] = useState<any[] | null>(null)
+  const [alumno_name, setName] = useState<string>("")
+  const [strPhone, setStrPhone] = useState<string>("")
+  const [alumno_phone, setPhone] = useState<number>(0)
 
   const fetchData = async () => {
     const { data, error } = await supabase
@@ -18,42 +21,86 @@ const App = () => {
         setError(error)
         setData(null)
         console.error('Error fetching data:', error)
-   }
-  
-   if (data) {
-     setData(data)
-     setError(null)
-     console.log('Data fetched successfully:', data)
-   }
+      }
+      if (data) {
+        setData(data)
+        setError(null)
+      }
   }
 
   const fetchClases = async () => {
-const { data, error } = await supabase
-.from('clase')
-.select()
+    const { data, error } = await supabase
+    .from('clase')
+    .select()
 
-if (error) {
-  setError(error)
-  setClases(null)
-  console.error('Error fetching data:', error)
-}
+    if (error) {
+      setError(error)
+      setClases(null)
+      console.error('Error fetching data:', error)
 
-if (data) {
-  setClases(data)
-  setError(null)
-  console.log('Data fetched successfully:', data)
-}
+    }
+
+    if (data) {
+      setClases(data)
+      setError(null)
+    }
+      }
+
+  const addStudent = async (e : any) => {
+    e.preventDefault()
+
+  
+    if (!alumno_name || !strPhone)
+    {
+      setError("Favor de llenar el valor de Nombre o telefono")
+      return
+    }
+
+    const parsedPhone = Number(strPhone)
+    if (isNaN(parsedPhone)) {
+      setError("Teléfono inválido")
+      return
+    }
+
+    setError(null)
+
+    setPhone(parsedPhone)
+
+    const estudiante: Student = { alumno_name, alumno_phone: parsedPhone}
+
+
+    console.log(estudiante)
+
+    const { data, error } = await supabase
+    .from("alumno")
+    .insert([estudiante])
+    .select()
+
+    if(error)
+    {
+      if(error.code = "400")
+      {
+        alert("Error en alguna regla!!")
+        return
+      }
+      alert(error.message)
+    }
+    
+    if(data)
+    {
+      alert("Alumno creado correctamente")
+      setName("")
+      setStrPhone("")   
+    }
+
   }
 
 
- useEffect(() => {
+useEffect(() => {
 
 fetchClases(),
 fetchData()
- }, [])
-
-console.log("data:", data)
-console.log("clases: ",clases)
+  }, [])
 
   return(
 
@@ -77,10 +124,23 @@ console.log("clases: ",clases)
             <p>Fecha y hora de la clase: {clase.fecha_hora}</p>
             <p>Capacidad de la clase: {clase.capacidad_clase}</p>
             <p>Nombre de la clase: {clase.nombre_clase}</p>
-
-
           </div>
         ))}
+      </div>
+
+      <div className="AddAlumno">
+        <h1>Favor de llenar los campos del alumno:</h1>
+        <div>
+        {error && (<h2>Error: {error?.toString()}</h2>)}        
+      </div>
+        <label>Full name: </label>
+        <input type="text" id="Student_name" name="Nombre" value={alumno_name} onChange={(e) => setName(e.target.value)}></input>
+        <br></br>
+        <label>phone: </label>
+        <input type="text" id="Student_phone" name="phone" value={strPhone} onChange={(e) => setStrPhone(e.target.value)}></input>
+        <br></br>
+        <button onClick={(e) => addStudent(e)}>Enviar datos</button>
+      
       </div>
     </div>
     </>
