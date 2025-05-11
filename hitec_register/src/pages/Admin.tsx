@@ -28,9 +28,18 @@ const Admin = () => {
         }
     }
 
+    const csvExport = () => {
+    
+    }
+
+    const editClass = (clase_id: number) => {
+        navigate("/registerClass", { state: { clase_id } })
+    }
+
     const createClass = () => {
             navigate("/registerClass") 
     }
+
 
     const deleteClass = async (clase_id: number) => {
   if (window.confirm("¿Seguro que deseas eliminar la clase?")) {
@@ -70,7 +79,8 @@ const Admin = () => {
 
     return (
         <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-            <button onClick={getOut}>Cerrar sesión</button>
+            <button onClick={getOut} style={{ position: "absolute", top: "10px", left: "10px" }}>Cerrar sesión</button>
+            <button onClick={csvExport} style={{ position: "absolute", top: "10px", right: "10px" }}>Exportar a csv</button>
             <h1>Hola miembro de Staff de Hitec!</h1>
             <button onClick={createClass}>Crear Clase</button>
             <p>Estas son las clases:</p>
@@ -94,7 +104,7 @@ const Admin = () => {
         <td style={{ border: "1px solid black" }}>{clase.fecha_hora}</td>
         <td style={{ border: "1px solid black" }}>{clase.capacidad_clase}</td>
         <td style={{ border: "1px solid black" }}>
-            <button style={{ margin: "8px"}}>Editar</button>
+            <button style={{ margin: "8px"}} onClick={() => editClass(clase.clase_id)}>Editar</button>
           <button style={{ margin: "8px"}} onClick={() => deleteClass(clase.clase_id)}>Eliminar</button>
           <br />
         </td>

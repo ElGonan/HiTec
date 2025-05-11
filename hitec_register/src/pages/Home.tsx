@@ -89,7 +89,7 @@ useEffect(() => {
         <>
         <div>
           <div>
-          <button onClick={getOut} >Cerrar Sesión</button>
+          <button onClick={getOut} style={{ position: "absolute", top: "10px", left: "10px" }} >Cerrar Sesión</button>
         </div>
             <h1>Bienvenido {name}</h1>
             <h2>Por favor, verifica tus clases.</h2>
