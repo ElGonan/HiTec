@@ -87,34 +87,36 @@ const Admin = () => {
             <h1>Hola miembro de Staff de Hitec!</h1>
             <button onClick={createClass}>Crear Clase</button>
             <p>Estas son las clases:</p>
-            <table style={{ border: "2px solid black", width: "100%", borderCollapse: "collapse", margin: "64px"  }}>
-  <thead>
-    <tr style={{ backgroundColor: "#982000", textAlign: "center" }}>
-      <th style={{ border: "1px solid black" }}>ID</th>
-      <th style={{ border: "1px solid black" }}>Nombre de la clase</th>
-      <th style={{ border: "1px solid black" }}>Instructor</th>
-      <th style={{ border: "1px solid black" }}>Fecha y hora</th>
-      <th style={{ border: "1px solid black" }}>Capacidad</th>
-      <th style={{ border: "1px solid black" }}>Acción</th>
-    </tr>
-  </thead>
-  <tbody>
-    {clases.map((clase) => (
-      <tr key={clase.clase_id} style={{ textAlign: "center", backgroundColor: "#d42d00" }}>
-        <td style={{ border: "1px solid black" }}>{clase.clase_id}</td>
-        <td style={{ border: "1px solid black" }}>{clase.nombre_clase}</td>
-        <td style={{ border: "1px solid black" }}>{clase.instructor}</td>
-        <td style={{ border: "1px solid black" }}>{clase.fecha_hora}</td>
-        <td style={{ border: "1px solid black" }}>{clase.capacidad_clase}</td>
-        <td style={{ border: "1px solid black" }}>
-            <button style={{ margin: "8px"}} onClick={() => editClass(clase.clase_id)}>Editar</button>
-          <button style={{ margin: "8px"}} onClick={() => deleteClass(clase.clase_id)}>Eliminar</button>
-          <br />
-        </td>
-      </tr>
-    ))}
-  </tbody>
-</table>
+            <div style={{ overflowX: "auto", width: "100%" }}>
+            <table style={{ border: "2px solid black", borderCollapse: "collapse", margin: "64px"  }}>
+            <thead>
+              <tr style={{ backgroundColor: "#982000", textAlign: "center" }}>
+                <th style={{ border: "1px solid black" }}>ID</th>
+                <th style={{ border: "1px solid black" }}>Nombre de la clase</th>
+                <th style={{ border: "1px solid black" }}>Instructor</th>
+                <th style={{ border: "1px solid black" }}>Fecha y hora</th>
+                <th style={{ border: "1px solid black" }}>Capacidad</th>
+                <th style={{ border: "1px solid black" }}>Acción</th>
+              </tr>
+            </thead>
+            <tbody>
+              {clases.map((clase) => (
+                <tr key={clase.clase_id} style={{ textAlign: "center", backgroundColor: "#d42d00" }}>
+                  <td style={{ border: "1px solid black" }}>{clase.clase_id}</td>
+                  <td style={{ border: "1px solid black" }}>{clase.nombre_clase}</td>
+                  <td style={{ border: "1px solid black" }}>{clase.instructor}</td>
+                  <td style={{ border: "1px solid black" }}>{clase.fecha_hora}</td>
+                  <td style={{ border: "1px solid black" }}>{clase.capacidad_clase}</td>
+                  <td style={{ border: "1px solid black" }}>
+                      <button style={{ margin: "8px"}} onClick={() => editClass(clase.clase_id)}>Editar</button>
+                    <button style={{ margin: "8px"}} onClick={() => deleteClass(clase.clase_id)}>Eliminar</button>
+                    <br />
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          </div>
 
         </div>
     )

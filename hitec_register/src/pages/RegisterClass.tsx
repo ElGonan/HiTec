@@ -141,7 +141,7 @@ useEffect(() => {
     <div>
       {/* Quiero que el boton de regresar este arrib a la izquierda*/}
       <div style={{ position: "absolute", top: "10px", left: "10px" }}>
-      <button>Regresar</button>
+      <button onClick={() => navigate("/admin")}>Regresar</button>
       </div>
       <h1>Registro de clases</h1>
       <p>Hola Snev o miembro del Staff. Por favor den de alta la clase que gusten</p>

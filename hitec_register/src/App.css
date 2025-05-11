@@ -5,6 +5,24 @@
   text-align: center;
 }
 
+/* Ajustes para móviles */
+@media screen and (max-width: 768px) {
+  #root {
+    padding: 1rem;
+    max-width: 100%; /* fit-content puede causar overflow */
+    box-sizing: border-box;
+  }
+
+  .card {
+    padding: 1rem;
+  }
+
+  .logo {
+    height: 4em;
+    padding: 1em;
+  }
+}
+
 .logo {
   height: 6em;
   padding: 1.5em;
