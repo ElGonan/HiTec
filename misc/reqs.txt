@@ -8,7 +8,7 @@
 ### ALUMNO ###
 1. Iniciar sesion ✅ 
 2. Inscribirse a clase ✅
-3. Editar inscripcion 
+3. Editar inscripcion (Despues del MVP)
 4. Eliminar inscripcion ✅
 
 ### RESTRICCIONES ###

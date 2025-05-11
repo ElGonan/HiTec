@@ -61,7 +61,9 @@ const Home = () => {
                     }
                 });
             });
-            setIsSelected(true);
+            if (claseIds.length > 0) {
+                setIsSelected(true);
+            }
         }
     };
 
@@ -71,7 +73,7 @@ const Home = () => {
         }
     };
 
-    const deleteInscription = async () => {
+     const deleteInscription = async () => {
         if (window.confirm("¿Seguro que deseas borrar la inscripción?")) {
             for (let i = 1; i <= 5; i++) {
                 const claseId = clases[i];
@@ -82,10 +84,8 @@ const Home = () => {
                     if (error) {
                         alert(error.message);
                         return;
-                    }
-                }
-            }
-            const { error } = await supabaseDelete("alumno_clase", "alumno_id", id!);
+                    }}}}
+                   const { error } = await supabaseDelete("alumno_clase", "alumno_id", id!);
             if (error) {
                 alert(error.message);
                 return;
@@ -95,7 +95,6 @@ const Home = () => {
             setClases({ 1: null, 2: null, 3: null, 4: null, 5: null });
             setCapacidades({ 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 });
         }
-    };
 
     const handleInscription = async (clase_id: number) => {
         const { data, error } = await SupabaseInscription(id!, clase_id);
@@ -128,7 +127,9 @@ const Home = () => {
         console.error('Error fetching data:', error);
     }
 
-    useEffect(() => {
+    
+
+useEffect(() => {
         const query = new URLSearchParams(location.search);
         const phoneFromQuery = Number(query.get("phone"));
         if (phoneFromQuery) {
@@ -153,30 +154,53 @@ const Home = () => {
     }, [location.search, location.state]);
 
     return (
-        <div>
-            <button onClick={getOut} style={{ position: "absolute", top: "10px", left: "10px" }}>Cerrar Sesión</button>
-            <button onClick={deleteInscription} style={{ position: "absolute", top: "10px", right: "10px" }} disabled={!isSelected}>Borrar inscripción</button>
+       <div>
+    <button onClick={getOut} style={{ position: "absolute", top: "10px", left: "10px" }}>Cerrar Sesión</button>
+    <button onClick={deleteInscription} style={{ position: "absolute", top: "10px", right: "10px" }} disabled={!isSelected}>Borrar inscripción</button>
 
-            <h1>Bienvenido {name}</h1>
-            <h2>Por favor, verifica tus clases.</h2>
-            <div>
-                {Array.from({ length: 5 }, (_, i) => (
-                    <select key={i} value={clases[i + 1] ?? ""} onChange={(e) => {
-                        const claseId = Number(e.target.value);
-                        setClases((prev) => ({ ...prev, [i + 1]: claseId }));
-                    }}>
-                        <option value="">Selecciona una clase</option>
-                        {data?.map((Class) => (
-                            <option key={Class.clase_id} value={Class.clase_id}>
-                                {Class.nombre_clase} | Prof: {Class.instructor} | Fecha y hora: {transformDate(Class.fecha_hora)}
-                            </option>
-                        ))}
-                    </select>
-                ))}
-            </div>
-            <br></br>
-            <button onClick={() => handleSubmit()}>Inscribirme!</button>
-        </div>
+    <h1>Bienvenido {name}</h1>
+    <h2>Por favor, verifica tus clases.</h2>
+    <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+        {Array.from({ length: 5 }, (_, i) => (
+            <select
+                key={i}
+                value={clases[i + 1] ?? ""}
+                onChange={(e) => {
+                    const claseId = Number(e.target.value);
+                    // Verifica si la clase ya fue seleccionada en otro select
+                    const isDuplicate = Object.entries(clases).some(([key, value]) => {
+                        return parseInt(key) !== i + 1 && value === claseId;
+                    });
+
+                    if (!claseId || !isDuplicate) {
+                        setClases((prev) => ({ ...prev, [i + 1]: claseId || null }));
+                    } else {
+                        alert("Esta clase ya ha sido seleccionada. Por favor elige otra.");
+                    }
+                }}
+            >
+                <option value="">Selecciona una clase</option>
+                {data?.map((Class) => {
+                    const isAlreadySelected = Object.entries(clases).some(
+                        ([key, value]) => parseInt(key) !== i + 1 && value === Class.clase_id
+                    );
+                    return (
+                        <option
+                            key={Class.clase_id}
+                            value={Class.clase_id}
+                            disabled={isAlreadySelected}
+                        >
+                            {Class.nombre_clase} | Prof: {Class.instructor} | Fecha y hora: {transformDate(Class.fecha_hora)}
+                        </option>
+                    );
+                })}
+            </select>
+        ))}
+    </div>
+    <br></br>
+    <button onClick={() => handleSubmit()}>Inscribirme!</button>
+</div>
+
     );
 };
 
