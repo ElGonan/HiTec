@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import supabaseGet from '../lib/supabaseGet'
 import supabaseDelete from '../lib/supabaseDelete'
+import exportToCSV from '../lib/exportCSV'
 
 const Admin = () => {
     const [clases, setClases] = useState<Class[]>([])
@@ -29,7 +30,9 @@ const Admin = () => {
     }
 
     const csvExport = () => {
-    
+        if (window.confirm("¿Seguro que deseas exportar a CSV?")) {
+        exportToCSV()
+    }
     }
 
     const editClass = (clase_id: number) => {
