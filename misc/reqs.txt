@@ -3,14 +3,13 @@
 2. Eliminar clase ✅
 3. Editar clase ✅
 4. Iniciar sesion ✅
-5. Exportar todas las clases y sus inscripciones a CSV o a Excel
+5. Exportar todas las clases y sus inscripciones a CSV o a Excel ✅
 
 ### ALUMNO ###
 1. Iniciar sesion ✅ 
 2. Inscribirse a clase ✅
-3. Editar inscripcion
-4. Eliminar inscripcion
-5. Recibir resultados u horario
+3. Editar inscripcion 
+4. Eliminar inscripcion ✅
 
 ### RESTRICCIONES ###
 1. Al inscribirse 40 alumnos, se debe cerrar la clase

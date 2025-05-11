@@ -55,7 +55,7 @@ const Admin = () => {
     }
 
     alert("Clase eliminada");
-    getClases(); // <-- actualiza la lista
+    getClases(); 
   }
 };
 

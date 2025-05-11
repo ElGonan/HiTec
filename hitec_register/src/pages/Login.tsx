@@ -14,7 +14,6 @@ const Login = () => {
         }
     }
 
-
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         if (!strPhone || strPhone.toString().length !== 10) {
@@ -43,10 +42,9 @@ const Login = () => {
             }
         }
         else{
-            navigate("home?phone=" + strPhone);
+            navigate("home?phone=" + strPhone, {state: { alumno_id: data[0].alumno_id }});
         }
-        }
-
+    }
 useEffect(() => {
     handleInputChange
 }, [])
