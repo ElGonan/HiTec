@@ -11,6 +11,7 @@ const useSupabaseRead = <T,>(table: string): { data: T[] | null; error: Postgres
     const { data, error } = await supabase
       .from(table)
       .select()
+      .gt("capacidad_clase", 0)
 
     if (error) {
       setError(error)

@@ -7,39 +7,22 @@ import SupabaseInscription from '../lib/supabaseInscription';
 const Home = () => {
     const [id, setId] = useState<number | null >(null)
     const [name, setName] = useState<string | null>(null)
-    const [phone, setPhone] = useState<number>(0)
     const location = useLocation()
     const [clase1, setClase1] = useState<number | null>(null)
     const [clase2, setClase2] = useState<number | null>(null)
     const [clase3, setClase3] = useState<number | null>(null)
     const [clase4, setClase4] = useState<number | null>(null)
     const [clase5, setClase5] = useState<number | null>(null)
-
-
-    
-    
-    const getStudent = async () => {
-        const { data, error }: { data: { alumno_id: number; alumno_name: string }[] | null; error: any } = await supabaseGet("alumno", "alumno_phone", phone);
-        if (error) {
-            alert("Mensaje de error!!! " + error.message);
-            return;
-        }
-        if (data) {
-            setId(data[0].alumno_id);
-            setName(data[0].alumno_name);
-        } else {
-            alert("No se encontró el número de teléfono");
-        }
-    };
+    const [errorInscription, setErrorInscription] = useState<string | null>(null)
 
     const handleInscription = async (clase_id: number) => {
         const { data, error } = await SupabaseInscription(id!, clase_id);
         if (error) {
-            alert("Error al inscribirte a la clase: " + error.message);
+            setErrorInscription(error.message);
             return;
         }
         if (data) {
-            alert("Inscripción exitosa a la clase: " + clase_id);
+          return 1;
         }
     }
 
@@ -61,19 +44,38 @@ const Home = () => {
           if (clase5) {
                 handleInscription(clase5);
           }
+          if (!errorInscription) {
+            alert("Inscripción exitosa");
+          } else {
+            alert("Error en la inscripción: " + errorInscription);
+          }
          }
     };
 
-    const { data, error }: { data: Class[] | null; error: any } = useSupabaseRead("clase")
+    const { data, error }: { data: Class[] | null; error: any } = useSupabaseRead("clase")    
     if (error) {
         console.error('Error fetching data:', error)
     }
 
 useEffect(() => {
-       const query = new URLSearchParams(location.search);
-       setPhone(Number(query.get("phone")));
-       getStudent();
-   }, [id, name, phone]);
+   const query = new URLSearchParams(location.search);
+   const phoneFromQuery = Number(query.get("phone"));
+   if (phoneFromQuery) {
+       supabaseGet("alumno", "alumno_phone", phoneFromQuery).then(({ data, error }) => {
+           if (error) {
+               alert("Mensaje de error!!! " + error.message);
+               return;
+           }
+           if (data && data.length > 0) {
+               setId(data[0].alumno_id);
+               setName(data[0].alumno_name);
+           } else {
+               alert("No se encontró el número de teléfono");
+           }
+       });
+   }
+}, [location.search]);
+
 
 
     return (
