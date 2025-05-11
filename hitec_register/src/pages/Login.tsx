@@ -32,8 +32,9 @@ const Login = () => {
         if (error) {
             alert(error.message)
             return
-        }if (data?.[0].alumno_id === 1) {
+        }if (data?.[0]?.alumno_id === 1) {
             navigate("/admin")
+            return
         }
 
         if (!data || data.length === 0) {  

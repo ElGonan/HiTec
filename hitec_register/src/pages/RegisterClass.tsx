@@ -1,6 +1,6 @@
 import supabase from '../supabase/supabaseClient'
 import { useEffect, useState } from 'react'
-
+import { useNavigate } from 'react-router-dom'
 
 const RegisterClass = () => {
  const [instructor, setInstructor] = useState<string>("")
@@ -8,12 +8,10 @@ const RegisterClass = () => {
  const [hora , setHora] = useState<string>("")
  const [capacidad_clase, setCapacidad] = useState<number>()   
  const [nombre_clase, setNombre] = useState<string>("")
+  const navigate = useNavigate()
 
 
   const addClass = async (e : any) => {
-    
-    
-
     e.preventDefault()
 
 
@@ -54,6 +52,7 @@ const RegisterClass = () => {
         setHora("")
         setCapacidad(0)
         setNombre("")
+      navigate("/admin")
         return
     }
 

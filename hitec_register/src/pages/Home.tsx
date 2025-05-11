@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import  supabaseGet  from '../lib/supabaseGet'
-import {useLocation } from 'react-router-dom';
+import {useLocation, useNavigate } from 'react-router-dom';
 import useSupabaseRead from '../hooks/useSupabaseRead';
 import SupabaseInscription from '../lib/supabaseInscription';
 
@@ -14,6 +14,13 @@ const Home = () => {
     const [clase4, setClase4] = useState<number | null>(null)
     const [clase5, setClase5] = useState<number | null>(null)
     const [errorInscription, setErrorInscription] = useState<string | null>(null)
+    const navigate = useNavigate()
+
+    const getOut = () => {
+        if (window.confirm("¿Seguro que deseas cerrar sesión?")) {
+            navigate("/")
+                }
+    }
 
     const handleInscription = async (clase_id: number) => {
         const { data, error } = await SupabaseInscription(id!, clase_id);
@@ -81,6 +88,9 @@ useEffect(() => {
     return (
         <>
         <div>
+          <div>
+          <button onClick={getOut} >Cerrar Sesión</button>
+        </div>
             <h1>Bienvenido {name}</h1>
             <h2>Por favor, verifica tus clases.</h2>
             <div>
@@ -133,6 +143,7 @@ useEffect(() => {
             <button onClick={handleSubmit}>Inscribirme a clase</button>
             </div>
         </div>
+       
         </>
     )
 }
