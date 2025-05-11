@@ -7,7 +7,7 @@
 
 ### ALUMNO ###
 1. Iniciar sesion ✅ 
-2. Inscribirse a clase
+2. Inscribirse a clase ✅
 3. Editar inscripcion
 4. Eliminar inscripcion
 5. Recibir resultados u horario
