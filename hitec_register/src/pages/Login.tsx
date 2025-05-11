@@ -32,7 +32,10 @@ const Login = () => {
         if (error) {
             alert(error.message)
             return
+        }if (data?.[0].alumno_id === 1) {
+            navigate("/admin")
         }
+
         if (!data || data.length === 0) {  
             if (window.confirm("No se encontró el número de teléfono \n¿Deseas registrarte?")) {
                 navigate("/register?phone=" + strPhone);
