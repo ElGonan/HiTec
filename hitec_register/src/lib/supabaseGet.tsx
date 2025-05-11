@@ -1,22 +1,25 @@
 import supabase from '../supabase/supabaseClient'
 import { PostgrestError } from '@supabase/supabase-js'
 
-const supabaseGet = async (table: string, parameter: string, value: string | number) => {
-
-    const { data, error }: { data: any[] | null; error: PostgrestError | null } = await supabase
-      .from(table)
-      .select()
-      .eq(parameter, value)
-
-    if (error) {
-      return { data: null, error }
-    }
-
-    if (data) {
-      return { data, error: null }
-    }
-  
-  return { data: null, error: null }
+type SupabaseGetResult = {
+  data: any[] | null
+  error: PostgrestError | null
 }
 
-  export default supabaseGet
+const supabaseGet = async (
+  table: string,
+  parameter?: string,
+  value?: string | number
+): Promise<SupabaseGetResult> => {
+  let query = supabase.from(table).select();
+
+  if (parameter && value !== undefined) {
+    query = query.eq(parameter, value);
+  }
+
+  const { data, error } = await query;
+
+  return { data, error };
+}
+
+export default supabaseGet;
