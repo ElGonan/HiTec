@@ -5,10 +5,15 @@ import supabaseDelete from '../lib/supabaseDelete';
 import supabaseUpdate from '../lib/supabaseUpdate';
 import SupabaseInscription from '../lib/supabaseInscription';
 import useSupabaseRead from '../hooks/useSupabaseRead';
+import transformDate from '../lib/transformDate';
 
 const Home = () => {
     const [id, setId] = useState<number | null>(null);
     const [name, setName] = useState<string | null>(null);
+    const [errorInscription, setErrorInscription] = useState<string | null>(null);
+    const [isSelected, setIsSelected] = useState(false);
+    const navigate = useNavigate();
+    const location = useLocation();
     const [clases, setClases] = useState<{[key: number]: number | null}>({
         1: null,
         2: null,
@@ -23,23 +28,6 @@ const Home = () => {
         4: 0,
         5: 0
     });
-    const [errorInscription, setErrorInscription] = useState<string | null>(null);
-    const [isSelected, setIsSelected] = useState(false);
-    const navigate = useNavigate();
-    const location = useLocation();
-
-    const transformDate = (date: string) => {
-        const dateObj = new Date(date);
-        const options: Intl.DateTimeFormatOptions = {
-            year: 'numeric',
-            month: '2-digit',
-            day: '2-digit',
-            hour: '2-digit',
-            minute: '2-digit',
-            second: '2-digit'
-        };
-        return dateObj.toLocaleString('es-MX', options);
-    };
 
     const retrieveData = async (alumno_id: number) => {
         const { data, error } = await supabaseGet("alumno_clase", "alumno_id", alumno_id);
@@ -157,13 +145,13 @@ useEffect(() => {
        <div>
     <button onClick={getOut} style={{ position: "absolute", top: "10px", left: "10px" }}>Cerrar Sesión</button>
     <button onClick={deleteInscription} style={{ position: "absolute", top: "10px", right: "10px" }} disabled={!isSelected}>Borrar inscripción</button>
+    <img src="../../logo.webp" alt="Logo HiTec" style={{ position: "relative", top: "32px", width: "10%", }} />
 
     <h1>Bienvenido {name}</h1>
     <h2>Por favor, verifica tus clases.</h2>
     <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
         {Array.from({ length: 5 }, (_, i) => (
             <select
-                key={i}
                 value={clases[i + 1] ?? ""}
                 onChange={(e) => {
                     const claseId = Number(e.target.value);
@@ -182,11 +170,11 @@ useEffect(() => {
                 <option value="">Selecciona una clase</option>
                 {data?.map((Class) => {
                     const isAlreadySelected = Object.entries(clases).some(
-                        ([key, value]) => parseInt(key) !== i + 1 && value === Class.clase_id
+                        ([key, value]) => parseInt(key) !== i + 1 && value === Class.clase_id || Class.capacidad_clase === 0
                     );
                     return (
                         <option
-                            key={Class.clase_id}
+                            key={Class.clase_id + i}
                             value={Class.clase_id}
                             disabled={isAlreadySelected}
                         >
@@ -198,7 +186,7 @@ useEffect(() => {
         ))}
     </div>
     <br></br>
-    <button onClick={() => handleSubmit()}>Inscribirme!</button>
+    <button onClick={() => handleSubmit()} disabled={isSelected}>Inscribirme!</button>
 </div>
 
     );

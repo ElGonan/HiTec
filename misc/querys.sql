@@ -1,14 +1,14 @@
 create TABLE Alumno (
   alumno_ID SERIAL PRIMARY KEY,
   alumno_name VARCHAR(100) NOT NULL,
-  alumno_phone BIGINT NOT NULL CHECK (alumno_phone BETWEEN 1000000000 AND 9999999999)
+  alumno_phone UNIQUE BIGINT NOT NULL CHECK (alumno_phone BETWEEN 1000000000 AND 9999999999)
 );
 
 create TABLE Clase (
   clase_ID SERIAL PRIMARY KEY,
   instructor varchar(50) NOT NULL,
   fecha_hora date NOT NULL,
-  capacidad_Clase int NOT NULL CHECK (capacidad_Clase > 0),
+  capacidad_Clase int NOT NULL CHECK (capacidad_Clase >= 0),
   nombre_clase varchar(100) NOT NULL
 );
 

@@ -58,3 +58,17 @@
 .read-the-docs {
   color: #888;
 }
+
+input {
+  padding: 0.5em;
+  border-radius: 0.5em;
+  border: 1px solid #ccc;
+  font-size: large;
+}
+
+select {
+  padding: 0.5em;
+  border-radius: 0.5em;
+  border: 1px solid #ccc;
+  font-size: large;
+}
