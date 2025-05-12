@@ -1,0 +1,25 @@
+.Card {
+    margin: 24px;
+    background: rgba(255, 255, 255, 0.15); /* blanco transparente */
+    backdrop-filter: blur(10px); /* desenfoque */
+    -webkit-backdrop-filter: blur(10px); /* compatibilidad con Safari */
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    padding: 20px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1); /* sombra suave */
+}
+
+.TitleText {
+    font-size: 24px;
+    font-weight: bold;
+    padding-left: 16px;
+    margin: 0;
+    color: #ffffff; /* color del texto */
+    text-align: left;
+}
+
+.Text {
+    font-size: 16px;
+    color: #ffffff; /* color del texto */
+    width: 95%;
+}

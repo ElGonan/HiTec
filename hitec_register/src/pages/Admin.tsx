@@ -4,6 +4,7 @@ import supabaseGet from '../lib/supabaseGet'
 import supabaseDelete from '../lib/supabaseDelete'
 import exportToCSV from '../lib/exportCSV'
 import transformDate from '../lib/transformDate'
+import './css/Admin.css'
 
 const Admin = () => {
     const [clases, setClases] = useState<Class[]>([])
@@ -54,13 +55,14 @@ const Admin = () => {
             alert(error.message)
             return
         }
-       if (data) {
-    const formatted = data.map((clase: Class) => ({
-        ...clase,
-        fecha_hora: transformDate(clase.fecha_hora)
-    }))
-    setClases(formatted)
-}
+        if (data) {
+          const sorted = data.sort((a: Class, b: Class) => a.clase_id - b.clase_id); // orden ascendente
+          const formatted = sorted.map((clase: Class) => ({
+            ...clase,
+            fecha_hora: transformDate(clase.fecha_hora)
+            }));
+          setClases(formatted);
+        }
     }
 
     useEffect(() => {
@@ -68,44 +70,87 @@ const Admin = () => {
     }, [])
 
     return (
-        <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-            <button onClick={getOut} style={{ position: "absolute", top: "10px", left: "10px" }}>Cerrar sesión</button>
-            <button onClick={csvExport} style={{ position: "absolute", top: "10px", right: "10px" }}>Exportar a csv</button>
-            <h1>Hola miembro de Staff de Hitec!</h1>
-            <button onClick={createClass}>Crear Clase</button>
-            <p>Estas son las clases:</p>
-            <div style={{ overflowX: "auto", width: "100%" }}>
-            <table style={{ border: "2px solid black", borderCollapse: "collapse", margin: "64px"  }}>
-            <thead>
-              <tr style={{ backgroundColor: "#982000", textAlign: "center" }}>
-                <th style={{ border: "1px solid black" }}>ID</th>
-                <th style={{ border: "1px solid black" }}>Nombre de la clase</th>
-                <th style={{ border: "1px solid black" }}>Instructor</th>
-                <th style={{ border: "1px solid black" }}>Fecha y hora</th>
-                <th style={{ border: "1px solid black" }}>Capacidad</th>
-                <th style={{ border: "1px solid black" }}>Acción</th>
-              </tr>
-            </thead>
-            <tbody>
-              {clases.map((clase) => (
-                <tr key={clase.clase_id} style={{ textAlign: "center", backgroundColor: "#d42d00" }}>
-                  <td style={{ border: "1px solid black" }}>{clase.clase_id}</td>
-                  <td style={{ border: "1px solid black" }}>{clase.nombre_clase}</td>
-                  <td style={{ border: "1px solid black" }}>{clase.instructor}</td>
-                  <td style={{ border: "1px solid black" }}>{clase.fecha_hora}</td>
-                  <td style={{ border: "1px solid black" }}>{clase.capacidad_clase}</td>
-                  <td style={{ border: "1px solid black" }}>
-                      <button style={{ margin: "8px"}} onClick={() => editClass(clase.clase_id)}>Editar</button>
-                    <button style={{ margin: "8px"}} onClick={() => deleteClass(clase.clase_id)}>Eliminar</button>
-                    <br />
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-          </div>
+       <div style={{
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "center",
+  padding: "20px",
+  width: "100%",
+  boxSizing: "border-box"
+}}>
+  <button
+    onClick={getOut}
+    style={{ position: "absolute", top: "10px", left: "10px" }}
+  >
+    Cerrar sesión
+  </button>
 
-        </div>
+  <button
+    onClick={csvExport}
+    style={{ position: "absolute", top: "10px", right: "10px" }}
+  >
+    Exportar a csv
+  </button>
+
+  <img
+    src="../../logo.webp"
+    alt="Logo HiTec"
+    style={{ position: "absolute", top: "10px", width: "80px" }}
+  />
+
+  <h1 style={{ textAlign: "center", marginTop: "60px" }}>
+    Hola miembro de Staff de Hitec!
+  </h1>
+
+  <button onClick={createClass} style={{ marginBottom: "10px" }}>
+    Crear Clase
+  </button>
+
+  <p>Estas son las clases:</p>
+
+  <div className="DBtable" style={{
+    overflowX: "auto",
+    width: "100%",
+    maxWidth: "1000px",
+    marginTop: "10px"
+  }}>
+    <table style={{
+      borderCollapse: "collapse",
+      width: "100%",
+      minWidth: "600px"
+    }}>
+      <thead>
+        <tr style={{ textAlign: "center" }}>
+          <th className="Title" style={{ width: "60px" }}>ID</th>
+          <th className="Title">Nombre de la clase</th>
+          <th className="Title">Instructor</th>
+          <th className="Title">Fecha y hora</th>
+          <th className="Title">Capacidad</th>
+          <th className="Title" style={{ width: "160px" }}>Acción</th>
+        </tr>
+      </thead>
+      <tbody>
+        {clases.map((clase, index) => {
+          const textClass = `Text ${index % 2 === 0 ? "Text-light" : "Text-dark"}`;
+          return (
+            <tr key={clase.clase_id} style={{ textAlign: "center" }}>
+              <td className={textClass} style={{ width: "60px" }}>{clase.clase_id}</td>
+              <td className={textClass}>{clase.nombre_clase}</td>
+              <td className={textClass}>{clase.instructor}</td>
+              <td className={textClass}>{clase.fecha_hora}</td>
+              <td className={textClass}>{clase.capacidad_clase}</td>
+              <td className={textClass} style={{ width: "160px", whiteSpace: "nowrap" }}>
+                <button style={{ margin: "4px" }} onClick={() => editClass(clase.clase_id)}>Editar</button>
+                <button style={{ margin: "4px" }} onClick={() => deleteClass(clase.clase_id)}>Eliminar</button>
+              </td>
+            </tr>
+          );
+        })}
+      </tbody>
+    </table>
+  </div>
+</div>
+
     )
 }
 
