@@ -1,4 +1,5 @@
 import supabase from '../supabase/supabaseClient'
+import transformDate from './transformDate'
 
 type AlumnoClase = {
   inscripcion_id: string
@@ -6,19 +7,6 @@ type AlumnoClase = {
   clase: Class
 }
 
-  const transformDate = (date: string) => {
-        const dateObj = new Date(date)
-        const options: Intl.DateTimeFormatOptions = {
-            year: 'numeric',
-            month: '2-digit',
-            day: '2-digit',
-            hour: '2-digit',
-            minute: '2-digit',
-            second: '2-digit'
-        }
-        const formattedDate = dateObj.toLocaleString('es-MX', options)
-        return formattedDate
-    }
 const getAlumnosPorClase = async () => {
 
 
