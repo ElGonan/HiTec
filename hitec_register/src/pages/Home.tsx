@@ -36,7 +36,9 @@ const Home = () => {
             return;
         }
         if (data) {
+            console.log(data);
             const claseIds = data.map((item: any) => item.clase_id);
+            console.log(claseIds);
             claseIds.forEach((claseId, index) => {
                 const claseKey = index + 1;
                 setClases((prev) => ({ ...prev, [claseKey]: claseId }));
@@ -136,7 +138,7 @@ useEffect(() => {
         }
 
         if (location.state) {
-            retrieveData(location.state.clase_id);
+            retrieveData(location.state.alumno_id);
         }
 
     }, [location.search, location.state]);
@@ -174,7 +176,7 @@ useEffect(() => {
                     );
                     return (
                         <option
-                            key={Class.clase_id + i}
+                            key={Class.clase_id}
                             value={Class.clase_id}
                             disabled={isAlreadySelected}
                         >
