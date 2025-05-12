@@ -29,6 +29,8 @@ const Home = () => {
         5: 0
     });
 
+
+
     const retrieveData = async (alumno_id: number) => {
         const { data, error } = await supabaseGet("alumno_clase", "alumno_id", alumno_id);
         if (error) {
@@ -36,9 +38,7 @@ const Home = () => {
             return;
         }
         if (data) {
-            console.log(data);
             const claseIds = data.map((item: any) => item.clase_id);
-            console.log(claseIds);
             claseIds.forEach((claseId, index) => {
                 const claseKey = index + 1;
                 setClases((prev) => ({ ...prev, [claseKey]: claseId }));
@@ -63,7 +63,7 @@ const Home = () => {
         }
     };
 
-     const deleteInscription = async () => {
+    const deleteInscription = async () => {
         if (window.confirm("¿Seguro que deseas borrar la inscripción?")) {
             for (let i = 1; i <= 5; i++) {
                 const claseId = clases[i];
@@ -75,7 +75,7 @@ const Home = () => {
                         alert(error.message);
                         return;
                     }}}}
-                   const { error } = await supabaseDelete("alumno_clase", "alumno_id", id!);
+                const { error } = await supabaseDelete("alumno_clase", "alumno_id", id!);
             if (error) {
                 alert(error.message);
                 return;
@@ -96,6 +96,11 @@ const Home = () => {
     };
 
     const handleSubmit = async () => {
+        console.log(clases);
+        if (clases[1] === null && clases[2] === null && clases[3] === null && clases[4] === null && clases[5] === null) {
+            alert("Por favor selecciona al menos una clase");
+            return;
+        }
         if (window.confirm("Seguro que deseas inscribirte a las clases seleccionadas?")) {
             for (let i = 1; i <= 5; i++) {
                 const claseId = clases[i];
@@ -141,7 +146,7 @@ useEffect(() => {
             retrieveData(location.state.alumno_id);
         }
 
-    }, [location.search, location.state]);
+    }, [location.search, location.state, isSelected]);
 
     return (
        <div>

@@ -54,7 +54,7 @@ useEffect(() => {
         <div>
             <h1>Bienvenido al Login de HiTec!</h1>
             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                <img src="../../logo.webp" alt="Logo HiTec" style={{ width: "50%" }} />
+                <img src="../../logo.webp" alt="Logo HiTec" style={{ width: "25%" }} />
             </div>
             <div>
                 <h2>Por favor, ingresa con tu número de teléfono</h2>

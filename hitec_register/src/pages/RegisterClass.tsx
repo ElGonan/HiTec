@@ -3,6 +3,8 @@ import { useEffect, useState } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import supabaseGet from '../lib/supabaseGet'
 import supabaseUpdate from '../lib/supabaseUpdate'
+import transformDate from '../lib/transformDate'
+import './css/Register.css'
 
 const RegisterClass = () => {
 const [id, setId] = useState<number | null>(null)
@@ -13,22 +15,6 @@ const [id, setId] = useState<number | null>(null)
  const [nombre_clase, setNombre] = useState<string>("")
 const navigate = useNavigate()
 const location = useLocation();
-
-
-const transformDate = (date: string) => {
-        const dateObj = new Date(date)
-        const options: Intl.DateTimeFormatOptions = {
-            year: 'numeric',
-            month: '2-digit',
-            day: '2-digit',
-            hour: '2-digit',
-            minute: '2-digit',
-            second: '2-digit'
-        }
-        const formattedDate = dateObj.toLocaleString('es-MX', options)
-        return formattedDate
-    }
-
 
   const retrieveClass = async (clase_id: number) => {
     const { data, error } = await supabaseGet("clase", "clase_id", clase_id)
@@ -57,7 +43,7 @@ const transformDate = (date: string) => {
       return
     }
 
-    if (window.confirm("¿Estas seguro de que quieres editar la clase?")) {
+    if (window.confirm("¿Estas seguro de que quieres editar la clase? NO OLVIDES QUE LA HORA SE CAMBIA A AM")) {
       
     const Clase = { instructor, fecha_hora: fecha + " " + hora, capacidad_clase, nombre_clase}
   
@@ -139,27 +125,35 @@ useEffect(() => {
 
     <>
     <div>
-      {/* Quiero que el boton de regresar este arrib a la izquierda*/}
       <div style={{ position: "absolute", top: "10px", left: "10px" }}>
       <button onClick={() => navigate("/admin")}>Regresar</button>
       </div>
+      <img src="../../logo.webp" alt="Logo HiTec" style={{ position: "relative", top: "10px", width: "10%", }} />
       <h1>Registro de clases</h1>
       <p>Hola Snev o miembro del Staff. Por favor den de alta la clase que gusten</p>
       <div>
-        <h3>Nombre del instructor:</h3>
-        <input type="text" id="instructor_name" name="instructor_name" value={instructor} onChange={(e) => setInstructor(e.target.value)} placeholder='Osito Snev'></input>
-        <h3>Fecha de la clase:</h3>
-        <input type="date" id="fecha" name="fecha" value={fecha} onChange={(e) => setFecha(e.target.value)} placeholder='30/03/2003'></input>
-        <h3>Hora de la clase:</h3>
-        <input type="time" id="hora" name="hora" value={hora} onChange={(e) => setHora(e.target.value)} placeholder='15:50'></input>
-        <h3>Capacidad de la clase:</h3>
-        <input type="text" id="capacidad_clase" name="capacidad_clase" value={capacidad_clase} onChange={(e) => setCapacidad(Number(e.target.value))} placeholder='5132'></input>
-        <h3>Nombre de la clase:</h3>
-        <input type="text" id="nombre_clase" name="nombre_clase" value={nombre_clase} onChange={(e) => setNombre(e.target.value)} placeholder='Odiamos Tecmed la vuelta'></input>
-        <br></br>
-        <br></br>
-        {id ? <button onClick={editClass}>Modificar Clase</button> : <button onClick={addClass}>Crear Clase</button>}
-        
+        <div className="Card">
+          <h3 className="TitleText">Nombre del instructor</h3>
+          <input className="Text" type="text" id="instructor_name" name="instructor_name" value={instructor} onChange={(e) => setInstructor(e.target.value)} placeholder='Osito Snev'></input>
+        </div>
+        <div className="Card">
+          <h3 className="TitleText">Fecha de la clase:</h3>
+          <input className="Text" type="date" id="fecha" name="fecha" value={fecha} onChange={(e) => setFecha(e.target.value)} placeholder='30/03/2003'></input>
+        </div>
+        <div className="Card">
+          <h3 className="TitleText">Hora de la clase:</h3>
+          <input className="Text" type="time" id="hora" name="hora" value={hora} onChange={(e) => setHora(e.target.value)} placeholder='15:50'></input>
+        </div>
+        <div className="Card">
+          <h3 className="TitleText">Capacidad de la clase:</h3>
+          <input className="Text" type="text" id="capacidad_clase" name="capacidad_clase" value={capacidad_clase} onChange={(e) => setCapacidad(Number(e.target.value))} placeholder='5132'></input>
+        </div>
+        <div className="Card">
+          <h3 className="TitleText">Nombre de la clase:</h3>
+          <input className="Text"type="text" id="nombre_clase" name="nombre_clase" value={nombre_clase} onChange={(e) => setNombre(e.target.value)} placeholder='Odiamos Tecmed la vuelta'></input>
+        </div>
+          {id ? <button onClick={editClass}>Modificar Clase</button> : <button onClick={addClass}>Crear Clase</button>}
+      
       </div>
       
     </div>

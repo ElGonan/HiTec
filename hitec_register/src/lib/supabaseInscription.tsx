@@ -31,9 +31,7 @@ const modifyCapacity = async (id: number) => {
 
   if (updateError) {
     console.error("Error al actualizar la capacidad:", updateError)
-  } else {
-    console.log(`Capacidad actualizada: ${nuevaCapacidad}`)
-  }
+  } 
 }
 
 const SupabaseInscription = async (alumno_id : number, clase_id: number) => {
