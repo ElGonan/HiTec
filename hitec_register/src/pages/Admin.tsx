@@ -3,25 +3,12 @@ import { useNavigate } from 'react-router-dom'
 import supabaseGet from '../lib/supabaseGet'
 import supabaseDelete from '../lib/supabaseDelete'
 import exportToCSV from '../lib/exportCSV'
+import transformDate from '../lib/transformDate'
 
 const Admin = () => {
     const [clases, setClases] = useState<Class[]>([])
     const [error, setError] = useState<string | null>(null)
     const navigate = useNavigate()
-
-    const transformDate = (date: string) => {
-        const dateObj = new Date(date)
-        const options: Intl.DateTimeFormatOptions = {
-            year: 'numeric',
-            month: '2-digit',
-            day: '2-digit',
-            hour: '2-digit',
-            minute: '2-digit',
-            second: '2-digit'
-        }
-        const formattedDate = dateObj.toLocaleString('es-MX', options)
-        return formattedDate
-    }
 
     const getOut = () => {
         if (window.confirm("¿Seguro que deseas cerrar sesión?")) {
