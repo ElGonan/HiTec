@@ -11,6 +11,8 @@ const [id, setId] = useState<number | null>(null)
  const [instructor, setInstructor] = useState<string>("")
  const [fecha, setFecha] = useState<string>("")
  const [hora , setHora] = useState<string>("")
+ const [area, setArea] = useState<string>("")
+ const [lugar, setLugar] = useState<string>("")
  const [capacidad_clase, setCapacidad] = useState<number>(40)   
  const [nombre_clase, setNombre] = useState<string>("")
 const navigate = useNavigate()
@@ -30,6 +32,8 @@ const location = useLocation();
       setHora(transformDate(data[0].fecha_hora).split(" ")[1])
       setCapacidad(data[0].capacidad_clase)
       setNombre(data[0].nombre_clase)
+      setArea(data[0].area)
+      setLugar(data[0].lugar)
     }
   }
 
@@ -43,9 +47,9 @@ const location = useLocation();
       return
     }
 
-    if (window.confirm("¿Estas seguro de que quieres editar la clase? NO OLVIDES QUE LA HORA SE CAMBIA A AM")) {
+    if (window.confirm("¿Estas seguro de que quieres editar la clase?")) {
       
-    const Clase = { instructor, fecha_hora: fecha + " " + hora, capacidad_clase, nombre_clase}
+    const Clase = { instructor, fecha_hora: fecha + " " + hora, capacidad_clase, nombre_clase, area, lugar}
   
     if (id === null) {
       alert("ID de la clase no es válido.")
@@ -76,7 +80,7 @@ const location = useLocation();
     }
 
     
-    const Clase = { instructor, fecha_hora: fecha + " " + hora, capacidad_clase, nombre_clase}
+    const Clase = { instructor, fecha_hora: fecha + " " + hora, capacidad_clase, nombre_clase, area, lugar}
 
 
     console.log(Clase)
@@ -142,7 +146,15 @@ useEffect(() => {
         </div>
         <div className="Card">
           <h3 className="TitleText">Hora de la clase:</h3>
-          <input className="Text" type="time" id="hora" name="hora" value={hora} onChange={(e) => setHora(e.target.value)} placeholder='15:50'></input>
+            <input className="Text" type="time" id="hora" name="hora" value={hora} onChange={(e) => setHora(e.target.value)} placeholder='15:50'></input>
+        </div>
+        <div className="Card">
+          <h3 className="TitleText">Area de la clase:</h3>
+          <input className="Text" type="text" id="area" name="area" value={area} onChange={(e) => setArea(e.target.value)} placeholder='Deportes'></input>
+        </div>
+        <div className="Card">
+          <h3 className="TitleText">Lugar de la clase:</h3>
+          <input className="Text" type="text" id="lugar" name="lugar" value={lugar} onChange={(e) => setLugar(e.target.value)} placeholder='Salón 1'></input>
         </div>
         <div className="Card">
           <h3 className="TitleText">Capacidad de la clase:</h3>
