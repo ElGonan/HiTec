@@ -7,6 +7,7 @@ import {useLocation, useNavigate  } from 'react-router-dom';
 
 const RegisterUser = () => {
     const [name, setName] = useState<string>("")
+    const [matricula, setMatricula] = useState<string>("")
     const [phone, setPhone] = useState<number>(0)
     const location = useLocation()
     const navigate = useNavigate();
@@ -18,15 +19,17 @@ const RegisterUser = () => {
     e.preventDefault()
 
 
-    if (!name) {
-      alert("Favor de llenar el valor de Nombre")
+    if (!name || !matricula) {
+      alert("Favor de llenar el valor de Nombre completo y Matrícula")
       return
     }
 
     const alumno_name = name
+    const alumno_matricula = matricula
     const alumno_phone = phone
 
-    const Student = { alumno_name, alumno_phone }
+
+    const Student = { alumno_name, alumno_matricula, alumno_phone }
 
 
     console.log(Student)
@@ -43,8 +46,13 @@ const RegisterUser = () => {
     {
       if(error.code = "400")
       {
+        if (error.message.includes('duplicate key value violates unique constraint "alumno_alumno_matricula_key"'))
+        {
+          alert("La matrícula ya está registrada")
+          return
+        }
         alert("Error en alguna regla!!")
-        console.log(error.message)
+        console.log(error)
         return
       }
       alert(error.message)
@@ -71,7 +79,9 @@ useEffect(() => {
       <h1>Registro de Usuario</h1>
       <div>
         <h3>Nombre completo:</h3>
-        <input type="text" id="instructor_name" name="instructor_name" value={name} onChange={(e) => setName(e.target.value)} placeholder='Jose Luis Slobotzky'></input>
+        <input type="text" id="name" name="name" value={name} onChange={(e) => setName(e.target.value)} placeholder='Jose Luis Slobotzky'></input>
+        <h3>Matrícula (Empezando con A)</h3>
+        <input type="text" id="matricula" name="matrcula" value={matricula} onChange={(e) => setMatricula(e.target.value)} placeholder='AXXXXXXXX'></input>
         <h3>Número de teléfono:</h3>
         <input type="text" id="phone" name="phone" value={phone} onChange={(e) => setPhone(Number(e.target.value))} placeholder='xxx-xxx-xxxx' disabled={true}></input>
         <br></br>
