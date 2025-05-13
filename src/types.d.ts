@@ -1,6 +1,7 @@
 type Student = {
     alumno_id : number 
     alumno_name : string
+    alumno_matricula : string
     alumno_phone : number
 }
 
@@ -10,4 +11,6 @@ type Class = {
     fecha_hora : string
     capacidad_clase : number
     nombre_clase : string
+    area : string
+    lugar : string
 }
