@@ -19,3 +19,4 @@ https://www.figma.com/design/FfjcxLFsMTB4jrci0TcpmT/HiTec--Registro?node-id=0-1&
 - supabase-js
 - postgres
 - react-router-dom
+- react-spinners
