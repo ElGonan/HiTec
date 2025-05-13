@@ -124,6 +124,8 @@ const Admin = () => {
           <th className="Title" style={{ width: "60px" }}>ID</th>
           <th className="Title">Nombre de la clase</th>
           <th className="Title">Instructor</th>
+          <th className="Title">Área</th>
+          <th className="Title">Lugar</th>
           <th className="Title">Fecha y hora</th>
           <th className="Title">Capacidad</th>
           <th className="Title" style={{ width: "160px" }}>Acción</th>
@@ -137,6 +139,8 @@ const Admin = () => {
               <td className={textClass} style={{ width: "60px" }}>{clase.clase_id}</td>
               <td className={textClass}>{clase.nombre_clase}</td>
               <td className={textClass}>{clase.instructor}</td>
+              <td className={textClass}>{clase.area}</td>
+              <td className={textClass}>{clase.lugar}</td>
               <td className={textClass}>{clase.fecha_hora}</td>
               <td className={textClass}>{clase.capacidad_clase}</td>
               <td className={textClass} style={{ width: "160px", whiteSpace: "nowrap" }}>
