@@ -10,6 +10,14 @@
 .DateButton {
     background-color: #292929;
     border-color: var(--hover-bg-color);
+}@media screen and (max-width: 768px) {
+    .Date{
+    font-size: 32px;
+    font-weight: bold;
+    color: #ffffff; /* color del texto */
+    padding: 16px;
+    }
+   
 }
 
 .DateButton:disabled {
