@@ -1,4 +1,4 @@
-.Date{
+.Time{
 
     font-size: 64px;
     font-weight: bold;
@@ -7,24 +7,24 @@
 
 } 
 
-.DateButton {
+.TimeButton {
     background-color: #292929;
     border-color: var(--hover-bg-color);
 }@media screen and (max-width: 768px) {
-    .Date{
+    .Time{
     font-size: 32px;
     font-weight: bold;
     color: #ffffff; /* color del texto */
     padding: 16px;
     }
-   
 }
 
-.DateButton:disabled {
+
+.TimeButton:disabled {
     background-color: var(--hover-bg-color);
     cursor: not-allowed;
 }
-.DateButton:hover {
+.TimeButton:hover {
     background-color: var(--hover-bg-color, rgba(255, 255, 255, 0.218));
     border-color: var(--hover-bg-color);
     cursor: pointer;

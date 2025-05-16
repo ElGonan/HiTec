@@ -6,6 +6,9 @@ import supabaseUpdate from '../lib/supabaseUpdate';
 import Loading from '../components/Loading';
 import './css/Home.css';
 
+// cmd + d to select all instances of the same variable
+// option + cmd to increase the size of the cursor
+
 // This variables are for the color of the buttons
 const buttonColors = {
     1: "#FF5733", // Red
@@ -147,48 +150,48 @@ const Home = () => {
             <table style={{ borderCollapse: "collapse", textAlign: "center" }}>
                 <tbody>
                 <tr>
-                <td className="Date">
+                <td className="Time">
                     <button 
-                    className="DateButton" 
+                    className="TimeButton" 
                     style={{ '--hover-bg-color': buttonColors[1] } as React.CSSProperties}
                     onClick={() => goToArea(11)}>
                     11:00</button>
                     </td>
-                <td className="Date">
+                <td className="Time">
                     <button 
-                    className="DateButton" 
+                    className="TimeButton" 
                     style={{ '--hover-bg-color': buttonColors[2] } as React.CSSProperties}
                     onClick={() => goToArea(12)}>
                     12:00</button>
                     </td>
                 </tr>
                 <tr>
-                <td className="Date">
+                <td className="Time">
                     <button 
-                    className="DateButton" 
+                    className="TimeButton" 
                     style={{ '--hover-bg-color': buttonColors[3] } as React.CSSProperties}
                     onClick={() => goToArea(13)}>
                     13:00</button>
                     </td>
-                <td className="Date">
+                <td className="Time">
                     <button 
-                    className="DateButton"
+                    className="TimeButton"
                     style={{ '--hover-bg-color': buttonColors[4] } as React.CSSProperties}
                     onClick={() => goToArea(14)}>
                     14:00</button>
                     </td>
                 </tr>
                 <tr>
-                <td className="Date">
+                <td className="Time">
                     <button 
-                    className="DateButton" 
+                    className="TimeButton" 
                     style={{ '--hover-bg-color': buttonColors[5] } as React.CSSProperties}
                     onClick={() => goToArea(15)}>
                     15:00</button>
                     </td>
-                <td className="Date">
+                <td className="Time">
                     <button 
-                    className="DateButton" 
+                    className="TimeButton" 
                     style={{ '--hover-bg-color': buttonColors[6] } as React.CSSProperties}
                     onClick={() => goToArea(16)}>
                     16:00</button>
