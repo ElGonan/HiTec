@@ -154,7 +154,7 @@ useEffect(() => {
             <button onClick={getOut} style={{ position: "absolute", top: "10px", left: "10px" }}>Cerrar Sesión</button>
             <img src="../../logo.webp" alt="Logo HiTec" style={{ position: "relative", top: "32px", width: "10%", }} />
 
-            <h1>Bienvenido {name}</h1>
+            <h1>Bienvenidx {name}</h1>
             <h2>Por favor,Selecciona un horario.</h2>
             <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
             <table style={{ borderCollapse: "collapse", textAlign: "center" }}>
