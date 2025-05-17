@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import Loading from "../components/Loading";
 import { useLocation, useNavigate } from "react-router-dom";
-import supabaseGetTimeAndArea from "../lib/supabaseGetTimeandArea";
+import supabaseGetTimeAndArea from "../lib/supabaseGetTimeAndArea"
 import SupabaseInscription from "../lib/supabaseInscription";
 import "./css/Classes.css";
 
