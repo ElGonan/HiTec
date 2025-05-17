@@ -18,17 +18,17 @@ const [loading, setLoading] = useState(false);
 
 
     const getClases = async () => {
-        setLoading(true); // Start loading
+        setLoading(true); 
         const {data, error} = await supabaseGetTime(time);
         if (error) {
             alert(error.message);
-            setLoading(false); // Stop loading on error
+            setLoading(false); 
             return;
         }
         if (data) {
             console.log(data);
             setAreas(data);
-            setLoading(false); // Stop loading on success
+            setLoading(false); 
         }
     }
 

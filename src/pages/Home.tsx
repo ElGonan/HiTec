@@ -3,6 +3,9 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import supabaseGet from '../lib/supabaseGet';
 import Loading from '../components/Loading';
 import './css/Home.css';
+import supabase from '../supabase/supabaseClient';
+import supabaseUpdate from '../lib/supabaseUpdate';
+import supabaseDelete from '../lib/supabaseDelete';
 
 // cmd + d to select all instances of the same variable
 // option + cmd to increase the size of the cursor
@@ -24,11 +27,10 @@ type LocationState = {
   time?: number;
 };
 
-const timeInscription : any = []
 const Home = () => {
     const [id, setId] = useState<number | null>(null);
     const [name, setName] = useState<string | null>(null);
-    const [loading, setLoading] = useState(false); // New loading state
+    const [loading, setLoading] = useState(false);
     const [disableClasses, setDisableClasses] = useState<{ [key: number]: boolean }>({
         11: false,
         12: false,
@@ -37,25 +39,44 @@ const Home = () => {
         15: false,
         16: false
     });
+    const [ classID, setClassID ] = useState<number[]>([]); // Variable to store the class ID
+    const [ classCapacities, setClassCapacities ] = useState<number[]>([]); // Array to store class capacities
     const navigate = useNavigate();
     const location = useLocation();
     const state = location.state as LocationState;
+    const [ fullInscription, setFullInscription ] = useState<boolean>(false);
 
 
-    const checkInscriptions = (timeInscription : number[]) => {
-        if (timeInscription.length >= INSCRIPTIONLIMIT ) {
-            alert("Ya tienes 5 inscripciones");
-        }
+    const checkInscriptions = (inscriptionHours: number[]) => {
+        setLoading(true); // Start loading
+        const newDisableClasses: { [key: number]: boolean } = {
+        11: false,
+        12: false,
+        13: false,
+        14: false,
+        15: false,
+        16: false
+        };
 
-        const newDisableClasses = { ...disableClasses };
-        timeInscription.forEach((time : number) => {
-        if (newDisableClasses.hasOwnProperty(time)) {
-            newDisableClasses[time] = true;
-        }
+        // Desactiva los botones según las horas inscritas
+        inscriptionHours.forEach((hour) => {
+            if (newDisableClasses.hasOwnProperty(hour)) {
+                newDisableClasses[hour] = true;
+            }
         });
 
+        // Si ya llegó al límite, desactiva todo
+        if (inscriptionHours.length >= INSCRIPTIONLIMIT) {
+            Object.keys(newDisableClasses).forEach((key) => {
+                newDisableClasses[Number(key)] = true;
+            });
+            setFullInscription(true);
+        }
+
         setDisableClasses(newDisableClasses);
+        setLoading(false); // Stop loading
     };
+
 
 
     const goToArea = (time: number) => {
@@ -67,20 +88,51 @@ const Home = () => {
             }});
     }
 
+    /*
+    Esta función es epecial. Obtiene todas las clases de un alumno en una hora determinada.
+    Se usa para desactivar los botones de las clases a las que ya está inscrito.
+
+    Además de eso, también me da la capacidad de cada clase.
+    */
+
     const retrieveData = async (alumno_id: number) => {
         setLoading(true); // Start loading
-        const { data, error } = await supabaseGet("alumno", "alumno_id", alumno_id);
+        setId(alumno_id);
+        const { data, error } = await supabase
+            .from("alumno_clase")
+            .select("clase(fecha_hora, capacidad_clase, clase_id)")
+            .eq("alumno_id", alumno_id)
+        
         if (error) {
-            alert(error.message);
-            setLoading(false); // Stop loading on error
+            alert("Error al recuperar los datos: " + error.message);
+            setLoading(false); // Stop loading
             return;
         }
+
         if (data) {
-            setId(data[0].alumno_id);
-            setName(data[0].alumno_name);
+    const times = data.map(row => {
+    if (row.clase && typeof row.clase.fecha_hora === "string") {
+        // Extrae los dos dígitos después de la 'T'
+        const match = row.clase.fecha_hora.match(/T(\d{2})/);
+        return match ? match[1] : null;
         }
-        setLoading(false); // Stop loading after data is fetched
-    };
+        return null;
+    }).filter((hour): hour is string => hour !== null);
+    checkInscriptions(times);
+
+        const classCapacities = data.map(row =>
+            row.clase ? row.clase.capacidad_clase : null
+            ).filter((capacity): capacity is number => capacity !== null)
+        setClassCapacities(classCapacities);
+
+        const classIDs = data.map(row =>
+            row.clase ? row.clase.clase_id : null
+            ).filter((id): id is number => id !== null)
+        setClassID(classIDs);
+        setLoading(false); // Stop loading
+        }
+    }
+
 
     const getOut = () => {
         if (window.confirm("¿Seguro que deseas cerrar sesión?")) {
@@ -88,8 +140,42 @@ const Home = () => {
         }
     };
 
-
-
+    const deleteInscription = async () => {
+        if (window.confirm("¿Seguro que deseas borrar la inscripción?")) {
+            if (classID.length === 0) {
+                alert("No tienes inscripciones!!! mañoso");
+                return;
+            }
+            setLoading(true); // Start loading
+            const newCapacities = [...classCapacities];
+            for (let i = 0; i < newCapacities.length; i++) {
+                newCapacities[i] = newCapacities[i] + 1;
+            }
+            for (let i = 0; i < classID.length; i++) {
+            const { error } = await supabaseUpdate("clase", "clase_id", i, { capacidad_clase: newCapacities[i] });
+            if (error) {
+                alert("Error al actualizar la capacidad de la clase: " + error.message);
+                return;
+            }
+            }
+            const { error } = await supabaseDelete("alumno_clase", "alumno_id", id!);
+            if (error) {
+                alert(error.message);
+                setLoading(false); // Stop loading on error
+                return;
+            }
+            alert("Inscripción borrada correctamente");
+            setDisableClasses({
+                11: false,
+                12: false,
+                13: false,
+                14: false,
+                15: false,
+                16: false
+            });
+            setFullInscription(false);
+            setLoading(false); // Stop loading
+    }}
 
 useEffect(() => {
     const query = new URLSearchParams(location.search);
@@ -113,34 +199,13 @@ useEffect(() => {
 
     // Paso 2: Si viene algo en location.state
     if (location.state) {
-        const { alumno_id, time } = location.state;
+        const { alumno_id } = location.state;
 
         // Ejecuta la lógica de recuperación
         if (alumno_id) {
             retrieveData(alumno_id);
         }
 
-        // Si viene el valor de "time"
-        if (time !== undefined) {
-            const stored = localStorage.getItem("timeInscription");
-            let parsed: number[] = stored ? JSON.parse(stored) : [];
-
-            // Si no está repetido
-            if (!parsed.includes(time)) {
-                parsed.push(time);
-                localStorage.setItem("timeInscription", JSON.stringify(parsed));
-                checkInscriptions(parsed);
-            } else {
-                checkInscriptions(parsed); // solo actualizar botones
-            }
-        }
-    } else {
-        // Paso 3: Si no hay `location.state`, carga directamente del localStorage
-        const stored = localStorage.getItem("timeInscription");
-        if (stored) {
-            const parsed = JSON.parse(stored);
-            checkInscriptions(parsed);
-        }
     }
 }, [location.search, location.state]);
 
@@ -153,9 +218,13 @@ useEffect(() => {
             <>
             <button onClick={getOut} style={{ position: "absolute", top: "10px", left: "10px" }}>Cerrar Sesión</button>
             <img src="../../logo.webp" alt="Logo HiTec" style={{ position: "relative", top: "32px", width: "10%", }} />
-
+            <button onClick={deleteInscription} style={{ position: "absolute", top: "10px", right: "10px" }} >Borrar inscripción</button>
             <h1>Bienvenidx {name}</h1>
             <h2>Por favor,Selecciona un horario.</h2>
+            {fullInscription && (
+                <div>
+                    <p style={{ color: "red" }}>No puedes inscribirte a más de {INSCRIPTIONLIMIT} clases.</p>
+                </div>)}
             <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
             <table style={{ borderCollapse: "collapse", textAlign: "center" }}>
                 <tbody>

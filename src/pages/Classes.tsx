@@ -43,7 +43,6 @@ const Classes = () => {
                     navigate("/home", {
                         state: {
                             alumno_id: alumno_id,
-                            time: time,
                         }
                     });
                 });
