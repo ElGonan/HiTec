@@ -7,6 +7,8 @@ import Home from './pages/Home'
 import RegisterClass from './pages/RegisterClass'
 import RegisterUser from './pages/RegisterUser'
 import Admin from './pages/Admin'
+import Area from './pages/Area'
+import Classes from './pages/Classes'
 
 function App() {
 
@@ -22,6 +24,8 @@ function App() {
           <Route path="/registerClass" element={<RegisterClass />} />
           <Route path="/register" element={<RegisterUser />} />
           <Route path="/admin" element={<Admin />} />
+          <Route path="/area" element={<Area />} />
+          <Route path="/clases" element={<Classes />} />
         </Routes>
       </Router>
     </>
