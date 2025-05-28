@@ -48,11 +48,20 @@ const Classes = () => {
                 });
         }}
 
+    const getOut = () => {
+        navigate("/home", {
+            state: {
+                alumno_id: alumno_id,
+            }
+        });
+    }
+
 useEffect(()=> {
     getClases();
 },[])
     return (
         <>
+        <button onClick={getOut} style={{ position: "absolute", top: "10px", left: "10px" }}>Regresar</button>
         {loading && (<Loading />)}
         <div className="cristalCard">
             <h1 className="text-4xl font-bold mb-4">Por favor, seleccione la clase de su interés</h1>

@@ -42,12 +42,21 @@ const [loading, setLoading] = useState(false);
             }});
     }
 
+    const getOut = () => {
+        navigate("/home", {
+            state: {
+                alumno_id: alumno_id,
+            }
+        });
+    }
+
     useEffect(() => {
         getClases();
     }, []);
 
     return (
         <div>
+        <button onClick={getOut} style={{ position: "absolute", top: "10px", left: "10px" }}>Regresar</button>
             {loading && (<Loading />)}
         <div className="cristalCard">
             <h1 className="text-2xl font-bold mb-4">Seleccione una Area</h1>
