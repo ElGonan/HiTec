@@ -110,28 +110,30 @@ const Home = () => {
         }
 
         if (data) {
-    const times = data.map(row => {
-    if (row.clase && typeof row.clase.fecha_hora === "string") {
-        // Extrae los dos dígitos después de la 'T'
-        const match = row.clase.fecha_hora.match(/T(\d{2})/);
-        return match ? match[1] : null;
-        }
-        return null;
-    }).filter((hour): hour is string => hour !== null);
-    checkInscriptions(times);
+        const times = data.map(row => {
+            // row.clase is expected to be an array
+            if (Array.isArray(row.clase) && row.clase.length > 0 && typeof row.clase[0].fecha_hora === "string") {
+                // Extrae los dos dígitos después de la 'T'
+                const match = row.clase[0].fecha_hora.match(/T(\d{2})/);
+                return match ? Number(match[1]) : null;
+            }
+            return null;
+            }).filter((hour): hour is number => hour !== null);
+            checkInscriptions(times);
 
         const classCapacities = data.map(row =>
-            row.clase ? row.clase.capacidad_clase : null
-            ).filter((capacity): capacity is number => capacity !== null)
+            Array.isArray(row.clase) && row.clase.length > 0 ? row.clase[0].capacidad_clase : null
+        ).filter((capacity): capacity is number => capacity !== null);
         setClassCapacities(classCapacities);
 
         const classIDs = data.map(row =>
-            row.clase ? row.clase.clase_id : null
-            ).filter((id): id is number => id !== null)
+            Array.isArray(row.clase) && row.clase.length > 0 ? row.clase[0].clase_id : null
+        ).filter((id): id is number => id !== null);
         setClassID(classIDs);
         setLoading(false); // Stop loading
         }
     }
+    
 
 
     const getOut = () => {
