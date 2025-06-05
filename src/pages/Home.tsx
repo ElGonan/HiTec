@@ -100,7 +100,7 @@ const Home = () => {
         setId(alumno_id);
         const { data, error } = await supabase
             .from("alumno_clase")
-            .select("clase(fecha_hora, capacidad_clase, clase_id)")
+            .select("clase(fecha_hora, capacidad_clase, clase_id), alumno(alumno_name)")
             .eq("alumno_id", alumno_id)
         
         if (error) {
@@ -112,9 +112,12 @@ const Home = () => {
         if (data) {
         const times = data.map(row => {
             // row.clase is expected to be an array
-            if (Array.isArray(row.clase) && row.clase.length > 0 && typeof row.clase[0].fecha_hora === "string") {
+            if (row.alumno) {
+                setName(row.alumno.alumno_name)
+            }
+            if (row.clase) {
                 // Extrae los dos dígitos después de la 'T'
-                const match = row.clase[0].fecha_hora.match(/T(\d{2})/);
+                const match = row.clase.fecha_hora.match(/T(\d{2})/);
                 return match ? Number(match[1]) : null;
             }
             return null;
@@ -122,12 +125,12 @@ const Home = () => {
             checkInscriptions(times);
 
         const classCapacities = data.map(row =>
-            Array.isArray(row.clase) && row.clase.length > 0 ? row.clase[0].capacidad_clase : null
+            row.clase ? row.clase.capacidad_clase : null
         ).filter((capacity): capacity is number => capacity !== null);
         setClassCapacities(classCapacities);
 
         const classIDs = data.map(row =>
-            Array.isArray(row.clase) && row.clase.length > 0 ? row.clase[0].clase_id : null
+            row.clase ? row.clase.clase_id : null
         ).filter((id): id is number => id !== null);
         setClassID(classIDs);
         setLoading(false); // Stop loading
@@ -180,26 +183,7 @@ const Home = () => {
     }}
 
 useEffect(() => {
-    const query = new URLSearchParams(location.search);
-    const phoneFromQuery = Number(query.get("phone"));
-
-    // Paso 1: Si viene el teléfono en la query
-    if (phoneFromQuery) {
-        supabaseGet("alumno", "alumno_phone", phoneFromQuery).then(({ data, error }) => {
-            if (error) {
-                alert("Mensaje de error!!! " + error.message);
-                return;
-            }
-            if (data && data.length > 0) {
-                setId(data[0].alumno_id);
-                setName(data[0].alumno_name);
-            } else {
-                alert("No se encontró el número de teléfono");
-            }
-        });
-    }
-
-    // Paso 2: Si viene algo en location.state
+    // Paso 1: Si viene algo en location.state
     if (location.state) {
         const { alumno_id } = location.state;
 
