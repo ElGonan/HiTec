@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import supabaseGet from '../lib/supabaseGet';
 import Loading from '../components/Loading';
 import './css/Home.css';
 import supabase from '../supabase/supabaseClient';
 import supabaseUpdate from '../lib/supabaseUpdate';
 import supabaseDelete from '../lib/supabaseDelete';
+import Swal from 'sweetalert2';
 
 // cmd + d to select all instances of the same variable
 // option + cmd to increase the size of the cursor
@@ -37,7 +37,8 @@ const Home = () => {
         13: false,
         14: false,
         15: false,
-        16: false
+        16: false,
+        17: false,
     });
     const [ classID, setClassID ] = useState<number[]>([]); // Variable to store the class ID
     const [ classCapacities, setClassCapacities ] = useState<number[]>([]); // Array to store class capacities
@@ -55,7 +56,8 @@ const Home = () => {
         13: false,
         14: false,
         15: false,
-        16: false
+        16: false,
+        17: false,
         };
 
         // Desactiva los botones según las horas inscritas
@@ -139,16 +141,34 @@ const Home = () => {
     
 
 
-    const getOut = () => {
-        if (window.confirm("¿Seguro que deseas cerrar sesión?")) {
+    const getOut = async () => {
+        const result = await Swal.fire({
+            text: "¿Seguro que deseas salir?",
+            icon: 'question',
+            showCancelButton: true,
+            cancelButtonText: 'No',
+            confirmButtonText: 'Si'
+        })
+        if (result.isConfirmed) {
             navigate("/");
         }
     };
 
     const deleteInscription = async () => {
-        if (window.confirm("¿Seguro que deseas borrar la inscripción?")) {
+        const result = await Swal.fire({
+            title: "¿Seguro que deseas borrar tu inscripcion?",
+            text: "Esto no se puede deshacer, deberás volver a inscribirte.",
+            icon: 'warning',
+            showCancelButton: true,
+            cancelButtonText: 'No',
+            confirmButtonText: 'Si'
+        })
+        if (result.isConfirmed) {
             if (classID.length === 0) {
-                alert("No tienes inscripciones!!! mañoso");
+                Swal.fire({
+                    title: "¡No tienes inscripciones!",
+                    icon: "error"
+                })
                 return;
             }
             setLoading(true); // Start loading
@@ -176,7 +196,8 @@ const Home = () => {
                 13: false,
                 14: false,
                 15: false,
-                16: false
+                16: false,
+                17: false
             });
             setFullInscription(false);
             setLoading(false); // Stop loading
@@ -219,17 +240,17 @@ useEffect(() => {
                     <button 
                     className="TimeButton" 
                     style={{ '--hover-bg-color': buttonColors[1] } as React.CSSProperties}
-                    onClick={() => goToArea(11)}
-                    disabled={disableClasses[11]}>
-                    11:00</button>
+                    onClick={() => goToArea(13)}
+                    disabled={disableClasses[13]}>
+                    13:00</button>
                     </td>
                 <td className="Time">
                     <button 
                     className="TimeButton" 
                     style={{ '--hover-bg-color': buttonColors[2] } as React.CSSProperties}
-                    onClick={() => goToArea(12)}
-                    disabled={disableClasses[12]}>
-                    12:00</button>
+                    onClick={() => goToArea(15)}
+                    disabled={disableClasses[15]}>
+                    15:00</button>
                     </td>
                 </tr>
                 <tr>
@@ -237,20 +258,20 @@ useEffect(() => {
                     <button 
                     className="TimeButton" 
                     style={{ '--hover-bg-color': buttonColors[3] } as React.CSSProperties}
-                    onClick={() => goToArea(13)}
-                    disabled={disableClasses[13]}>
-                    13:00</button>
+                    onClick={() => goToArea(16)}
+                    disabled={disableClasses[16]}>
+                    16:00</button>
                     </td>
                 <td className="Time">
                     <button 
                     className="TimeButton"
                     style={{ '--hover-bg-color': buttonColors[4] } as React.CSSProperties}
-                    onClick={() => goToArea(14)}
-                    disabled={disableClasses[14]}>
-                    14:00</button>
+                    onClick={() => goToArea(17)}
+                    disabled={disableClasses[17]}>
+                    17:00</button>
                     </td>
                 </tr>
-                <tr>
+                {/* <tr>
                 <td className="Time">
                     <button 
                     className="TimeButton" 
@@ -267,7 +288,7 @@ useEffect(() => {
                     disabled={disableClasses[16]}>
                     16:00</button>
                     </td>
-                </tr>
+                </tr> */}
                 </tbody>
             </table>
             </div>
