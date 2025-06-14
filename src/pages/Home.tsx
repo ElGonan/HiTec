@@ -5,12 +5,13 @@ import './css/Home.css';
 import supabase from '../supabase/supabaseClient';
 import supabaseUpdate from '../lib/supabaseUpdate';
 import supabaseDelete from '../lib/supabaseDelete';
+import supabaseGet from '../lib/supabaseGet';
 import Swal from 'sweetalert2';
 
 // cmd + d to select all instances of the same variable
 // option + cmd to increase the size of the cursor
 
-let INSCRIPTIONLIMIT = 5;
+let INSCRIPTIONLIMIT = 4;
 
 // This variables are for the color of the buttons
 const buttonColors = {
@@ -111,10 +112,28 @@ const Home = () => {
             return;
         }
 
+        /*
+         * Fun fact: The query on top won't work if there are no classes signed.
+         * Fixed with the function below.
+         */
+
+        if (data.length == 0){
+            const { data, error } = await supabaseGet("alumno", "alumno_id", alumno_id)
+            if (error){
+                console.log("error recibiendo los datos del usuario.")
+            }
+            setName(data[0].alumno_name)
+            setLoading(false); // Stop loading
+            return;
+        }
+
+        console.log(data)
+
         if (data) {
         const times = data.map(row => {
             // row.clase is expected to be an array
             if (row.alumno) {
+                
                 setName(row.alumno.alumno_name)
             }
             if (row.clase) {
@@ -189,7 +208,10 @@ const Home = () => {
                 setLoading(false); // Stop loading on error
                 return;
             }
-            alert("Inscripción borrada correctamente");
+            Swal.fire({
+                    title: "Inscripción borrada correctametne",
+                    icon: "success"
+                });
             setDisableClasses({
                 11: false,
                 12: false,
@@ -227,7 +249,7 @@ useEffect(() => {
             <img src="../../logo.webp" alt="Logo HiTec" style={{ position: "relative", top: "32px", width: "10%", }} />
             <button onClick={deleteInscription} style={{ position: "absolute", top: "10px", right: "10px" }} >Borrar inscripción</button>
             <h1>Bienvenidx {name}</h1>
-            <h2>Por favor,Selecciona un horario.</h2>
+            <h2>Por favor, Selecciona un horario.</h2>
             {fullInscription && (
                 <div>
                     <p style={{ color: "red" }}>No puedes inscribirte a más de {INSCRIPTIONLIMIT} clases.</p>
