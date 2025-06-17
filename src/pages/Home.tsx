@@ -1,16 +1,17 @@
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import supabaseGet from '../lib/supabaseGet';
 import Loading from '../components/Loading';
 import './css/Home.css';
 import supabase from '../supabase/supabaseClient';
 import supabaseUpdate from '../lib/supabaseUpdate';
 import supabaseDelete from '../lib/supabaseDelete';
+import supabaseGet from '../lib/supabaseGet';
+import Swal from 'sweetalert2';
 
 // cmd + d to select all instances of the same variable
 // option + cmd to increase the size of the cursor
 
-let INSCRIPTIONLIMIT = 5;
+let INSCRIPTIONLIMIT = 4;
 
 // This variables are for the color of the buttons
 const buttonColors = {
@@ -37,7 +38,8 @@ const Home = () => {
         13: false,
         14: false,
         15: false,
-        16: false
+        16: false,
+        17: false,
     });
     const [ classID, setClassID ] = useState<number[]>([]); // Variable to store the class ID
     const [ classCapacities, setClassCapacities ] = useState<number[]>([]); // Array to store class capacities
@@ -55,7 +57,8 @@ const Home = () => {
         13: false,
         14: false,
         15: false,
-        16: false
+        16: false,
+        17: false,
         };
 
         // Desactiva los botones según las horas inscritas
@@ -109,10 +112,28 @@ const Home = () => {
             return;
         }
 
+        /*
+         * Fun fact: The query on top won't work if there are no classes signed.
+         * Fixed with the function below.
+         */
+
+        if (data.length == 0){
+            const { data, error } = await supabaseGet("alumno", "alumno_id", alumno_id)
+            if (error){
+                console.log("error recibiendo los datos del usuario.")
+            }
+            setName(data[0].alumno_name)
+            setLoading(false); // Stop loading
+            return;
+        }
+
+        console.log(data)
+
         if (data) {
         const times = data.map(row => {
             // row.clase is expected to be an array
             if (row.alumno) {
+                
                 setName(row.alumno.alumno_name)
             }
             if (row.clase) {
@@ -139,16 +160,34 @@ const Home = () => {
     
 
 
-    const getOut = () => {
-        if (window.confirm("¿Seguro que deseas cerrar sesión?")) {
+    const getOut = async () => {
+        const result = await Swal.fire({
+            text: "¿Seguro que deseas salir?",
+            icon: 'question',
+            showCancelButton: true,
+            cancelButtonText: 'No',
+            confirmButtonText: 'Si'
+        })
+        if (result.isConfirmed) {
             navigate("/");
         }
     };
 
     const deleteInscription = async () => {
-        if (window.confirm("¿Seguro que deseas borrar la inscripción?")) {
+        const result = await Swal.fire({
+            title: "¿Seguro que deseas borrar tu inscripcion?",
+            text: "Esto no se puede deshacer, deberás volver a inscribirte.",
+            icon: 'warning',
+            showCancelButton: true,
+            cancelButtonText: 'No',
+            confirmButtonText: 'Si'
+        })
+        if (result.isConfirmed) {
             if (classID.length === 0) {
-                alert("No tienes inscripciones!!! mañoso");
+                Swal.fire({
+                    title: "¡No tienes inscripciones!",
+                    icon: "error"
+                })
                 return;
             }
             setLoading(true); // Start loading
@@ -169,14 +208,18 @@ const Home = () => {
                 setLoading(false); // Stop loading on error
                 return;
             }
-            alert("Inscripción borrada correctamente");
+            Swal.fire({
+                    title: "Inscripción borrada correctametne",
+                    icon: "success"
+                });
             setDisableClasses({
                 11: false,
                 12: false,
                 13: false,
                 14: false,
                 15: false,
-                16: false
+                16: false,
+                17: false
             });
             setFullInscription(false);
             setLoading(false); // Stop loading
@@ -206,7 +249,7 @@ useEffect(() => {
             <img src="../../logo.webp" alt="Logo HiTec" style={{ position: "relative", top: "32px", width: "10%", }} />
             <button onClick={deleteInscription} style={{ position: "absolute", top: "10px", right: "10px" }} >Borrar inscripción</button>
             <h1>Bienvenidx {name}</h1>
-            <h2>Por favor,Selecciona un horario.</h2>
+            <h2>Por favor, Selecciona un horario.</h2>
             {fullInscription && (
                 <div>
                     <p style={{ color: "red" }}>No puedes inscribirte a más de {INSCRIPTIONLIMIT} clases.</p>
@@ -219,17 +262,17 @@ useEffect(() => {
                     <button 
                     className="TimeButton" 
                     style={{ '--hover-bg-color': buttonColors[1] } as React.CSSProperties}
-                    onClick={() => goToArea(11)}
-                    disabled={disableClasses[11]}>
-                    11:00</button>
+                    onClick={() => goToArea(13)}
+                    disabled={disableClasses[13]}>
+                    13:00</button>
                     </td>
                 <td className="Time">
                     <button 
                     className="TimeButton" 
                     style={{ '--hover-bg-color': buttonColors[2] } as React.CSSProperties}
-                    onClick={() => goToArea(12)}
-                    disabled={disableClasses[12]}>
-                    12:00</button>
+                    onClick={() => goToArea(15)}
+                    disabled={disableClasses[15]}>
+                    15:00</button>
                     </td>
                 </tr>
                 <tr>
@@ -237,20 +280,20 @@ useEffect(() => {
                     <button 
                     className="TimeButton" 
                     style={{ '--hover-bg-color': buttonColors[3] } as React.CSSProperties}
-                    onClick={() => goToArea(13)}
-                    disabled={disableClasses[13]}>
-                    13:00</button>
+                    onClick={() => goToArea(16)}
+                    disabled={disableClasses[16]}>
+                    16:00</button>
                     </td>
                 <td className="Time">
                     <button 
                     className="TimeButton"
                     style={{ '--hover-bg-color': buttonColors[4] } as React.CSSProperties}
-                    onClick={() => goToArea(14)}
-                    disabled={disableClasses[14]}>
-                    14:00</button>
+                    onClick={() => goToArea(17)}
+                    disabled={disableClasses[17]}>
+                    17:00</button>
                     </td>
                 </tr>
-                <tr>
+                {/* <tr>
                 <td className="Time">
                     <button 
                     className="TimeButton" 
@@ -267,7 +310,7 @@ useEffect(() => {
                     disabled={disableClasses[16]}>
                     16:00</button>
                     </td>
-                </tr>
+                </tr> */}
                 </tbody>
             </table>
             </div>
