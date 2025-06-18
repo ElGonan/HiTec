@@ -20,6 +20,13 @@
 
 .Text {
     font-size: 16px;
-    color: #ffffff; /* color del texto */
+    color: #ffffff !important; /* color del texto */
     width: 95%;
+}
+
+.FillText {
+    font-size: 16px;
+    color: #000000 !important; /* color del texto */
+    width: 95%;
+   
 }

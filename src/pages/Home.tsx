@@ -162,7 +162,7 @@ const Home = () => {
 
     const getOut = async () => {
         const result = await Swal.fire({
-            text: "¿Seguro que deseas salir?",
+            text: "¿Segurx que deseas salir?",
             icon: 'question',
             showCancelButton: true,
             cancelButtonText: 'No',
@@ -175,7 +175,7 @@ const Home = () => {
 
     const deleteInscription = async () => {
         const result = await Swal.fire({
-            title: "¿Seguro que deseas borrar tu inscripcion?",
+            title: "¿Segurx que deseas borrar tu inscripcion?",
             text: "Esto no se puede deshacer, deberás volver a inscribirte.",
             icon: 'warning',
             showCancelButton: true,
@@ -209,7 +209,7 @@ const Home = () => {
                 return;
             }
             Swal.fire({
-                    title: "Inscripción borrada correctametne",
+                    title: "Inscripción borrada correctamente.",
                     icon: "success"
                 });
             setDisableClasses({

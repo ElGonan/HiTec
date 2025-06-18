@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import  supabaseGet  from '../lib/supabaseGet'
 import { useNavigate } from 'react-router-dom';
+import Swal from 'sweetalert2';
 
 const Login = () => {
     const [strPhone, setStrPhone] = useState<string | null>()
@@ -17,13 +18,19 @@ const Login = () => {
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         if (!strPhone || strPhone.toString().length !== 10) {
-            alert("Favor de llenar el valor de telefono, los telefonos tienen 10 digitos")
+            Swal.fire({
+                title: "Por favor, ingresa mínimo 10 dígitos.",
+                icon: "error"
+            })
             return
         }
         const alumno_phone = Number(strPhone)
 
         if (isNaN(alumno_phone)){
-            alert("El teléfono no es válido")
+            Swal.fire({
+                title: "El teléfono no es válido.",
+                icon: "error"
+            })
             return
         }
 
@@ -36,8 +43,17 @@ const Login = () => {
             return
         }
 
-        if (!data || data.length === 0) {  
-            if (window.confirm("No se encontró el número de teléfono \n¿Deseas registrarte?")) {
+        if (!data || data.length === 0) {
+            const result = await Swal.fire({
+                text: "No se encontró el número de teléfono. ¿Deseas registrarte?",
+                icon: "question",
+                showCancelButton: true,
+                cancelButtonText: "No",
+                confirmButtonText: "Si"
+
+
+            })
+            if (result.isConfirmed) {
                 navigate("/register?phone=" + strPhone);
             }
         }

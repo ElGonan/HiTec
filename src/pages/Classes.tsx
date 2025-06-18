@@ -4,6 +4,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import supabaseGetTimeAndArea from "../lib/supabaseGetTimeAndArea"
 import SupabaseInscription from "../lib/supabaseInscription";
 import "./css/Classes.css";
+import Swal from 'sweetalert2'
 
 const Classes = () => {
     const location = useLocation();
@@ -27,10 +28,16 @@ const Classes = () => {
         }
     }
 
-    const handleInscription = (clase_id: number) => {
+    const handleInscription = async (clase_id: number) => {
         console.log(alumno_id, clase_id);
-        if ( window.confirm("Seguro que deseas inscribirte a la clase?"))
-        {
+        const result = await Swal.fire({
+                text: "Seguro que deseas inscribirte a la clase?",
+                icon: "question",
+                showCancelButton: true,
+                cancelButtonText: "No",
+                confirmButtonText: "Si"
+            })
+            if (result.isConfirmed) {
                 setLoading(true);
                 SupabaseInscription(alumno_id, clase_id).then(({ error }) => {
                     if (error) {
@@ -38,7 +45,10 @@ const Classes = () => {
                         setLoading(false);
                         return;
                     }
-                    alert("Inscripción exitosa");
+                    Swal.fire({
+                        title: "Inscripción exitosa.",
+                        icon: "success"
+                    })
                     setLoading(false);
                     navigate("/home", {
                         state: {
