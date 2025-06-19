@@ -5,6 +5,7 @@ import supabaseGetTimeAndArea from "../lib/supabaseGetTimeAndArea"
 import SupabaseInscription from "../lib/supabaseInscription";
 import "./css/Classes.css";
 import Swal from 'sweetalert2'
+import ClassCard from "../components/ClassCard";
 
 const Classes = () => {
     const location = useLocation();
@@ -31,7 +32,7 @@ const Classes = () => {
     const handleInscription = async (clase_id: number) => {
         console.log(alumno_id, clase_id);
         const result = await Swal.fire({
-                text: "Seguro que deseas inscribirte a la clase?",
+                text: "Segurx que deseas inscribirte a esta clase?",
                 icon: "question",
                 showCancelButton: true,
                 cancelButtonText: "No",
@@ -66,47 +67,20 @@ useEffect(()=> {
         {loading && (<Loading />)}
         <div className="cristalCard">
             <h1 className="text-4xl font-bold mb-4">Por favor, seleccione la clase de su interés</h1>
-            <div
-            className="DBtable" style={{
-                overflowX: "auto",
-                width: "fit-screen",
-                marginTop: "10px"}}>
-                <table
-                style={{
-                    borderCollapse: "collapse",
-                    width: "100%",
-                    minWidth: "600px"
-                    }}>
-                    <thead>
-                        <tr>
-                            <th className="Title">Nombre</th>
-                            <th className="Title">Instructor</th>
-                            <th className="Title">Lugar</th>
-                            <th className="Title">Inscribirse</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {data?.map((item: any, index: number) => (
-                            <tr key={index}>
-                                <td className="Text">{item.nombre_clase}</td>
-                                <td className="Text">{item.instructor}</td>
-                                <td className="Text">{item.lugar}</td>
-                                <td className="Text ">
-                                    <button
-                                        className="bg-blue-500 text-white px-4 py-2 rounded"
-                                        onClick={() => {
-                                            handleInscription(item.clase_id);}}
-                                    >
-                                        Inscribirse
-                                    </button>
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
+            <div>
+            {data?.map((item:any, index: number) => (
+                <div key={index}>
+                    <ClassCard 
+                    className={item.nombre_clase} 
+                    teacherName={item.instructor} 
+                    onSign={() => handleInscription(item.clase_id)}
+                    />
+                </div>
+            ))}
             </div>
         </div>
         </>
     );
 }
 export default Classes;
+
