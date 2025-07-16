@@ -10,6 +10,10 @@ import Admin from './pages/Admin'
 import Area from './pages/Area'
 import Classes from './pages/Classes'
 
+/* We may use useContext to avoid
+   many calls to the DB. */
+
+
 function App() {
 
 

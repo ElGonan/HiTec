@@ -73,14 +73,13 @@ useEffect(() => {
                 <img src="../../logo.webp" alt="Logo HiTec" style={{ width: "25%" }} />
             </div>
             <div>
-                <h2>Por favor, ingresa con tu número de teléfono</h2>
+                <h2>Por favor, ingresa con tu código</h2>
                 <form onSubmit={handleSubmit}>
                     <input type="number" placeholder="xxx-xxx-xxxx" name="phone" value={strPhone || ''} onChange={handleInputChange} ></input>
                     <br></br> <br></br>
-                    <button type="submit">Enviar datos</button>
+                    <button type="submit">Iniciar sesión</button>
                 </form>
             </div>
-            <p style={{ fontSize: '8px' }}>Al iniciar sesión o registrarte aceptas nuestras <a href="/terms">condiciones de uso</a></p>
         </div>
         </>
     )

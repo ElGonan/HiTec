@@ -22,7 +22,7 @@ const Classes = () => {
             return;
         }
         if (data) {
-            console.log(data);
+            //console.log(data);
             setData(data);
             setLoading(false);
         }
@@ -41,7 +41,10 @@ const Classes = () => {
                 setLoading(true);
                 SupabaseInscription(alumno_id, clase_id).then(({ error }) => {
                     if (error) {
-                        alert(error.message);
+                        Swal.fire({
+                    title: "No hay más lugares para esta clase!",
+                    icon: "error"
+                            })
                         setLoading(false);
                         return;
                     }
@@ -86,7 +89,8 @@ useEffect(()=> {
                         </tr>
                     </thead>
                     <tbody>
-                        {data?.map((item: any, index: number) => (
+                        {data?.filter(item => item.capacidad_clase > 0)
+                        .map((item: any, index: number) => (
                             <tr key={index}>
                                 <td className="Text">{item.nombre_clase}</td>
                                 <td className="Text">{item.instructor}</td>

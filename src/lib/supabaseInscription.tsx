@@ -19,7 +19,7 @@ const modifyCapacity = async (id: number) => {
 
   // 2. Validar que no sea menor a 0
   if (nuevaCapacidad < 0) {
-    alert("No hay lugares disponibles en esta clase.")
+    console.error("No hay lugares disponibles en esta clase.")
     return -1
   }
 
@@ -52,7 +52,7 @@ const SupabaseInscription = async (alumno_id : number, clase_id: number) => {
     }
 
     if (data) {
-        console.log("Inscripcion exitosa")
+        //console.log("Inscripcion exitosa")
         
       return { data, error: null }
     }
