@@ -5,6 +5,7 @@ import supabaseGetTimeAndArea from "../lib/supabaseGetTimeAndArea"
 import SupabaseInscription from "../lib/supabaseInscription";
 import "./css/Classes.css";
 import Swal from 'sweetalert2'
+import ClassCard from "../components/ClassCard";
 
 const Classes = () => {
     const location = useLocation();
@@ -31,7 +32,7 @@ const Classes = () => {
     const handleInscription = async (clase_id: number) => {
         console.log(alumno_id, clase_id);
         const result = await Swal.fire({
-                text: "Seguro que deseas inscribirte a la clase?",
+                text: "Segurx que deseas inscribirte a esta clase?",
                 icon: "question",
                 showCancelButton: true,
                 cancelButtonText: "No",
@@ -114,3 +115,4 @@ useEffect(()=> {
     );
 }
 export default Classes;
+

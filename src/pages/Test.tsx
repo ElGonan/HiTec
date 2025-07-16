@@ -1,9 +1,9 @@
-import supabase from '../supabase/supabaseClient'
-import { useEffect, useState } from 'react'
-import useSupabaseRead from '../hooks/useSupabaseRead'
-import { PostgrestError } from '@supabase/supabase-js'
-
-
+import Swal from 'sweetalert2';
+import { useEffect, useState } from 'react';
+import supabase from '../supabase/supabaseClient';
+import useSupabaseRead from '../hooks/useSupabaseRead';
+import { PostgrestError } from '@supabase/supabase-js';
+import ClassCard from '../components/ClassCard';
 
 const Test = () => {
   const [error, setError] = useState<PostgrestError | null | string>(null)
@@ -89,7 +89,17 @@ fetchClases()
   return(
 
     <>
-    <div>
+    <ClassCard className="pako" teacherName="Pilates"/>
+    </>
+
+  )
+
+}
+export default Test
+
+
+/*
+ <div>
       <h1>Hitec Register</h1>
       <p>Welcome to the Hitec Register app!</p>
       <p>Check the console for Supabase client details.</p>
@@ -127,12 +137,12 @@ fetchClases()
       
       </div>
     </div>
-    </>
 
-  )
+* */
 
-}
-export default Test
+
+
+
 
 
 // Just while I do testing, I'll comment the whole page out
