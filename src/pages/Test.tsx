@@ -1,7 +1,6 @@
 import Swal from 'sweetalert2';
 import { useEffect, useState } from 'react';
 import supabase from '../supabase/supabaseClient';
-import useSupabaseRead from '../hooks/useSupabaseRead';
 import { PostgrestError } from '@supabase/supabase-js';
 import ClassCard from '../components/ClassCard';
 
@@ -80,7 +79,6 @@ const Test = () => {
 
   }
 
-  const { data } = useSupabaseRead('alumno')
 
 useEffect(() => {
 fetchClases()

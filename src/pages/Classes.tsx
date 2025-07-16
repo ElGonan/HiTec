@@ -5,7 +5,6 @@ import supabaseGetTimeAndArea from "../lib/supabaseGetTimeAndArea"
 import SupabaseInscription from "../lib/supabaseInscription";
 import "./css/Classes.css";
 import Swal from 'sweetalert2'
-import ClassCard from "../components/ClassCard";
 
 const Classes = () => {
     const location = useLocation();
