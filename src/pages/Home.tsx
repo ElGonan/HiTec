@@ -8,6 +8,7 @@ import supabaseDelete from '../lib/supabaseDelete';
 import supabaseGet from '../lib/supabaseGet';
 import Swal from 'sweetalert2';
 import { useUser } from '../hooks/useUserContext';
+import GlassCard from '../components/GlassCard';
 
 
 
@@ -15,7 +16,7 @@ import { useUser } from '../hooks/useUserContext';
 // cmd + d to select all instances of the same variable
 // option + cmd to increase the size of the cursor
 
-let INSCRIPTIONLIMIT = 4;
+const INSCRIPTIONLIMIT = 4;
 
 // This variables are for the color of the buttons
 const buttonColors = {
@@ -33,7 +34,7 @@ type LocationState = {
 };
 
 const Home = () => {
-    const { logout } = useUser();
+    const { logout, user } = useUser();
     const [id, setId] = useState<number | null>(null);
     const [name, setName] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
@@ -105,7 +106,7 @@ const Home = () => {
 
     const retrieveData = async (alumno_id: number) => {
         setLoading(true); // Start loading
-        setId(alumno_id);
+        setId(user?.alumno_id);
         const { data, error } = await supabase
             .from("alumno_clase")
             .select("clase(fecha_hora, capacidad_clase, clase_id), alumno(alumno_name)")
@@ -137,10 +138,6 @@ const Home = () => {
         if (data) {
         const times = data.map(row => {
             // row.clase is expected to be an array
-            if (row.alumno) {
-                
-                setName(row.alumno.alumno_name)
-            }
             if (row.clase) {
                 // Extrae los dos dígitos después de la 'T'
                 const match = row.clase.fecha_hora.match(/T(\d{2})/);
@@ -167,7 +164,7 @@ const Home = () => {
 
     const getOut = async () => {
         const result = await Swal.fire({
-            text: "¿Segurx que deseas salir?",
+            text: "¿Segurx que deseas cerrar tu sesión?",
             icon: 'question',
             showCancelButton: true,
             cancelButtonText: 'No',
@@ -233,8 +230,8 @@ const Home = () => {
 
 useEffect(() => {
     // Paso 1: Si viene algo en location.state
-    if (location.state) {
-        const { alumno_id } = location.state;
+    if (user) {
+        const { alumno_id } = user.alumno_id;
 
         // Ejecuta la lógica de recuperación
         if (alumno_id) {
@@ -252,74 +249,77 @@ useEffect(() => {
             )}
             <>
             <button onClick={getOut} style={{ position: "absolute", top: "10px", left: "10px" }}>Cerrar Sesión</button>
-            <img src="../../logo.webp" alt="Logo HiTec" style={{ position: "relative", top: "32px", width: "10%", }} />
             <button onClick={deleteInscription} style={{ position: "absolute", top: "10px", right: "10px" }} >Borrar inscripción</button>
-            <h1>Bienvenidx {name}</h1>
-            <h2>Por favor, Selecciona un horario.</h2>
-            {fullInscription && (
-                <div>
-                    <p style={{ color: "red" }}>No puedes inscribirte a más de {INSCRIPTIONLIMIT} clases.</p>
-                </div>)}
-            <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-            <table style={{ borderCollapse: "collapse", textAlign: "center" }}>
-                <tbody>
-                <tr>
-                <td className="Time">
-                    <button 
-                    className="TimeButton" 
-                    style={{ '--hover-bg-color': buttonColors[1] } as React.CSSProperties}
-                    onClick={() => goToArea(13)}
-                    disabled={disableClasses[13]}>
-                    13:00</button>
-                    </td>
-                <td className="Time">
-                    <button 
-                    className="TimeButton" 
-                    style={{ '--hover-bg-color': buttonColors[2] } as React.CSSProperties}
-                    onClick={() => goToArea(15)}
-                    disabled={disableClasses[15]}>
-                    15:00</button>
-                    </td>
-                </tr>
-                <tr>
-                <td className="Time">
-                    <button 
-                    className="TimeButton" 
-                    style={{ '--hover-bg-color': buttonColors[3] } as React.CSSProperties}
-                    onClick={() => goToArea(16)}
-                    disabled={disableClasses[16]}>
-                    16:00</button>
-                    </td>
-                <td className="Time">
-                    <button 
-                    className="TimeButton"
-                    style={{ '--hover-bg-color': buttonColors[4] } as React.CSSProperties}
-                    onClick={() => goToArea(17)}
-                    disabled={disableClasses[17]}>
-                    17:00</button>
-                    </td>
-                </tr>
-                {/* <tr>
-                <td className="Time">
-                    <button 
-                    className="TimeButton" 
-                    style={{ '--hover-bg-color': buttonColors[5] } as React.CSSProperties}
-                    onClick={() => goToArea(15)}
-                    disabled={disableClasses[15]}>
-                    15:00</button>
-                    </td>
-                <td className="Time">
-                    <button 
-                    className="TimeButton" 
-                    style={{ '--hover-bg-color': buttonColors[6] } as React.CSSProperties}
-                    onClick={() => goToArea(16)}
-                    disabled={disableClasses[16]}>
-                    16:00</button>
-                    </td>
-                </tr> */}
-                </tbody>
-            </table>
-            </div>
+            <GlassCard>
+                <img src="../../logo.webp" alt="Logo HiTec" style={{ position: "relative", top: "32px", width: "10%", }} />
+                <h1>Bienvenidx {name}</h1>
+                <h2>Por favor, Selecciona un horario.</h2>
+                {fullInscription && (
+                    <div>
+                        <p style={{ color: "red" }}>No puedes inscribirte a más de {INSCRIPTIONLIMIT} clases.</p>
+                    </div>)}
+                <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+                <table style={{ borderCollapse: "collapse", textAlign: "center" }}>
+                    <tbody>
+                    <tr>
+                    <td className="Time">
+                        <button 
+                        className="TimeButton" 
+                        style={{ '--hover-bg-color': buttonColors[1] } as React.CSSProperties}
+                        onClick={() => goToArea(13)}
+                        disabled={disableClasses[13]}>
+                        13:00</button>
+                        </td>
+                    <td className="Time">
+                        <button 
+                        className="TimeButton" 
+                        style={{ '--hover-bg-color': buttonColors[2] } as React.CSSProperties}
+                        onClick={() => goToArea(15)}
+                        disabled={disableClasses[15]}>
+                        15:00</button>
+                        </td>
+                    </tr>
+                    <tr>
+                    <td className="Time">
+                        <button 
+                        className="TimeButton" 
+                        style={{ '--hover-bg-color': buttonColors[3] } as React.CSSProperties}
+                        onClick={() => goToArea(16)}
+                        disabled={disableClasses[16]}>
+                        16:00</button>
+                        </td>
+                    <td className="Time">
+                        <button 
+                        className="TimeButton"
+                        style={{ '--hover-bg-color': buttonColors[4] } as React.CSSProperties}
+                        onClick={() => goToArea(17)}
+                        disabled={disableClasses[17]}>
+                        17:00</button>
+                        </td>
+                    </tr>
+                    {/* <tr>
+                    <td className="Time">
+                        <button 
+                        className="TimeButton" 
+                        style={{ '--hover-bg-color': buttonColors[5] } as React.CSSProperties}
+                        onClick={() => goToArea(15)}
+                        disabled={disableClasses[15]}>
+                        15:00</button>
+                        </td>
+                    <td className="Time">
+                        <button 
+                        className="TimeButton" 
+                        style={{ '--hover-bg-color': buttonColors[6] } as React.CSSProperties}
+                        onClick={() => goToArea(16)}
+                        disabled={disableClasses[16]}>
+                        16:00</button>
+                        </td>
+                    </tr> */}
+                    </tbody>
+                </table>
+                </div>
+                <button>Ver mi horario</button>
+            </GlassCard>
             </>
         </div>
     );
