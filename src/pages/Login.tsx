@@ -1,70 +1,32 @@
-/* eslint-disable @typescript-eslint/no-unused-expressions */
-import { useEffect, useState } from 'react'
-import  supabaseGet  from '../lib/supabaseGet'
+import { useState, useEffect } from 'react'
+import { useUser } from '../hooks/useUserContext';
 import { useNavigate } from 'react-router-dom';
-import Swal from 'sweetalert2';
+
 
 const Login = () => {
-    const [strPhone, setStrPhone] = useState<string | null>()
-    const navigate = useNavigate();
+const [inputId, setInputId] = useState('');
+const { login, isLoading, user } = useUser();
+const navigate = useNavigate();
 
 
-    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const value = e.target.value
-        if (value.length <= 10) {
-            setStrPhone(value)
-        }
-    }
-
-    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault()
-        if (!strPhone || strPhone.toString().length !== 10) {
-            Swal.fire({
-                title: "Por favor, ingresa mínimo 10 dígitos.",
-                icon: "error"
-            })
-            return
-        }
-        const alumno_phone = Number(strPhone)
-
-        if (isNaN(alumno_phone)){
-            Swal.fire({
-                title: "El teléfono no es válido.",
-                icon: "error"
-            })
-            return
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        try{
+            console.log(inputId)
+            await login(inputId);
+        } catch(error) {
+            alert((error as Error).message)
         }
 
-        const { data, error } = await supabaseGet("alumno", "alumno_phone", alumno_phone)
-        if (error) {
-            alert(error.message)
-            return
-        }if (data?.[0]?.alumno_id === 1) {
-            navigate("/admin")
-            return
-        }
+    };
 
-        if (!data || data.length === 0) {
-            const result = await Swal.fire({
-                text: "No se encontró el número de teléfono. ¿Deseas registrarte?",
-                icon: "question",
-                showCancelButton: true,
-                cancelButtonText: "No",
-                confirmButtonText: "Si"
-
-
-            })
-            if (result.isConfirmed) {
-                navigate("/register?phone=" + strPhone);
-            }
-        }
-        else{
-            navigate("home?phone=" + strPhone, {state: { alumno_id: data[0].alumno_id }});
-        }
-    }
 useEffect(() => {
-    handleInputChange;
-}, [])
+if (user){
+        if(user.alumno_id === 1) {navigate("/admin");}
+        else{navigate("/Home");}
+        
+    }
+},[navigate, user])
 
     return (
         <>
@@ -76,9 +38,9 @@ useEffect(() => {
             <div>
                 <h2>Por favor, ingresa con tu código</h2>
                 <form onSubmit={handleSubmit}>
-                    <input type="number" placeholder="xxx-xxx-xxxx" name="phone" value={strPhone || ''} onChange={handleInputChange} ></input>
+                    <input type="number" placeholder="XXXX" name="phone" value={inputId} onChange={(e) => setInputId(e.target.value)} required></input>
                     <br></br> <br></br>
-                    <button type="submit">Iniciar sesión</button>
+                    <button disabled={isLoading} type="submit">Iniciar sesión</button>
                 </form>
             </div>
         </div>

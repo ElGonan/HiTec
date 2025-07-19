@@ -9,29 +9,27 @@ import RegisterUser from './pages/RegisterUser'
 import Admin from './pages/Admin'
 import Area from './pages/Area'
 import Classes from './pages/Classes'
-
-/* We may use useContext to avoid
-   many calls to the DB. */
-
+import { UserProvider } from './hooks/useUserContext'
 
 function App() {
 
-
   return (
     <>
-      <Router>
-        <Routes>
-          <Route path="/" element={<Login />} />
-          <Route path="/test" element={<Test />} />
-          <Route path="/terms" element={<Terms />} />
-          <Route path="/home" element={<Home />} />
-          <Route path="/registerClass" element={<RegisterClass />} />
-          <Route path="/register" element={<RegisterUser />} />
-          <Route path="/admin" element={<Admin />} />
-          <Route path="/area" element={<Area />} />
-          <Route path="/clases" element={<Classes />} />
-        </Routes>
-      </Router>
+      <UserProvider>
+        <Router>
+          <Routes>
+            <Route path="/" element={<Login />} />
+            <Route path="/test" element={<Test />} />
+            <Route path="/terms" element={<Terms />} />
+            <Route path="/home" element={<Home />} />
+            <Route path="/registerClass" element={<RegisterClass />} />
+            <Route path="/register" element={<RegisterUser />} />
+            <Route path="/admin" element={<Admin />} />
+            <Route path="/area" element={<Area />} />
+            <Route path="/clases" element={<Classes />} />
+          </Routes>
+        </Router>
+      </UserProvider>
     </>
   )
 }

@@ -7,6 +7,10 @@ import supabaseUpdate from '../lib/supabaseUpdate';
 import supabaseDelete from '../lib/supabaseDelete';
 import supabaseGet from '../lib/supabaseGet';
 import Swal from 'sweetalert2';
+import { useUser } from '../hooks/useUserContext';
+
+
+
 
 // cmd + d to select all instances of the same variable
 // option + cmd to increase the size of the cursor
@@ -29,6 +33,7 @@ type LocationState = {
 };
 
 const Home = () => {
+    const { logout } = useUser();
     const [id, setId] = useState<number | null>(null);
     const [name, setName] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
@@ -169,6 +174,7 @@ const Home = () => {
             confirmButtonText: 'Si'
         })
         if (result.isConfirmed) {
+            await logout();
             navigate("/");
         }
     };

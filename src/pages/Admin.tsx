@@ -6,11 +6,12 @@ import exportToCSV from '../lib/exportCSV'
 import transformDate from '../lib/transformDate'
 import './css/Admin.css'
 import Swal from 'sweetalert2'
+import { useUser } from '../hooks/useUserContext'
 
 const Admin = () => {
+    const { logout } = useUser();
     const [clases, setClases] = useState<Class[]>([])
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const [error, setError] = useState<string | null>(null)
+    const [, setError] = useState<string | null>(null)
     const navigate = useNavigate()
 
     const getOut = async () => {
@@ -21,8 +22,9 @@ const Admin = () => {
             cancelButtonText: "No",
             confirmButtonText: "Si"
                 })
- 
+
         if (result.isConfirmed) {
+            await logout();
             navigate("/")
         }
     }
@@ -35,7 +37,7 @@ const Admin = () => {
             cancelButtonText: "No",
             confirmButtonText: "Si"
                 })
- 
+
         if (result.isConfirmed) {
         exportToCSV()
         }
