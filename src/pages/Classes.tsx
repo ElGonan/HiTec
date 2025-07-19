@@ -5,13 +5,16 @@ import supabaseGetTimeAndArea from "../lib/supabaseGetTimeAndArea"
 import SupabaseInscription from "../lib/supabaseInscription";
 import "./css/Classes.css";
 import Swal from 'sweetalert2'
+import { useUser } from "../hooks/useUserContext";
 
 const Classes = () => {
+    const { user } = useUser();
     const location = useLocation();
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
-    const { alumno_id, time, area } = location.state as { alumno_id: number; time: number; area: string };
+    const { time, area } = location.state as { time: number; area: string };
     const [data, setData] = useState<Class[] | null>(null);
+    const alumno_id = user?.alumno_id;
 
     const getClases = async () => {
         setLoading(true);
@@ -29,7 +32,7 @@ const Classes = () => {
     }
 
     const handleInscription = async (clase_id: number) => {
-        console.log(alumno_id, clase_id);
+        // console.log(alumno_id, clase_id);
         const result = await Swal.fire({
                 text: "Segurx que deseas inscribirte a esta clase?",
                 icon: "question",
@@ -61,12 +64,21 @@ const Classes = () => {
                 });
         }}
 
+    const goBack = () =>
+    {
+        navigate("/area", {
+            state: {
+                time: time,
+            }});
+    }
+
 useEffect(()=> {
     getClases();
 },[])
     return (
         <>
-        {loading && (<Loading />)}
+        <button onClick={goBack} style={{ position: "absolute", top: "10px", left: "10px" }}>Regresar</button>
+        {loading ? (<Loading />) :
         <div className="cristalCard">
             <h1 className="text-4xl font-bold mb-4">Por favor, seleccione la clase de su interés</h1>
             <div
@@ -90,6 +102,7 @@ useEffect(()=> {
                     </thead>
                     <tbody>
                         {data?.filter(item => item.capacidad_clase > 0)
+                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
                         .map((item: any, index: number) => (
                             <tr key={index}>
                                 <td className="Text">{item.nombre_clase}</td>
@@ -110,6 +123,8 @@ useEffect(()=> {
                 </table>
             </div>
         </div>
+        }
+    
         </>
     );
 }

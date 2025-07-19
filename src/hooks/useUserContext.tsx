@@ -1,8 +1,11 @@
-/*  Get the context of the user, to avoid many
-    calls to the API.
+/* eslint-disable react-refresh/only-export-components */
+
+
+/*  Obtiene el contexto del usuario para evitar multiples llamadas
+    a la DB
 */
 
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useState, useEffect } from "react";
 import supabaseGet from "../lib/supabaseGet";
 import Swal from "sweetalert2";
 
@@ -13,22 +16,40 @@ type UserContextType = {
   isLoading: boolean;
 };
 
-// eslint-disable-next-line react-refresh/only-export-components
 export const userContext = createContext<UserContextType | undefined>(undefined);
 
 export const UserProvider = ({ children }: { children:React.ReactNode }) => {
 
-    const [user, setUser] = useState<Student | User | null>(null);
     const [isLoading, setIsLoading] = useState(false);
+
+    // Obtenemos el usuario de localStorage si existe
+    const [user, setUser] = useState<Student | User | null>(() => {
+        if (typeof window !== 'undefined') {
+            const saved = localStorage.getItem('user');
+            return saved ? JSON.parse(saved) : null;
+        }
+        return null;
+    })
+
+    // Al cambio del usuario, lo guardamos en localstorage.
+    useEffect(() => {
+        if (user) {
+            localStorage.setItem('user', JSON.stringify(user));
+        } else {
+            localStorage.removeItem('user');
+        }
+    }, [user])
+
+
 
     const login = async (id: string) => {
         setIsLoading(true);
         try {
             const { data, error } = await supabaseGet("alumno", "alumno_id", id);
-            // if there's no User
             if (error || !data){
                 throw new Error("Algo falló" + error?.message || "No hay datos!");
             }
+            // En caso de que no haya usuario
             if (data.length === 0){
             await Swal.fire({
             title: "El usuario ingresado no existe",
@@ -53,7 +74,6 @@ export const UserProvider = ({ children }: { children:React.ReactNode }) => {
 
 };
 
-// eslint-disable-next-line react-refresh/only-export-components
 export const useUser = () => {
     const context = useContext(userContext);
     if (!context) throw new Error('useUser debe ser usado con un UserProvider');
