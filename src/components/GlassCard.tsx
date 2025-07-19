@@ -13,7 +13,7 @@ const GlassCard = ({
   children,
   className = '',
   style = {},
-  blur = 8,
+  blur = 2,
   transparency = 0.2
 }: GlassCardProps) => {
   return (
@@ -23,10 +23,11 @@ const GlassCard = ({
         display: 'inline-block', // Ajuste al contenido
         backdropFilter: `blur(${blur}px)`,
         backgroundColor: `rgba(255, 255, 255, ${transparency})`,
-        borderRadius: '12px',
+        borderRadius: '8px',
         border: '1px solid rgba(255, 255, 255, 0.18)',
+        margin: '2rem',
         boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)',
-        padding: '1.5rem',
+        padding: '0.5rem',
         width: 'fit-content', // Clave para ajuste al contenido
         height: 'fit-content',
         ...style // Permite sobrescribir estilos

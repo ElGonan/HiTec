@@ -6,6 +6,7 @@ import supabaseUpdate from '../lib/supabaseUpdate'
 import transformDate from '../lib/transformDate'
 import './css/Register.css'
 import Swal from 'sweetalert2';
+import GlassCard from '../components/GlassCard'
 
 const RegisterClass = () => {
 const [id, setId] = useState<number | null>(null)
@@ -166,6 +167,7 @@ useEffect(() => {
       <div style={{ position: "absolute", top: "10px", left: "10px" }}>
       <button onClick={() => navigate("/admin")}>Regresar</button>
       </div>
+      <GlassCard>
       <img src="../../logo.webp" alt="Logo HiTec" style={{ position: "relative", top: "10px", width: "10%", }} />
       <h1>Registro de clases</h1>
       <p>Hola Snev o miembro del Staff. Por favor den de alta la clase que gusten</p>
@@ -201,7 +203,7 @@ useEffect(() => {
           {id ? <button onClick={editClass}>Modificar Clase</button> : <button onClick={addClass}>Crear Clase</button>}
       
       </div>
-      
+      </GlassCard>
     </div>
     </>
 

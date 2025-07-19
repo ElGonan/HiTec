@@ -7,6 +7,7 @@ import transformDate from '../lib/transformDate'
 import './css/Admin.css'
 import Swal from 'sweetalert2'
 import { useUser } from '../hooks/useUserContext'
+import GlassCard from '../components/GlassCard'
 
 const Admin = () => {
     const { logout } = useUser();
@@ -130,11 +131,11 @@ const Admin = () => {
   >
     Exportar a csv
   </button>
-
+  <GlassCard style={{ padding: "1rem" }}>
   <img
     src="../../logo.webp"
     alt="Logo HiTec"
-    style={{ position: "absolute", top: "10px", width: "80px" }}
+    style={{ width: "150px", height: "150px", marginBottom: "-40px" }}
   />
 
   <h1 style={{ textAlign: "center", marginTop: "60px" }}>
@@ -192,7 +193,9 @@ const Admin = () => {
       </tbody>
     </table>
   </div>
+  </GlassCard>
 </div>
+
 
 )
 }
