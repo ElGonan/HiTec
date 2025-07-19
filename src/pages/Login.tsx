@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-expressions */
 import { useEffect, useState } from 'react'
 import  supabaseGet  from '../lib/supabaseGet'
 import { useNavigate } from 'react-router-dom';
@@ -62,7 +63,7 @@ const Login = () => {
         }
     }
 useEffect(() => {
-    handleInputChange
+    handleInputChange;
 }, [])
 
     return (

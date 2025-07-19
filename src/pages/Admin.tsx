@@ -9,6 +9,7 @@ import Swal from 'sweetalert2'
 
 const Admin = () => {
     const [clases, setClases] = useState<Class[]>([])
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [error, setError] = useState<string | null>(null)
     const navigate = useNavigate()
 
@@ -37,7 +38,7 @@ const Admin = () => {
  
         if (result.isConfirmed) {
         exportToCSV()
-    }
+        }
     }
 
     const editClass = (clase_id: number) => {
@@ -68,6 +69,7 @@ const Admin = () => {
                     text: error.message,
                     icon: "error"
                 })
+                console.log(error);
                 return;
                 }
                 Swal.fire({

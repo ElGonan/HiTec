@@ -1,8 +1,16 @@
+/*
+The table Alumno has now the alumno_class_1 and alumno_class_2
+since those are the classes we WONT be modifying
+*/
+
+
 CREATE TABLE Alumno (
   alumno_ID BIGINT PRIMARY KEY,
   alumno_name TEXT NOT NULL,
   alumno_matricula TEXT NOT NULL UNIQUE,
-  alumno_phone BIGINT UNIQUE NOT NULL CHECK (alumno_phone BETWEEN 1000000000 AND 9999999999)
+  alumno_phone BIGINT UNIQUE NOT NULL CHECK (alumno_phone BETWEEN 1000000000 AND 9999999999),
+  alumno_class_1 BIGINT,
+  alumno_class_2 BIGINT
 );
 
 
