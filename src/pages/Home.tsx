@@ -218,10 +218,7 @@ const Home = () => {
 
     const goToSchedule = () =>
     {
-        navigate("/schedule", {
-            state: {
-                data: userClassData
-            }})
+        navigate("/schedule")
     }
 
 

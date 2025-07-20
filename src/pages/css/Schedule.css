@@ -1,0 +1,38 @@
+.context{
+    font-size: 16px;
+}
+
+.title {
+    font-size: 20px;
+}
+
+.table {
+  border-collapse: collapse; /* Esto hace que los bordes se colapsen en una sola línea */
+  width: 100%;
+}
+
+.table tr:nth-child(even) {
+      background-color: rgba(0,0,0,0.2)
+}
+
+.tableTitle {
+    font-size: 24px;
+}
+.tableTitleMid {
+    font-size: 24px;
+    border: 1px solid #ddd; /* Bordes de 1px sólidos en gris claro */
+    padding: 8px;
+    border-top: 0cap;
+}
+
+.tableEvent {
+  border: 1px solid #ddd; /* Bordes de 1px sólidos en gris claro */
+  border-left: 0cm;
+  border-right: 0cm;
+  padding: 8px;
+}
+
+.tableEventMid{
+    border: 1px solid #ddd; /* Bordes de 1px sólidos en gris claro */
+    padding: 8px;
+}

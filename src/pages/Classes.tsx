@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect } from "react";
 import Loading from "../components/Loading";
 import { useLocation, useNavigate } from "react-router-dom";
