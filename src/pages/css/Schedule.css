@@ -3,12 +3,11 @@
 }
 
 .title {
-    font-size: 20px;
+    font-size: 16px;
 }
 
 .table {
   border-collapse: collapse; /* Esto hace que los bordes se colapsen en una sola línea */
-  width: 100%;
 }
 
 .table tr:nth-child(even) {
@@ -16,23 +15,50 @@
 }
 
 .tableTitle {
-    font-size: 24px;
+    font-size: 32px;
+    padding: 8px;
 }
 .tableTitleMid {
-    font-size: 24px;
+    font-size: 32px;
     border: 1px solid #ddd; /* Bordes de 1px sólidos en gris claro */
-    padding: 8px;
+    padding: 4px;
     border-top: 0cap;
+    padding: 8px;
 }
 
 .tableEvent {
-  border: 1px solid #ddd; /* Bordes de 1px sólidos en gris claro */
-  border-left: 0cm;
-  border-right: 0cm;
-  padding: 8px;
+    border: 1px solid #ddd; /* Bordes de 1px sólidos en gris claro */
+    border-left: 0cm;
+    border-right: 0cm;
+    padding: 4px;
+    font-size: large;
+
 }
 
 .tableEventMid{
     border: 1px solid #ddd; /* Bordes de 1px sólidos en gris claro */
-    padding: 8px;
+    padding: 4px;
+    font-size: large;
+
+}
+
+@media (max-width: 768px) {
+.context{
+    font-size: 12px;
+}
+
+.title {
+    font-size: 16px;
+}
+
+.tableTitle {
+    font-size: 1.2em;
+    padding: 2px;
+}
+.tableTitleMid {
+    font-size: 1.2em;
+    padding: 2px;
+
+}
+    
 }

@@ -106,7 +106,7 @@ const Home = () => {
             .eq("alumno_id", alumno_id)
         
         if (error) {
-            alert("Error al recuperar los datos: " + error.message);
+            console.log("Error al recuperar los datos: " + error.message);
             setLoading(false); 
             return;
         }

@@ -7,6 +7,7 @@ import SupabaseInscription from "../lib/supabaseInscription";
 import "./css/Classes.css";
 import Swal from 'sweetalert2'
 import { useUser } from "../hooks/useUserContext";
+import GlassCard from "../components/GlassCard";
 
 const Classes = () => {
     const { user } = useUser();
@@ -80,7 +81,7 @@ useEffect(()=> {
         <>
         <button onClick={goBack} style={{ position: "absolute", top: "10px", left: "10px" }}>Regresar</button>
         {loading ? (<Loading />) :
-        <div className="cristalCard">
+        <GlassCard>
             <h1 className="text-4xl font-bold mb-4">Por favor, seleccione la clase de su interés</h1>
             <div
             className="DBtable" style={{
@@ -123,7 +124,7 @@ useEffect(()=> {
                     </tbody>
                 </table>
             </div>
-        </div>
+        </GlassCard>
         }
     
         </>

@@ -63,7 +63,7 @@ const [loading, setLoading] = useState(false);
             <div className="Area">
                 {areas.map((areas, index) => (
                     <div key={index}  >
-                        <button 
+                        <button className="AreaButton"
                             onClick={() => goToClasses(areas.area)}
                         >{areas.area}</button>
                     </div>

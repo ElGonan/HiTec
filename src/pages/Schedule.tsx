@@ -5,7 +5,6 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
 import Loading from '../components/Loading';
 import GlassCard from '../components/GlassCard';
-import transformDate from '../lib/transformDate';
 
 
 
@@ -43,6 +42,19 @@ const Schedule = () => {
         navigate("/home")
     }
 
+    const transformTime = (date: string) => {
+        const isoDate = date.replace(' ', 'T')
+        const dateObj = new Date(isoDate)
+        const options: Intl.DateTimeFormatOptions = {
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        timeZone: 'UTC',
+        hour12: false // Ensures 24-hour clock format
+    }
+    return dateObj.toLocaleString('es-MX', options)
+    }
+
 useEffect(() => {
     if (user){
         getData(user.alumno_id.toString())
@@ -63,14 +75,14 @@ useEffect(() => {
                         <tr>
                             <th className='tableTitle'>Nombre de la clase</th>
                             <th className='tableTitleMid'>Lugar de la clase</th>
-                            <th className='tableTitleMid'>fecha y hora de la clase</th>
+                            <th className='tableTitleMid'>Hora de la clase</th>
                             <th className='tableTitle'>Instructor de la clase</th>
                         </tr>
             {data.map((clase, index) => (
                         <tr key={index}>
                             <td className='tableEvent'>{clase.nombre_clase}</td>
                             <td className='tableEventMid'>{clase.lugar}</td>
-                            <td className='tableEventMid'>{transformDate(clase.fecha_hora)}</td>
+                            <td className='tableEventMid'>{transformTime(clase.fecha_hora)}</td>
                             <td className='tableEvent'>{clase.instructor}</td>
                         </tr>
             ))}
