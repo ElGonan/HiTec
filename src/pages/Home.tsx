@@ -1,89 +1,196 @@
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import supabaseGet from '../lib/supabaseGet';
-import supabaseDelete from '../lib/supabaseDelete';
+import Loading from '../components/Loading';
+import './css/Home.css';
+import supabase from '../supabase/supabaseClient';
 import supabaseUpdate from '../lib/supabaseUpdate';
-import SupabaseInscription from '../lib/supabaseInscription';
-import useSupabaseRead from '../hooks/useSupabaseRead';
-import transformDate from '../lib/transformDate';
+import supabaseDelete from '../lib/supabaseDelete';
+import supabaseGet from '../lib/supabaseGet';
+import Swal from 'sweetalert2';
+import { useUser } from '../hooks/useUserContext';
+import GlassCard from '../components/GlassCard';
+
+
+
+
+// cmd + d to select all instances of the same variable
+// option + cmd to increase the size of the cursor
+
+const INSCRIPTIONLIMIT = 4;
+
+// This variables are for the color of the buttons
+const buttonColors = {
+    1: "#FF5733", // Red
+    2: "#33FF57", // Green
+    3: "#3357FF", // Blue
+    4: "#FF33A1", // Pink
+    5: "#FFA533" , // Orange
+    6: "#FF33FF"  // Purple
+};
+
 
 const Home = () => {
+    const { logout, user } = useUser();
     const [id, setId] = useState<number | null>(null);
-    const [name, setName] = useState<string | null>(null);
-    const [errorInscription, setErrorInscription] = useState<string | null>(null);
-    const [isSelected, setIsSelected] = useState(false);
-    const [loading, setLoading] = useState(false); // New loading state
+    const [loading, setLoading] = useState(false);
+    const [disableClasses, setDisableClasses] = useState<{ [key: number]: boolean }>({
+        11: false,
+        12: false,
+        13: false,
+        14: false,
+        15: false,
+        16: false,
+        17: false,
+    });
+    const [ classID, setClassID ] = useState<number[]>([]); // Variable to store the class ID
+    const [ classCapacities, setClassCapacities ] = useState<number[]>([]); // Array to store class capacities
     const navigate = useNavigate();
-    const location = useLocation();
-    const [clases, setClases] = useState<{ [key: number]: number | null }>({
-        1: null,
-        2: null,
-        3: null,
-        4: null,
-        5: null
-    });
-    const [capacidades, setCapacidades] = useState<{ [key: number]: number }>({
-        1: 0,
-        2: 0,
-        3: 0,
-        4: 0,
-        5: 0
-    });
+    const [ fullInscription, setFullInscription ] = useState<boolean>(false);
+    const [ seeScheduleButton, setSeeScheduleButton ] = useState<boolean>(false);
+    const [userClassData, setUserClassData] = useState<unknown>(null);
 
-    const retrieveData = async (alumno_id: number) => {
+
+    const checkInscriptions = (inscriptionHours: number[]) => {
         setLoading(true); // Start loading
-        const { data, error } = await supabaseGet("alumno_clase", "alumno_id", alumno_id);
-        if (error) {
-            alert(error.message);
-            setLoading(false); // Stop loading on error
-            return;
-        }
-        if (data) {
-            const claseIds = data.map((item: any) => item.clase_id);
-            claseIds.forEach((claseId, index) => {
-                const claseKey = index + 1;
-                setClases((prev) => ({ ...prev, [claseKey]: claseId }));
-                // Fetch the corresponding clase capacity
-                supabaseGet("clase", "clase_id", claseId).then(({ data, error }) => {
-                    if (error) {
-                        alert(error.message);
-                        setLoading(false); // Stop loading on error
-                        return;
-                    }
-                    if (data) {
-                        const capacidad = data[0].capacidad_clase || 0;
-                        setCapacidades((prev) => ({ ...prev, [claseKey]: capacidad }));
-                    }
-                });
-            });
-            if (claseIds.length > 0) {
-                setIsSelected(true);
+        const newDisableClasses: { [key: number]: boolean } = {
+        11: false,
+        12: false,
+        13: false,
+        14: false,
+        15: false,
+        16: false,
+        17: false,
+        };
+
+        // Desactiva los botones según las horas inscritas
+        inscriptionHours.forEach((hour) => {
+            if (newDisableClasses.hasOwnProperty(hour)) {
+                newDisableClasses[hour] = true;
             }
+        });
+
+        // Si ya llegó al límite, desactiva todo
+        if (inscriptionHours.length >= INSCRIPTIONLIMIT) {
+            Object.keys(newDisableClasses).forEach((key) => {
+                newDisableClasses[Number(key)] = true;
+            });
+            setFullInscription(true);
         }
-        setLoading(false); // Stop loading after data is fetched
+
+        setDisableClasses(newDisableClasses);
+        setLoading(false); // Stop loading
     };
 
-    const getOut = () => {
-        if (window.confirm("¿Seguro que deseas cerrar sesión?")) {
+
+
+    const goToArea = (time: number) => {
+        navigate("/area", {
+            state: {
+                time: time,
+            }});
+    }
+
+    /*
+    Esta función es epecial. Obtiene todas las clases de un alumno en una hora determinada.
+    Se usa para desactivar los botones de las clases a las que ya está inscrito.
+
+    Además de eso, también me da la capacidad de cada clase.
+    */
+
+    const retrieveData = async (alumno_id: number) => {
+        setLoading(true); 
+        setId(user?.alumno_id);
+        const { data, error } = await supabase
+            .from("alumno_clase")
+            .select("clase(fecha_hora, capacidad_clase, clase_id), alumno(alumno_name)")
+            .eq("alumno_id", alumno_id)
+        
+        if (error) {
+            console.log("Error al recuperar los datos: " + error.message);
+            setLoading(false); 
+            return;
+        }
+
+        if (data.length == 0){
+            setLoading(false); 
+            setSeeScheduleButton(false);
+            return;
+        } else {
+            setSeeScheduleButton(true);
+            console.log(data);
+            setUserClassData(data);
+        }
+
+
+        if (data) {
+        const times = data.map(row => {
+            // row.clase se espera que sea un array
+            if (row.clase) {
+                // Extrae los dos dígitos después de la 'T'
+                const match = row.clase.fecha_hora.match(/T(\d{2})/);
+                return match ? Number(match[1]) : null;
+            }
+            return null;
+            }).filter((hour): hour is number => hour !== null);
+            checkInscriptions(times);
+
+        const classCapacities = data.map(row =>
+            row.clase ? row.clase.capacidad_clase : null
+        ).filter((capacity): capacity is number => capacity !== null);
+        setClassCapacities(classCapacities);
+
+        const classIDs = data.map(row =>
+            row.clase ? row.clase.clase_id : null
+        ).filter((id): id is number => id !== null);
+        setClassID(classIDs);
+        setLoading(false); 
+        }
+    }
+    
+
+
+    const getOut = async () => {
+        const result = await Swal.fire({
+            text: "¿Segurx que deseas cerrar tu sesión?",
+            icon: 'question',
+            showCancelButton: true,
+            cancelButtonText: 'No',
+            confirmButtonText: 'Si'
+        })
+        if (result.isConfirmed) {
+            await logout();
             navigate("/");
         }
     };
 
     const deleteInscription = async () => {
-        if (window.confirm("¿Seguro que deseas borrar la inscripción?")) {
+        const result = await Swal.fire({
+            title: "¿Segurx que deseas borrar tu inscripcion?",
+            text: "Esto no se puede deshacer, deberás volver a inscribirte.",
+            icon: 'warning',
+            showCancelButton: true,
+            cancelButtonText: 'No',
+            confirmButtonText: 'Si'
+        })
+        if (result.isConfirmed) {
+            if (classID.length === 0) {
+                Swal.fire({
+                    title: "¡No tienes inscripciones!",
+                    icon: "error"
+                })
+                return;
+            }
             setLoading(true); // Start loading
-            for (let i = 1; i <= 5; i++) {
-                const claseId = clases[i];
-                const capacidad = capacidades[i];
-                if (claseId !== null) {
-                    const newCapacity = capacidad + 1;
-                    const { error } = await supabaseUpdate("clase", "clase_id", claseId, { capacidad_clase: newCapacity });
-                    if (error) {
-                        alert(error.message);
-                        setLoading(false); // Stop loading on error
-                        return;
-                    }
-                }
+            const newCapacities = [...classCapacities];
+            for (let i = 0; i < newCapacities.length; i++) {
+                newCapacities[i] = newCapacities[i] + 1;
+            }
+            for (let i = 0; i < classID.length; i++) {
+            const { error } = await supabaseUpdate("clase", "clase_id", i, { capacidad_clase: newCapacities[i] });
+            if (error) {
+                alert("Error al actualizar la capacidad de la clase: " + error.message);
+                return;
+            }
             }
             const { error } = await supabaseDelete("alumno_clase", "alumno_id", id!);
             if (error) {
@@ -91,123 +198,116 @@ const Home = () => {
                 setLoading(false); // Stop loading on error
                 return;
             }
-            alert("Inscripción borrada correctamente");
-            setIsSelected(false);
-            setClases({ 1: null, 2: null, 3: null, 4: null, 5: null });
-            setCapacidades({ 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 });
-            setLoading(false); // Stop loading after deletion
-        }
-    };
+            Swal.fire({
+                    title: "Inscripción borrada correctamente.",
+                    icon: "success"
+                });
+            setDisableClasses({
+                11: false,
+                12: false,
+                13: false,
+                14: false,
+                15: false,
+                16: false,
+                17: false
+            });
+            setFullInscription(false);
+            setSeeScheduleButton(false);
+            setLoading(false); // Stop loading
+    }}
 
-    const handleInscription = async (clase_id: number) => {
-        const { data, error } = await SupabaseInscription(id!, clase_id);
-        if (error) {
-            setErrorInscription(error.message);
-            return;
-        }
-        return data ? 1 : 0;
-    };
-
-    const handleSubmit = async () => {
-        console.log(clases);
-        if (clases[1] === null && clases[2] === null && clases[3] === null && clases[4] === null && clases[5] === null) {
-            alert("Por favor selecciona al menos una clase");
-            return;
-        }
-        if (window.confirm("Seguro que deseas inscribirte a las clases seleccionadas?")) {
-            setLoading(true); // Start loading
-            for (let i = 1; i <= 5; i++) {
-                const claseId = clases[i];
-                if (claseId) {
-                    await handleInscription(claseId);
-                }
-            }
-            if (!errorInscription) {
-                alert("Inscripción exitosa");
-                setIsSelected(true);
-            } else {
-                alert("Error en la inscripción: " + errorInscription);
-            }
-            setLoading(false); // Stop loading after submission
-        }
-    };
-
-    const { data, error }: { data: Class[] | null; error: any } = useSupabaseRead("clase");
-    if (error) {
-        console.error('Error fetching data:', error);
+    const goToSchedule = () =>
+    {
+        navigate("/schedule")
     }
 
-    useEffect(() => {
-        const query = new URLSearchParams(location.search);
-        const phoneFromQuery = Number(query.get("phone"));
-        if (phoneFromQuery) {
-            supabaseGet("alumno", "alumno_phone", phoneFromQuery).then(({ data, error }) => {
-                if (error) {
-                    alert("Mensaje de error!!! " + error.message);
-                    return;
-                }
-                if (data && data.length > 0) {
-                    setId(data[0].alumno_id);
-                    setName(data[0].alumno_name);
-                } else {
-                    alert("No se encontró el número de teléfono");
-                }
-            });
-        }
 
-        if (location.state) {
-            retrieveData(location.state.alumno_id);
-        }
+useEffect(() => {
+    retrieveData(user?.alumno_id);
+}, [user]);
 
-    }, [location.search, location.state, isSelected]);
 
     return (
         <div>
             <button onClick={getOut} style={{ position: "absolute", top: "10px", left: "10px" }}>Cerrar Sesión</button>
-            <button onClick={deleteInscription} style={{ position: "absolute", top: "10px", right: "10px" }} disabled={!isSelected || loading}>Borrar inscripción</button>
-            <img src="../../logo.webp" alt="Logo HiTec" style={{ position: "relative", top: "32px", width: "10%", }} />
-
-            <h1>Bienvenido {name}</h1>
-            <h2>Por favor, verifica tus clases.</h2>
-            <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
-                {Array.from({ length: 5 }, (_, i) => (
-                    <select
-                        value={clases[i + 1] ?? ""}
-                        onChange={(e) => {
-                            const claseId = Number(e.target.value);
-                            // Verifica si la clase ya fue seleccionada en otro select
-                            const isDuplicate = Object.entries(clases).some(([key, value]) => {
-                                return parseInt(key) !== i + 1 && value === claseId;
-                            });
-
-                            if (!claseId || !isDuplicate) {
-                                setClases((prev) => ({ ...prev, [i + 1]: claseId || null }));
-                            } else {
-                                alert("Esta clase ya ha sido seleccionada. Por favor elige otra.");
-                            }
-                        }}
-                        disabled={loading || isSelected} // Disable dropdowns when loading or already selected
-                    >
-                        <option value="">Selecciona una clase</option>
-                        {data?.map((Class) => {
-                            const isAlreadySelected = Object.entries(clases).some(
-                                ([key, value]) => parseInt(key) !== i + 1 && value === Class.clase_id || Class.capacidad_clase === 0
-                            );
-                            return (
-                                <option
-                                    key={Class.clase_id}
-                                    value={Class.clase_id}
-                                    disabled={isAlreadySelected}
-                                >
-                                    {Class.nombre_clase} | Prof: {Class.instructor} | Fecha y hora: {transformDate(Class.fecha_hora)}
-                                </option>
-                            );
-                        })}
-                    </select>
-                ))}
-            </div>
-            <br></br>
-            <button onClick={() => handleSubmit()} disabled={isSelected || loading}>Inscribirme!</button>
+            <button onClick={deleteInscription} style={{ position: "absolute", top: "10px", right: "10px" }} >Borrar inscripción</button>
+            {loading ? (<Loading /> ) :
+        
+        <>
+            <GlassCard>
+                <img src="../../logo.webp" alt="Logo HiTec" style={{ position: "relative", top: "32px", width: "10%", }} />
+                <h1>Bienvenidx</h1>
+                <h2>Por favor, Selecciona un horario para tu clase</h2>
+                {fullInscription && (
+                    <div>
+                        <p style={{ color: "red" }}>No puedes inscribirte a más de {INSCRIPTIONLIMIT} clases.</p>
+                    </div>)}
+                <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+                <table style={{ borderCollapse: "collapse", textAlign: "center" }}>
+                    <tbody>
+                    <tr>
+                    <td className="Time">
+                        <button 
+                        className="TimeButton" 
+                        style={{ '--hover-bg-color': buttonColors[1] } as React.CSSProperties}
+                        onClick={() => goToArea(13)}
+                        disabled={disableClasses[13]}>
+                        13:00</button>
+                        </td>
+                    <td className="Time">
+                        <button 
+                        className="TimeButton" 
+                        style={{ '--hover-bg-color': buttonColors[2] } as React.CSSProperties}
+                        onClick={() => goToArea(15)}
+                        disabled={disableClasses[15]}>
+                        15:00</button>
+                        </td>
+                    </tr>
+                    <tr>
+                    <td className="Time">
+                        <button 
+                        className="TimeButton" 
+                        style={{ '--hover-bg-color': buttonColors[3] } as React.CSSProperties}
+                        onClick={() => goToArea(16)}
+                        disabled={disableClasses[16]}>
+                        16:00</button>
+                        </td>
+                    <td className="Time">
+                        <button 
+                        className="TimeButton"
+                        style={{ '--hover-bg-color': buttonColors[4] } as React.CSSProperties}
+                        onClick={() => goToArea(17)}
+                        disabled={disableClasses[17]}>
+                        17:00</button>
+                        </td>
+                    </tr>
+                    {/* <tr>
+                    <td className="Time">
+                        <button 
+                        className="TimeButton" 
+                        style={{ '--hover-bg-color': buttonColors[5] } as React.CSSProperties}
+                        onClick={() => goToArea(15)}
+                        disabled={disableClasses[15]}>
+                        15:00</button>
+                        </td>
+                    <td className="Time">
+                        <button 
+                        className="TimeButton" 
+                        style={{ '--hover-bg-color': buttonColors[6] } as React.CSSProperties}
+                        onClick={() => goToArea(16)}
+                        disabled={disableClasses[16]}>
+                        16:00</button>
+                        </td>
+                    </tr> */}
+                    </tbody>
+                </table>
+                </div>
+                {seeScheduleButton ? 
+                <button onClick={goToSchedule} >Ver mi horario</button> : <></>}
+            </GlassCard>
+            </>
+        }
+            
         </div>
     );
 };

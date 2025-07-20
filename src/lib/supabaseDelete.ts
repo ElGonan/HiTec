@@ -5,6 +5,12 @@ type SupabaseGetResult = {
   error: PostgrestError | null
 }
 
+/*
+ * I requiered a function to delete parameters from a table,
+ * this function can delete a row or a specific parameter
+ * from a table in Supabase.
+ */
+
 const supabaseDelete = async (
   table: string,
   parameter: string,

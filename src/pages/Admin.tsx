@@ -5,22 +5,43 @@ import supabaseDelete from '../lib/supabaseDelete'
 import exportToCSV from '../lib/exportCSV'
 import transformDate from '../lib/transformDate'
 import './css/Admin.css'
+import Swal from 'sweetalert2'
+import { useUser } from '../hooks/useUserContext'
+import GlassCard from '../components/GlassCard'
 
 const Admin = () => {
+    const { logout } = useUser();
     const [clases, setClases] = useState<Class[]>([])
-    const [error, setError] = useState<string | null>(null)
+    const [, setError] = useState<string | null>(null)
     const navigate = useNavigate()
 
-    const getOut = () => {
-        if (window.confirm("¿Seguro que deseas cerrar sesión?")) {
+    const getOut = async () => {
+        const result = await Swal.fire({
+            text: "¿Estás segurx de que quieres cerrar sesión?",
+            icon: "question",
+            showCancelButton: true,
+            cancelButtonText: "No",
+            confirmButtonText: "Si"
+                })
+
+        if (result.isConfirmed) {
+            await logout();
             navigate("/")
         }
     }
 
-    const csvExport = () => {
-        if (window.confirm("¿Seguro que deseas exportar a CSV?")) {
+    const csvExport = async () => {
+            const result = await Swal.fire({
+            text: "¿Estás segurx de que deseas exportar la base de datos a CSV?",
+            icon: "question",
+            showCancelButton: true,
+            cancelButtonText: "No",
+            confirmButtonText: "Si"
+                })
+
+        if (result.isConfirmed) {
         exportToCSV()
-    }
+        }
     }
 
     const editClass = (clase_id: number) => {
@@ -33,26 +54,45 @@ const Admin = () => {
 
 
     const deleteClass = async (clase_id: number) => {
-  if (window.confirm("¿Seguro que deseas eliminar la clase?")) {
-    const { error } = await supabaseDelete("clase", "clase_id", clase_id);
+            const result = await Swal.fire({
+            text: "¿Estás segurx de que deseas eliminar la clase?",
+            icon: "question",
+            showCancelButton: true,
+            cancelButtonText: "No",
+            confirmButtonText: "Si"
+                })
+ 
+        if (result.isConfirmed) {
+            const { error } = await supabaseDelete("clase", "clase_id", clase_id);
     
-    if (error) {
-      setError(error.message);
-      alert(error.message);
-      return;
-    }
-
-    alert("Clase eliminada");
-    getClases(); 
-  }
-};
+            if (error) {
+                setError(error.message);
+                Swal.fire({
+                    title: "Error! Pasale este mensaje a Alan o a algún encargado",
+                    text: error.message,
+                    icon: "error"
+                })
+                console.log(error);
+                return;
+                }
+                Swal.fire({
+                    title: "Clase eliminada correctamente.",
+                    icon: "success"
+                })
+            getClases(); 
+        }
+    };
 
 
     const getClases = async () => {
         const { data, error } = await supabaseGet("clase")
         if (error) {
             setError(error.message)
-            alert(error.message)
+                Swal.fire({
+                    title: "Error! Pasale este mensaje a Alan o a algún encargado",
+                    text: error.message,
+                    icon: "error"
+                })
             return
         }
         if (data) {
@@ -91,11 +131,11 @@ const Admin = () => {
   >
     Exportar a csv
   </button>
-
+  <GlassCard style={{ padding: "1rem" }}>
   <img
     src="../../logo.webp"
     alt="Logo HiTec"
-    style={{ position: "absolute", top: "10px", width: "80px" }}
+    style={{ width: "150px", height: "150px", marginBottom: "-40px" }}
   />
 
   <h1 style={{ textAlign: "center", marginTop: "60px" }}>
@@ -124,6 +164,8 @@ const Admin = () => {
           <th className="Title" style={{ width: "60px" }}>ID</th>
           <th className="Title">Nombre de la clase</th>
           <th className="Title">Instructor</th>
+          <th className="Title">Área</th>
+          <th className="Title">Lugar</th>
           <th className="Title">Fecha y hora</th>
           <th className="Title">Capacidad</th>
           <th className="Title" style={{ width: "160px" }}>Acción</th>
@@ -137,6 +179,8 @@ const Admin = () => {
               <td className={textClass} style={{ width: "60px" }}>{clase.clase_id}</td>
               <td className={textClass}>{clase.nombre_clase}</td>
               <td className={textClass}>{clase.instructor}</td>
+              <td className={textClass}>{clase.area}</td>
+              <td className={textClass}>{clase.lugar}</td>
               <td className={textClass}>{clase.fecha_hora}</td>
               <td className={textClass}>{clase.capacidad_clase}</td>
               <td className={textClass} style={{ width: "160px", whiteSpace: "nowrap" }}>
@@ -149,9 +193,11 @@ const Admin = () => {
       </tbody>
     </table>
   </div>
+  </GlassCard>
 </div>
 
-    )
+
+)
 }
 
 
