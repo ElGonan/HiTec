@@ -5,6 +5,9 @@ import App from './App.tsx'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
+    {/* 
+      Hecho con amor por Alan
+    */}
     <App />
     <footer>
             <div style={{ 
@@ -17,7 +20,7 @@ createRoot(document.getElementById('root')!).render(
               fontSize: '8px',
               padding: '5px',
             }}>
-              <p>v0.1.0</p>
+              <p>v0.4.1</p>
             </div>
     </footer>
   </StrictMode>,

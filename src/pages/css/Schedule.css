@@ -1,0 +1,81 @@
+.context{
+    font-size: 16px;
+}
+
+.title {
+    font-size: 16px;
+}
+
+.table {
+  border-collapse: collapse; /* Esto hace que los bordes se colapsen en una sola línea */
+}
+
+.table tr:nth-child(even) {
+      background-color: rgba(0,0,0,0.2)
+}
+
+.tableTitle {
+    font-size: 32px;
+    padding: 8px;
+}
+.tableTitleMid {
+    font-size: 32px;
+    border: 1px solid #ddd; /* Bordes de 1px sólidos en gris claro */
+    padding: 4px;
+    border-top: 0cap;
+    padding: 8px;
+}
+
+.tableEvent {
+    border: 1px solid #ddd; /* Bordes de 1px sólidos en gris claro */
+    border-left: 0cm;
+    border-right: 0cm;
+    padding: 4px;
+    font-size: large;
+
+}
+
+.tableEventMid{
+    border: 1px solid #ddd; /* Bordes de 1px sólidos en gris claro */
+    padding: 4px;
+    font-size: large;
+
+}
+
+@media (max-width: 768px) {
+.context{
+    font-size: 12px;
+}
+
+.title {
+    font-size: 16px;
+}
+
+.tableTitle {
+    font-size: large;
+    padding: 2px;
+}
+.tableTitleMid {
+    font-size: large;
+    padding: 2px;
+
+}
+
+
+.tableEvent {
+    border: 1px solid #ddd; /* Bordes de 1px sólidos en gris claro */
+    border-left: 0cm;
+    border-right: 0cm;
+    padding: 4px;
+    font-size: medium;
+
+}
+
+.tableEventMid{
+    border: 1px solid #ddd; /* Bordes de 1px sólidos en gris claro */
+    padding: 4px;
+    font-size: medium;
+
+}
+    
+}

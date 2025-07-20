@@ -28,10 +28,15 @@ const buttonColors = {
     6: "#FF33FF"  // Purple
 };
 
+type LocationState = {
+  alumno_id?: number;
+  time?: number;
+};
 
 const Home = () => {
     const { logout, user } = useUser();
     const [id, setId] = useState<number | null>(null);
+    const [name, setName] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
     const [disableClasses, setDisableClasses] = useState<{ [key: number]: boolean }>({
         11: false,
@@ -45,9 +50,9 @@ const Home = () => {
     const [ classID, setClassID ] = useState<number[]>([]); // Variable to store the class ID
     const [ classCapacities, setClassCapacities ] = useState<number[]>([]); // Array to store class capacities
     const navigate = useNavigate();
+    const location = useLocation();
+    const state = location.state as LocationState;
     const [ fullInscription, setFullInscription ] = useState<boolean>(false);
-    const [ seeScheduleButton, setSeeScheduleButton ] = useState<boolean>(false);
-    const [userClassData, setUserClassData] = useState<unknown>(null);
 
 
     const checkInscriptions = (inscriptionHours: number[]) => {
@@ -84,8 +89,10 @@ const Home = () => {
 
 
     const goToArea = (time: number) => {
+        console.log(id, time);
         navigate("/area", {
             state: {
+                alumno_id: id,
                 time: time,
             }});
     }
@@ -98,7 +105,7 @@ const Home = () => {
     */
 
     const retrieveData = async (alumno_id: number) => {
-        setLoading(true); 
+        setLoading(true); // Start loading
         setId(user?.alumno_id);
         const { data, error } = await supabase
             .from("alumno_clase")
@@ -106,25 +113,31 @@ const Home = () => {
             .eq("alumno_id", alumno_id)
         
         if (error) {
-            console.log("Error al recuperar los datos: " + error.message);
-            setLoading(false); 
+            alert("Error al recuperar los datos: " + error.message);
+            setLoading(false); // Stop loading
             return;
         }
+
+        /*
+         * Fun fact: The query on top won't work if there are no classes signed.
+         * Fixed with the function below.
+         */
 
         if (data.length == 0){
-            setLoading(false); 
-            setSeeScheduleButton(false);
+            const { data, error } = await supabaseGet("alumno", "alumno_id", alumno_id)
+            if (error){
+                console.log("error recibiendo los datos del usuario.")
+            }
+            setName(data[0].alumno_name)
+            setLoading(false); // Stop loading
             return;
-        } else {
-            setSeeScheduleButton(true);
-            console.log(data);
-            setUserClassData(data);
         }
 
+        console.log(data)
 
         if (data) {
         const times = data.map(row => {
-            // row.clase se espera que sea un array
+            // row.clase is expected to be an array
             if (row.clase) {
                 // Extrae los dos dígitos después de la 'T'
                 const match = row.clase.fecha_hora.match(/T(\d{2})/);
@@ -143,7 +156,7 @@ const Home = () => {
             row.clase ? row.clase.clase_id : null
         ).filter((id): id is number => id !== null);
         setClassID(classIDs);
-        setLoading(false); 
+        setLoading(false); // Stop loading
         }
     }
     
@@ -212,32 +225,35 @@ const Home = () => {
                 17: false
             });
             setFullInscription(false);
-            setSeeScheduleButton(false);
             setLoading(false); // Stop loading
     }}
 
-    const goToSchedule = () =>
-    {
-        navigate("/schedule")
-    }
-
-
 useEffect(() => {
-    retrieveData(user?.alumno_id);
-}, [user]);
+    // Paso 1: Si viene algo en location.state
+    if (user) {
+        const { alumno_id } = user.alumno_id;
+
+        // Ejecuta la lógica de recuperación
+        if (alumno_id) {
+            retrieveData(alumno_id);
+        }
+
+    }
+}, [location.search, location.state]);
 
 
     return (
         <div>
+            {loading && (
+                <Loading />
+            )}
+            <>
             <button onClick={getOut} style={{ position: "absolute", top: "10px", left: "10px" }}>Cerrar Sesión</button>
             <button onClick={deleteInscription} style={{ position: "absolute", top: "10px", right: "10px" }} >Borrar inscripción</button>
-            {loading ? (<Loading /> ) :
-        
-        <>
             <GlassCard>
                 <img src="../../logo.webp" alt="Logo HiTec" style={{ position: "relative", top: "32px", width: "10%", }} />
-                <h1>Bienvenidx</h1>
-                <h2>Por favor, Selecciona un horario para tu clase</h2>
+                <h1>Bienvenidx {name}</h1>
+                <h2>Por favor, Selecciona un horario.</h2>
                 {fullInscription && (
                     <div>
                         <p style={{ color: "red" }}>No puedes inscribirte a más de {INSCRIPTIONLIMIT} clases.</p>
@@ -302,12 +318,9 @@ useEffect(() => {
                     </tbody>
                 </table>
                 </div>
-                {seeScheduleButton ? 
-                <button onClick={goToSchedule} >Ver mi horario</button> : <></>}
+                <button>Ver mi horario</button>
             </GlassCard>
             </>
-        }
-            
         </div>
     );
 };

@@ -3,9 +3,10 @@
   line-height: 1.5;
   font-weight: 400;
 
-  color-scheme: light dark;
+  /* color-scheme: light dark; */
   color: rgba(255, 255, 255, 0.87);
-  background-color: #E78853;
+  background-color: #4051b5ff;
+  background-image: url("data:image/svg+xml,<svg id='patternId' width='100%' height='100%' xmlns='http://www.w3.org/2000/svg'><defs><pattern id='a' patternUnits='userSpaceOnUse' width='40' height='40' patternTransform='scale(1) rotate(35)'><rect x='0' y='0' width='100%' height='100%' fill='%233f51b5ff'/><path d='M15 5h10v30H15zM35-5V5H5V-5zM35 35v10H5V35zM35-15h10v30H35zM55 15v10H25V15zM15 15v10h-30V15zM35 25h10v30H35zM-5 25H5v30H-5zM-5-15H5v30H-5z'  stroke-width='1.5' stroke='%23000000ff' fill='none'/></pattern></defs><rect width='800%' height='800%' transform='translate(0,0)' fill='url(%23a)'/></svg>");
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -42,7 +43,7 @@ button {
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  background-color: #292929;
+  background-color: #c8c8c8;
   cursor: pointer;
   transition: border-color 0.25s;
 }
@@ -54,10 +55,10 @@ button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
-@media (prefers-color-scheme: light) {
+/* @media (prefers-color-scheme: light) {
   :root {
-    color: #213547;
-    background-color: #E78853;
+    color: rgba(255, 255, 255, 0.87);
+    background-color:  rgba(29,65,109,0.50);
   }
   a:hover {
     color: #747bff;
@@ -65,4 +66,4 @@ button:focus-visible {
   button {
     background-color: #292929;
   }
-}
+} */
