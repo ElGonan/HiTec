@@ -71,6 +71,8 @@ useEffect(() => {
         </div>
         <GlassCard>
         <h1 className="title">Horario del usuario con ID: {user?.alumno_id}</h1>
+                <GlassCard>
+
             <table className='table'>
                         <tr>
                             <th className='tableTitle'>Nombre de la clase</th>
@@ -87,7 +89,9 @@ useEffect(() => {
                         </tr>
             ))}
             </table>
+        </GlassCard>        
         </GlassCard>
+
         </>
         }
         

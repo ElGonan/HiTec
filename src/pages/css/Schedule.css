@@ -52,12 +52,29 @@
 }
 
 .tableTitle {
-    font-size: 1.2em;
+    font-size: large;
     padding: 2px;
 }
 .tableTitleMid {
-    font-size: 1.2em;
+    font-size: large;
     padding: 2px;
+
+}
+
+
+.tableEvent {
+    border: 1px solid #ddd; /* Bordes de 1px sólidos en gris claro */
+    border-left: 0cm;
+    border-right: 0cm;
+    padding: 4px;
+    font-size: medium;
+
+}
+
+.tableEventMid{
+    border: 1px solid #ddd; /* Bordes de 1px sólidos en gris claro */
+    padding: 4px;
+    font-size: medium;
 
 }
     

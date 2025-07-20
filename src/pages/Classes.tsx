@@ -8,10 +8,13 @@ import "./css/Classes.css";
 import Swal from 'sweetalert2'
 import { useUser } from "../hooks/useUserContext";
 import GlassCard from "../components/GlassCard";
+import { useMediaQuery } from "react-responsive";
+import ClassCard from "../components/ClassCard";
 
 const Classes = () => {
     const { user } = useUser();
     const location = useLocation();
+    const isMobile = useMediaQuery({ maxWidth: 768 })
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
     const { time, area } = location.state as { time: number; area: string };
@@ -81,51 +84,70 @@ useEffect(()=> {
         <>
         <button onClick={goBack} style={{ position: "absolute", top: "10px", left: "10px" }}>Regresar</button>
         {loading ? (<Loading />) :
-        <GlassCard>
-            <h1 className="text-4xl font-bold mb-4">Por favor, seleccione la clase de su interés</h1>
-            <div
-            className="DBtable" style={{
-                overflowX: "auto",
-                width: "fit-screen",
-                marginTop: "10px"}}>
-                <table
-                style={{
-                    borderCollapse: "collapse",
-                    width: "100%",
-                    minWidth: "600px"
-                    }}>
-                    <thead>
-                        <tr>
-                            <th className="Title">Nombre</th>
-                            <th className="Title">Instructor</th>
-                            <th className="Title">Lugar</th>
-                            <th className="Title">Inscribirse</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {data?.filter(item => item.capacidad_clase > 0)
-                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                        .map((item: any, index: number) => (
-                            <tr key={index}>
-                                <td className="Text">{item.nombre_clase}</td>
-                                <td className="Text">{item.instructor}</td>
-                                <td className="Text">{item.lugar}</td>
-                                <td className="Text ">
-                                    <button
-                                        className="bg-blue-500 text-white px-4 py-2 rounded"
-                                        onClick={() => {
-                                            handleInscription(item.clase_id);}}
-                                    >
-                                        Inscribirse
-                                    </button>
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
+        <div>
+            {isMobile ?
+            <div>
+                <GlassCard style={{ marginTop:"4em" }}>
+                    <h1 className="text-xl font-bold mb-4">Por favor, seleccione la clase de su interés</h1>
+                {data?.filter(item => item.capacidad_clase > 0)
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                .map((item: any, index: number) => (
+                <ClassCard id={index} className={item.nombre_clase} teacherName={item.instructor} onSign={() =>handleInscription(item.clase_id)} classPlace={item.lugar}/>
+                ))}
+                </GlassCard>
             </div>
-        </GlassCard>
+            :
+            <div>
+                <GlassCard>
+                    <h1 className="text-xl font-bold mb-4">Por favor, seleccione la clase de su interés</h1>
+                    <div
+                    className="DBtable" style={{
+                        overflowX: "auto",
+                        width: "fit-screen",
+                        marginTop: "10px"}}>
+                        <table
+                        style={{
+                            borderCollapse: "collapse",
+                            width: "100%",
+                            minWidth: "600px"
+                            }}>
+                            <thead>
+                                <tr>
+                                    <th className="Title">Nombre</th>
+                                    <th className="Title">Instructor</th>
+                                    <th className="Title">Lugar</th>
+                                    <th className="Title">Inscribirse</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {data?.filter(item => item.capacidad_clase > 0)
+                                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                                .map((item: any, index: number) => (
+                                    <tr key={index}>
+                                        <td className="Text">{item.nombre_clase}</td>
+                                        <td className="Text">{item.instructor}</td>
+                                        <td className="Text">{item.lugar}</td>
+                                        <td className="Text ">
+                                            <button
+                                                className="bg-blue-500 text-white px-4 py-2 rounded"
+                                                onClick={() => {
+                                                    handleInscription(item.clase_id);}}
+                                            >
+                                                Inscribirse
+                                            </button>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                        
+                    </div>
+                </GlassCard>
+            </div>
+            }
+            </div>
         }
+        
     
         </>
     );
