@@ -180,7 +180,7 @@ const Home = () => {
     const deleteInscription = async () => {
         const result = await Swal.fire({
             title: "¿Segurx que deseas borrar tu inscripcion?",
-            text: "Esto no se puede deshacer, deberás volver a inscribirte.",
+            text: "Esto no se puede deshacer, deberás volver a inscribirte. También recuerda que NO puedes borrar las clases que ya estaban dadas de alta para ti.",
             icon: 'warning',
             showCancelButton: true,
             cancelButtonText: 'No',
