@@ -125,12 +125,25 @@ const Admin = () => {
     Cerrar sesión
   </button>
 
-  <button
-    onClick={csvExport}
-    style={{ position: "absolute", top: "10px", right: "10px" }}
-  >
-    Exportar a csv
-  </button>
+  <div className="csvArea" style={{ position: "absolute", top: "10px", right: "10px" }}>
+    <button style={{ marginLeft: "5px", marginRight: "5px" }}
+      onClick={csvExport}
+    >
+      Importar usuarios desde csv
+    </button>
+    <button style={{ marginLeft: "5px", marginRight: "5px" }}
+      onClick={csvExport}
+    >
+      Importar clases desde csv
+    </button>
+    <button style={{ marginLeft: "5px", marginRight: "5px" }}
+      onClick={csvExport}
+    >
+      Exportar base de datos a csv
+    </button>
+
+
+  </div>
   <GlassCard style={{ padding: "1rem" }}>
   <img
     src="../../logo.webp"

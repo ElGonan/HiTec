@@ -152,6 +152,7 @@ const Home = () => {
             row.clase ? row.clase.capacidad_clase : null
         ).filter((capacity): capacity is number => capacity !== null);
         setClassCapacities(classCapacities);
+        console.log("Capacidades de las clases:", classCapacities);
 
         const classIDs = data.map(row =>
             row.clase ? row.clase.clase_id : null
@@ -200,7 +201,7 @@ const Home = () => {
                 newCapacities[i] = newCapacities[i] + 1;
             }
             for (let i = 0; i < classID.length; i++) {
-            const { error } = await supabaseUpdate("clase", "clase_id", i, { capacidad_clase: newCapacities[i] });
+            const { error } = await supabaseUpdate("clase", "clase_id",classID[i], {capacidad_clase: newCapacities[i]});
             if (error) {
                 alert("Error al actualizar la capacidad de la clase: " + error.message);
                 return;
