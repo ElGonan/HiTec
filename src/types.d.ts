@@ -21,7 +21,6 @@ type Class = {
 
 // this is the new type used
 type User = {
-    alumno_id : number // The new ID given by the excel, can be replaced by alumno_id?
     alumno_matricula: string
     alumno_class_1 : string // or maybe a time, the locked according to the mentor's class?
     alumno_class_2 : string // or maybe a time, the locked according to the mentor's class?
