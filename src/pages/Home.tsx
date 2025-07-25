@@ -5,7 +5,6 @@ import './css/Home.css';
 import supabase from '../supabase/supabaseClient';
 import supabaseUpdate from '../lib/supabaseUpdate';
 import supabaseDelete from '../lib/supabaseDelete';
-import supabaseGet from '../lib/supabaseGet';
 import Swal from 'sweetalert2';
 import { useUser } from '../hooks/useUserContext';
 import GlassCard from '../components/GlassCard';

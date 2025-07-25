@@ -6,7 +6,7 @@ import App from './App.tsx'
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     {/* 
-      Hecho con amor por Alan
+      Hecho con amor por Alan y Ale - HITEC 2025
     */}
     <App />
     <footer>
