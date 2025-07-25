@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import supabaseGet from '../lib/supabaseGet'
 import supabaseDelete from '../lib/supabaseDelete'
@@ -8,12 +8,15 @@ import './css/Admin.css'
 import Swal from 'sweetalert2'
 import { useUser } from '../hooks/useUserContext'
 import GlassCard from '../components/GlassCard'
+import { importStudentsCSV } from '../lib/importStudentsCSV'
+import { importClassesCSV } from '../lib/importClassesCSV'
 
 const Admin = () => {
     const { logout } = useUser();
     const [clases, setClases] = useState<Class[]>([])
     const [, setError] = useState<string | null>(null)
     const navigate = useNavigate()
+    const fileInputRef = useRef<HTMLInputElement>(null);
 
     const getOut = async () => {
         const result = await Swal.fire({
@@ -42,6 +45,82 @@ const Admin = () => {
         if (result.isConfirmed) {
         exportToCSV()
         }
+    }
+
+    const handleImportClick = () => {
+      fileInputRef.current?.click();
+    };
+
+    const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+      const file = e.target.files?.[0];
+      if (!file) return;
+      
+      await importStudents(file);
+      e.target.value = "";
+    };
+
+    const handleFileClassChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+      const file = e.target.files?.[0];
+      if (!file) return;
+      
+      await importClases(file);
+      e.target.value = "";
+    };
+
+    const importStudents = async (file: File) => {
+      try {
+        const result = await importStudentsCSV(file, (progress) => {
+          Swal.fire({
+            title: "Importando estudiantes...",
+            text: `Progreso: ${progress}%`,
+            didOpen: () => {
+              Swal.showLoading();
+            },
+          });
+        });
+        Swal.close(); // Cierra el loading cuando termina
+        setTimeout(() => {
+          Swal.fire({
+            title: "Importación completada",
+            text: `Total: ${result.total}, Insertados: ${result.inserted}, Actualizados: ${result.updated}`,
+            icon: "success",
+          });
+        }, 500); // Espera un segundo para mostrar el mensaje final
+      } catch (error) {
+        Swal.fire({
+          title: "Error al importar",
+          text: (error as Error).message,
+          icon: "error",
+        });
+      }
+    }
+
+    const importClases = async (file: File) => {
+      try {
+        const result = await importClassesCSV(file, (progress) => {
+          Swal.fire({
+            title: "Importando clases...",
+            text: `Progreso: ${progress}%`,
+            didOpen: () => {
+              Swal.showLoading();
+            },
+          });
+        });
+        Swal.close(); // Cierra el loading cuando termina
+        setTimeout(() => {
+          Swal.fire({
+            title: "Importación completada",
+            text: `Total: ${result.total}, Insertados: ${result.inserted}, Actualizados: ${result.updated}`,
+            icon: "success",
+          });
+        }, 500); // Espera un segundo para mostrar el mensaje final
+      } catch (error) {
+        Swal.fire({
+          title: "Error al importar",
+          text: (error as Error).message,
+          icon: "error",
+        });
+      }
     }
 
     const editClass = (clase_id: number) => {
@@ -125,12 +204,43 @@ const Admin = () => {
     Cerrar sesión
   </button>
 
-  <button
-    onClick={csvExport}
-    style={{ position: "absolute", top: "10px", right: "10px" }}
-  >
-    Exportar a csv
-  </button>
+  <div className="csvArea" style={{ position: "absolute", top: "10px", right: "10px" }}>
+    <input
+        type="file"
+        accept=".csv"
+        ref={fileInputRef}
+        onChange={handleFileChange}
+        style={{ display: 'none' }}
+      />
+      <button
+        style={{ marginLeft: "5px", marginRight: "5px" }}
+        onClick={handleImportClick}
+        disabled={false} // Puedes agregar estado de loading aquí si necesitas
+      >
+        Importar usuarios desde CSV
+      </button>
+    <input
+        type="file"
+        accept=".csv"
+        ref={fileInputRef}
+        onChange={handleFileClassChange}
+        style={{ display: 'none' }}
+      />
+      <button
+        style={{ marginLeft: "5px", marginRight: "5px" }}
+        onClick={handleImportClick}
+        disabled={false} // Puedes agregar estado de loading aquí si necesitas
+      >
+        Importar clases desde CSV
+      </button>
+    <button style={{ marginLeft: "5px", marginRight: "5px" }}
+      onClick={csvExport}
+    >
+      Exportar base de datos a csv
+    </button>
+
+
+  </div>
   <GlassCard style={{ padding: "1rem" }}>
   <img
     src="../../logo.webp"
