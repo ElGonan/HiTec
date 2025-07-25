@@ -5,7 +5,7 @@ import GlassCard from '../components/GlassCard';
 
 
 const Login = () => {
-const [inputId, setInputId] = useState('');
+const [inputMatricula, setInputMatricula] = useState('');
 const { login, isLoading, user } = useUser();
 const navigate = useNavigate();
 
@@ -13,15 +13,12 @@ const navigate = useNavigate();
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         try{
-            console.log(inputId)
-            await login(inputId);
+            await login(inputMatricula);
         } catch(error) {
             alert((error as Error).message)
         }
 
-    };
-
-useEffect(() => {
+    }; useEffect(() => {
 if (user){
         if(user.alumno_id === 1) {navigate("/admin");}
         else{navigate("/Home");}
@@ -38,17 +35,11 @@ if (user){
                     <img src="../../logo.webp" alt="Logo HiTec" style={{ width: "25%" }} />
                 </div>
                 <div>
-                    <h2>Por favor, ingresa con tu código identificador</h2>
+                    <h2>Por favor, ingresa con tu matrícula</h2>
                     <form onSubmit={handleSubmit}>
-                        <input type="number" placeholder="xxxx" name="id" value={inputId} onChange={(e) => setInputId(e.target.value)} required></input>
+                        <input type="string" placeholder="A0XXXXXXX" name="matricula" value={inputMatricula} onChange={(e) => setInputMatricula(e.target.value)} required></input>
                         <br></br> <br></br>
                         <button disabled={isLoading} type="submit">Entrar</button>
-                    </form>
-                </div>
-            </div>
-        </GlassCard>
-        </>
-    )
-}
+                    </form> </div> </div> </GlassCard> </>) }
 
 export default Login

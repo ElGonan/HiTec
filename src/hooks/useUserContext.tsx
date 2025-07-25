@@ -42,10 +42,10 @@ export const UserProvider = ({ children }: { children:React.ReactNode }) => {
 
 
 
-    const login = async (id: string) => {
+    const login = async (matricula: string) => {
         setIsLoading(true);
         try {
-            const { data, error } = await supabaseGet("alumno", "alumno_id", id);
+            const { data, error } = await supabaseGet("alumno", "alumno_matricula", matricula);
             if (error || !data){
                 throw new Error("Algo falló" + error?.message || "No hay datos!");
             }
