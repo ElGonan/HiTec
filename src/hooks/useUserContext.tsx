@@ -42,18 +42,18 @@ export const UserProvider = ({ children }: { children:React.ReactNode }) => {
 
 
 
-    const login = async (id: string) => {
+    const login = async (matricula: string) => {
         setIsLoading(true);
         try {
-            const { data, error } = await supabaseGet("alumno", "alumno_id", id);
+            const { data, error } = await supabaseGet("alumno", "alumno_matricula", matricula);
             if (error || !data){
                 throw new Error("Algo falló" + error?.message || "No hay datos!");
             }
             // En caso de que no haya usuario
             if (data.length === 0){
             await Swal.fire({
-            title: "El usuario ingresado no existe",
-            text: "Por favor revisa el ID que ingresaste, debe ser el que se te brindó en la bienvenida. De otra forma no podrás hacer tu horario",
+            title: "Matrícula no encontrada",
+            text: "Por favor revisa la matrícula ingresada. De otra forma no podrás hacer tu horario",
             icon: 'error',
             })
             } else{
