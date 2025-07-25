@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useUser } from '../hooks/useUserContext';
 import { useNavigate } from 'react-router-dom';
-import GlassCard from '../components/GlassCard';
+import LoginCard from '../components/LoginCard';
 
 
 const Login = () => {
@@ -31,22 +31,26 @@ if (user){
 
     return (
         <>
-        <GlassCard>
-            <div>
-                <h1>Bienvenido al Login de HiTec!</h1>
+        <LoginCard>
+            <div  style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}> 
                 <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                    <img src="../../logo.webp" alt="Logo HiTec" style={{ width: "25%" }} />
+                    <img src="../../logo.webp" alt="Logo HiTec" style={{ width: "35%" }} />
                 </div>
-                <div>
-                    <h2>Por favor, ingresa con tu código identificador</h2>
+                <span style={{fontSize:'2rem', fontWeight: 'bold'}}>Bienvenid@</span>
+                <span>HITEC 2025</span>
+                <div style={{paddingTop:'2rem'}}>
+                    <div style={{paddingBottom:'1rem'}}>
+                        <span>Por favor, ingresa tu matrícula</span>
+                    </div>
                     <form onSubmit={handleSubmit}>
-                        <input type="number" placeholder="xxxx" name="id" value={inputId} onChange={(e) => setInputId(e.target.value)} required></input>
-                        <br></br> <br></br>
-                        <button disabled={isLoading} type="submit">Entrar</button>
+                        <input type="number" placeholder="A0000000" name="id" value={inputId} onChange={(e) => setInputId(e.target.value)} required></input>
+                        <br/>
+                        <br/>
+                        <button disabled={isLoading} type="submit" style={{backgroundColor:"white", color:`rgba(16,18,60,1)`, border: 'none', fontSize: '14px'}}>Entrar</button>
                     </form>
                 </div>
             </div>
-        </GlassCard>
+        </LoginCard>
         </>
     )
 }
