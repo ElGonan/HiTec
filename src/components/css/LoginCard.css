@@ -1,0 +1,22 @@
+.login-card {
+  display: inline-block;
+  border-radius: 8px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  padding: 2rem;
+  width: fit-content;
+  height: fit-content;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.login-card-mobile {
+  width: fit-content;
+}
+
+@media (max-width: 768px) {
+  .login-card-mobile {
+    width: calc(100% - 4rem);
+    margin: 2rem;
+    display: block;
+  }
+}
