@@ -9,8 +9,8 @@ CREATE TABLE Alumno (
   alumno_name TEXT NOT NULL,
   alumno_matricula TEXT NOT NULL UNIQUE,
   alumno_phone BIGINT UNIQUE NOT NULL CHECK (alumno_phone BETWEEN 1000000000 AND 9999999999),
-  alumno_class_1 BIGINT,
-  alumno_class_2 BIGINT
+  alumno_class_1 time,
+  alumno_class_2 time
 );
 
 

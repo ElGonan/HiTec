@@ -49,7 +49,6 @@ const Home = () => {
     const [ seeScheduleButton, setSeeScheduleButton ] = useState<boolean>(false);
     const [userClassData, setUserClassData] = useState<unknown>(null);
 
-
     const checkInscriptions = (inscriptionHours: number[]) => {
         setLoading(true); // Start loading
         const newDisableClasses: { [key: number]: boolean } = {
@@ -90,6 +89,16 @@ const Home = () => {
             }});
     }
 
+    const setClassesDirectas = () => {
+        const clases: string[] | undefined = [];
+        if (!user) {
+            return [];
+        }
+        clases.push(user?.alumno_class_1);
+        clases.push(user?.alumno_class_2);
+        const horas: string[] = clases.map((hora) => hora.split(':')[0]);
+        return horas;
+    }
     /*
     Esta función es epecial. Obtiene todas las clases de un alumno en una hora determinada.
     Se usa para desactivar los botones de las clases a las que ya está inscrito.
@@ -100,6 +109,10 @@ const Home = () => {
     const retrieveData = async (alumno_id: number) => {
         setLoading(true); 
         setId(user?.alumno_id);
+        const horasDirectas = setClassesDirectas();
+        // agarraremos ambas clases del alumno, las que son alumno_class_1 y alumno_class_2
+        // para bloquearlas en la pantalla de inicio.
+
         const { data, error } = await supabase
             .from("alumno_clase")
             .select("clase(fecha_hora, capacidad_clase, clase_id), alumno(alumno_name)")
@@ -114,10 +127,10 @@ const Home = () => {
         if (data.length == 0){
             setLoading(false); 
             setSeeScheduleButton(false);
+            checkInscriptions(horasDirectas.map(Number));
             return;
         } else {
             setSeeScheduleButton(true);
-            console.log(data);
             setUserClassData(data);
         }
 
@@ -132,7 +145,9 @@ const Home = () => {
             }
             return null;
             }).filter((hour): hour is number => hour !== null);
-            checkInscriptions(times);
+            console.log("Horas de inscripción:", times);
+            const totalTimes = horasDirectas.map(Number).concat(times);
+            checkInscriptions(totalTimes);
 
         const classCapacities = data.map(row =>
             row.clase ? row.clase.capacidad_clase : null
@@ -213,6 +228,8 @@ const Home = () => {
             });
             setFullInscription(false);
             setSeeScheduleButton(false);
+            const horasDirectas = setClassesDirectas();
+            checkInscriptions(horasDirectas.map(Number));
             setLoading(false); // Stop loading
     }}
 
@@ -222,8 +239,12 @@ const Home = () => {
     }
 
 
-useEffect(() => {
+useEffect(() => {   
+
+    if (user) {
+    setClassesDirectas();
     retrieveData(user?.alumno_id);
+    }
 }, [user]);
 
 
