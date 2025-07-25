@@ -96,11 +96,9 @@ const Home = () => {
         clases.push(user?.alumno_class_1);
         clases.push(user?.alumno_class_2);
 
-        if (!clases || clases.length === 0) {
-            return [];
-        }
-
-        const horas: string[] = clases.map((hora) => hora.split(':')[0]);
+        const horas: string[] = clases
+            .filter((hora): hora is string => typeof hora === 'string' && hora !== null)
+            .map((hora) => hora.split(':')[0]);
         return horas;
     }
     /*
