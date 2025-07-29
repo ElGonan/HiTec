@@ -54,12 +54,12 @@ const [loading, setLoading] = useState(false);
 
     return (
         <div>
-            <button onClick={goBack} style={{ position: "absolute", top: "10px", left: "10px" }}>Regresar</button>
+            <button onClick={goBack} style={{ position: "absolute", top: "20px", left: "20px", background:"#ff8c24",color:"white", fontSize: "12px"}}>Regresar</button>
             {loading ? 
             (<Loading />)
             : 
-            <GlassCard style={{ padding: "3em" }}>
-                <h1 className="text-2xl font-bold mb-4">Seleccione una Area</h1>
+            <GlassCard style={{ padding: "0em 3em" }}>
+                <h2 className="text-md font-bold mb-4">Seleccione una Area</h2>
             <div className="Area">
                 {areas.map((areas, index) => (
                     <div key={index}  >

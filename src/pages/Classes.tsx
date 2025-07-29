@@ -82,13 +82,13 @@ useEffect(()=> {
 },[])
     return (
         <>
-        <button onClick={goBack} style={{ position: "absolute", top: "10px", left: "10px" }}>Regresar</button>
+        <button onClick={goBack} style={{ position: "absolute", top: "20px", left: "20px", background:"#ff8c24",color:"white", fontSize: "12px"}}>Regresar</button>
         {loading ? (<Loading />) :
         <div>
             {isMobile ?
             <div>
-                <GlassCard style={{ marginTop:"4em" }}>
-                    <h1 className="text-xl font-bold mb-4">Por favor, seleccione la clase de su interés</h1>
+                <GlassCard style={{ display:"flex", flexDirection: "column", gap:"12px", marginTop:"4em" }}>
+                     <span style={{fontSize:'24px', fontWeight: 'bold'}}>Por favor, seleccione la clase de su interés</span>
                 {data?.filter(item => item.capacidad_clase > 0)
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 .map((item: any, index: number) => (
@@ -99,7 +99,7 @@ useEffect(()=> {
             :
             <div>
                 <GlassCard>
-                    <h1 className="text-xl font-bold mb-4">Por favor, seleccione la clase de su interés</h1>
+                    <span style={{fontSize:'24px', fontWeight: 'bold'}}>Por favor, seleccione la clase de su interés</span>
                     <div
                     className="DBtable" style={{
                         overflowX: "auto",

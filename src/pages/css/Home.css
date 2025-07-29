@@ -1,33 +1,39 @@
-.Time{
-
+.Time {
     font-size: 64px;
     font-weight: bold;
     color: #ffffff; /* color del texto */
     padding: 16px;
-
 } 
 
 .TimeButton {
-    background-color: #c8c8c8;
+    width: 250px;
+    padding: 10px;
+    font-size: 24px;
+    background-color: #ececec;
+    border: 2px solid transparent;
+    border-radius: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
     border-color: var(--hover-bg-color);
-}@media screen and (max-width: 768px) {
-    .Time{
-    font-size: 32px;
-    font-weight: bold;
-    color: #ffffff; /* color del texto */
-    padding: 16px;
-    }
 }
 
+.TimeButton:hover:not(:disabled) {
+    background-color: var(--hover-bg-color, rgba(255, 255, 255, 0.218));
+    border-color: var(--hover-bg-color);
+    cursor: pointer;
+}
 
 .TimeButton:disabled {
     background-color: var(--hover-bg-color);
     cursor: not-allowed;
+    opacity: 0.6;
 }
-.TimeButton:hover {
-    background-color: var(--hover-bg-color, rgba(255, 255, 255, 0.218));
-    border-color: var(--hover-bg-color);
-    cursor: pointer;
-    transition: background-color 0.3s ease, border-color 0.3s ease;
-    
+
+@media screen and (max-width: 768px) {
+    .Time {
+        font-size: 32px;
+        font-weight: bold;
+        color: #ffffff;
+        padding: 16px;
+    }
 }
