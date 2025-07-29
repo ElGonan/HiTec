@@ -31,6 +31,7 @@ const Home = () => {
     const [id, setId] = useState<number | null>(null);
     const [loading, setLoading] = useState(false);
     const [disableClasses, setDisableClasses] = useState<{ [key: number]: boolean }>({
+        10: false,
         11: false,
         12: false,
         13: false,
@@ -49,6 +50,7 @@ const Home = () => {
     const checkInscriptions = (inscriptionHours: number[]) => {
         setLoading(true); // Start loading
         const newDisableClasses: { [key: number]: boolean } = {
+        10: false,
         11: false,
         12: false,
         13: false,
@@ -219,6 +221,7 @@ const Home = () => {
                     icon: "success"
                 });
             setDisableClasses({
+                10: false,
                 11: false,
                 12: false,
                 13: false,
