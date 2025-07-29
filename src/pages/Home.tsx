@@ -255,16 +255,15 @@ useEffect(() => {
             <button onClick={deleteInscription} style={{ position: "absolute", bottom: "20px", right: "50px", fontSize:"14px", backgroundColor: "#ff8c24", color:"white"}} >Borrar inscripción</button>
             {loading ? (<Loading /> ) :
             <GlassCard>
-                <div style={{display: "flex", flexDirection:"column", alignItems: "center", gap:4, padding:"24px"}}>
+                <div style={{display: "flex", flexDirection:"column", alignItems: "center", margin: 0, padding:"10px"}}>
                 <img src="../../logo.webp" alt="Logo HiTec" style={{ width: "30%", }} />
                 <span style={{fontSize:'24px', fontWeight: 'bold'}}>Arma tu horario</span>
-                <span style={{ display: "block"}}>Selecciona el bloque que deseas inscribir</span>
+                <p style={{ margin: 0, padding: 0}}>Selecciona el bloque que deseas inscribir</p>
                 </div>
                 
                 {fullInscription && (
-                    <div>
-                        <p style={{ color: "red" }}>No puedes inscribirte a más de {INSCRIPTIONLIMIT} clases.</p>
-                    </div>)}
+                    <p style={{ color: "red",  margin: ".5rem", padding: 0}}>No puedes inscribirte a más de {INSCRIPTIONLIMIT} clases.</p>
+                )}
                 <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "12px" }}>
                     {[13, 15, 16, 17].map((hour, index) => (
                         <button

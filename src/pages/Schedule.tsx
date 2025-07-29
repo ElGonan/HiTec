@@ -63,7 +63,7 @@ useEffect(() => {
 
     return(
         <>
-        <button onClick={goBack} style={{ position: "absolute", top: "10px", left: "10px" }}>Regresar</button>
+        <button onClick={goBack} style={{ position: "absolute", top: "20px", left: "20px", background:"#ff8c24",color:"white", fontSize: "12px"}}>Regresar</button>
         {loading ? <Loading /> : 
         <>
         <div>
