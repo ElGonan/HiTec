@@ -14,7 +14,6 @@ const GlassCard = ({
   className = '',
   style = {},
   blur = 2,
-  transparency = 0.2,
   fullWidthOnMobile = true // Valor por defecto
 }: GlassCardProps) => {
   return (
@@ -23,11 +22,10 @@ const GlassCard = ({
       style={{
         display: 'inline-block',
         backdropFilter: `blur(${blur}px)`,
-        backgroundColor: `rgba(255, 255, 255, ${transparency})`,
+        backgroundColor: `rgba(16,18,60,1)`,
         borderRadius: '8px',
-        border: '1px solid rgba(255, 255, 255, 0.18)',
         boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)',
-        padding: '0.5rem',
+        padding: '.5rem',
         width: 'fit-content',
         height: 'fit-content',
         maxWidth: '100%', // Asegura que no se salga de la pantalla

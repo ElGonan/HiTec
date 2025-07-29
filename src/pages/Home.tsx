@@ -19,12 +19,10 @@ const INSCRIPTIONLIMIT = 4;
 
 // This variables are for the color of the buttons
 const buttonColors = {
-    1: "#FF5733", // Red
-    2: "#33FF57", // Green
-    3: "#3357FF", // Blue
-    4: "#FF33A1", // Pink
-    5: "#FFA533" , // Orange
-    6: "#FF33FF"  // Purple
+    1: "#b8eadf", // aquamarine
+    2: "#ffd902", // yellow
+    3: "#f7a305", // orange
+    4: "#fd7a5c", // secondary orange
 };
 
 
@@ -184,7 +182,7 @@ const Home = () => {
     const deleteInscription = async () => {
         const result = await Swal.fire({
             title: "¿Segurx que deseas borrar tu inscripcion?",
-            text: "Esto no se puede deshacer, deberás volver a inscribirte. También recuerda que NO puedes borrar las clases que ya estaban dadas de alta para ti.",
+            text: "Esta acción no se puede deshacer. Si continúas, deberás volver a inscribirte manualmente. Además, recuerda que no puedes eliminar las clases de Mentoría y Academia.",
             icon: 'warning',
             showCancelButton: true,
             cancelButtonText: 'No',
@@ -253,85 +251,39 @@ useEffect(() => {
 
     return (
         <div>
-            <button onClick={getOut} style={{ position: "absolute", top: "10px", left: "10px" }}>Cerrar Sesión</button>
-            <button onClick={deleteInscription} style={{ position: "absolute", top: "10px", right: "10px" }} >Borrar inscripción</button>
+            <button onClick={getOut} style={{ position: "absolute", bottom: "20px", left: "50px", fontSize:"14px", backgroundColor: "#ff8c24", color:"white"}}>Cerrar Sesión</button>
+            <button onClick={deleteInscription} style={{ position: "absolute", bottom: "20px", right: "50px", fontSize:"14px", backgroundColor: "#ff8c24", color:"white"}} >Borrar inscripción</button>
             {loading ? (<Loading /> ) :
-        
-        <>
             <GlassCard>
-                <img src="../../logo.webp" alt="Logo HiTec" style={{ position: "relative", top: "32px", width: "10%", }} />
-                <h1>Bienvenidx</h1>
-                <h2>Por favor, Selecciona un horario para tu clase</h2>
+                <div style={{display: "flex", flexDirection:"column", alignItems: "center", gap:4, padding:"24px"}}>
+                <img src="../../logo.webp" alt="Logo HiTec" style={{ width: "30%", }} />
+                <span style={{fontSize:'24px', fontWeight: 'bold'}}>Arma tu horario</span>
+                <span style={{ display: "block"}}>Selecciona el bloque que deseas inscribir</span>
+                </div>
+                
                 {fullInscription && (
                     <div>
                         <p style={{ color: "red" }}>No puedes inscribirte a más de {INSCRIPTIONLIMIT} clases.</p>
                     </div>)}
-                <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-                <table style={{ borderCollapse: "collapse", textAlign: "center" }}>
-                    <tbody>
-                    <tr>
-                    <td className="Time">
-                        <button 
-                        className="TimeButton" 
-                        style={{ '--hover-bg-color': buttonColors[1] } as React.CSSProperties}
-                        onClick={() => goToArea(13)}
-                        disabled={disableClasses[13]}>
-                        13:00</button>
-                        </td>
-                    <td className="Time">
-                        <button 
-                        className="TimeButton" 
-                        style={{ '--hover-bg-color': buttonColors[2] } as React.CSSProperties}
-                        onClick={() => goToArea(15)}
-                        disabled={disableClasses[15]}>
-                        15:00</button>
-                        </td>
-                    </tr>
-                    <tr>
-                    <td className="Time">
-                        <button 
-                        className="TimeButton" 
-                        style={{ '--hover-bg-color': buttonColors[3] } as React.CSSProperties}
-                        onClick={() => goToArea(16)}
-                        disabled={disableClasses[16]}>
-                        16:00</button>
-                        </td>
-                    <td className="Time">
-                        <button 
+                <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "12px" }}>
+                    {[13, 15, 16, 17].map((hour, index) => (
+                        <button
+                        key={hour}
                         className="TimeButton"
-                        style={{ '--hover-bg-color': buttonColors[4] } as React.CSSProperties}
-                        onClick={() => goToArea(17)}
-                        disabled={disableClasses[17]}>
-                        17:00</button>
-                        </td>
-                    </tr>
-                    {/* <tr>
-                    <td className="Time">
-                        <button 
-                        className="TimeButton" 
-                        style={{ '--hover-bg-color': buttonColors[5] } as React.CSSProperties}
-                        onClick={() => goToArea(15)}
-                        disabled={disableClasses[15]}>
-                        15:00</button>
-                        </td>
-                    <td className="Time">
-                        <button 
-                        className="TimeButton" 
-                        style={{ '--hover-bg-color': buttonColors[6] } as React.CSSProperties}
-                        onClick={() => goToArea(16)}
-                        disabled={disableClasses[16]}>
-                        16:00</button>
-                        </td>
-                    </tr> */}
-                    </tbody>
-                </table>
+                        style={{ '--hover-bg-color': buttonColors[index + 1] } as React.CSSProperties}
+                        onClick={() => goToArea(hour)}
+                        disabled={disableClasses[hour]}
+                        >
+                    {`${hour}:00`}
+                    </button>
+                ))}
                 </div>
                 {seeScheduleButton ? 
-                <button onClick={goToSchedule} >Ver mi horario</button> : <></>}
+                <a onClick={goToSchedule} style={{ color: "#ff8c24", textDecoration: "underline", cursor: "pointer", padding: "6px 0px",  display: "block", fontSize:"16px"}}>
+                Ver mi horario
+                </a> : null}
             </GlassCard>
-            </>
-        }
-            
+            }     
         </div>
     );
 };
