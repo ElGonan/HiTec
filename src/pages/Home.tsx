@@ -265,7 +265,7 @@ useEffect(() => {
                     <p style={{ color: "red",  margin: ".5rem", padding: 0}}>No puedes inscribirte a más de {INSCRIPTIONLIMIT} clases.</p>
                 )}
                 <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "12px" }}>
-                    {[13, 15, 16, 17].map((hour, index) => (
+                    {[10, 11, 12, 13].map((hour, index) => (
                         <button
                         key={hour}
                         className="TimeButton"
