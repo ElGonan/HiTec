@@ -41,7 +41,7 @@ if (user){
                         <span>Por favor, ingresa tu matrícula</span>
                     </div>
                     <form onSubmit={handleSubmit}>
-                        <input type="string" placeholder="A0000000" name="id" value={inputMatricula} onChange={(e) => setInputMatricula(e.target.value)} required></input>
+                        <input type="string" placeholder="A0000000" name="id" value={inputMatricula} onChange={(e) => setInputMatricula(e.target.value.toUpperCase())} required></input>
                         <br/>
                         <br/>
                         <button disabled={isLoading} type="submit" style={{backgroundColor:"white", color:`rgba(16,18,60,1)`, border: 'none', fontSize: '14px'}}>Entrar</button>

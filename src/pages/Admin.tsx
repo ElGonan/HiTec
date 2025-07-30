@@ -189,20 +189,20 @@ const Admin = () => {
     }, [])
 
     return (
-       <div style={{
-  display: "flex",
-  flexDirection: "column",
-  alignItems: "center",
-  padding: "20px",
-  width: "100%",
-  boxSizing: "border-box"
-}}>
-  <button
-    onClick={getOut}
-    style={{ position: "absolute", top: "10px", left: "10px" }}
-  >
-    Cerrar sesión
-  </button>
+      <div style={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        padding: "20px",
+        width: "100%",
+        boxSizing: "border-box"
+      }}>
+        <button
+          onClick={getOut}
+          style={{ position: "absolute", top: "10px", left: "10px" }}
+        >
+          Cerrar sesión
+        </button>
 
   <div className="csvArea" style={{ position: "absolute", top: "10px", right: "10px" }}>
     <input
@@ -238,8 +238,6 @@ const Admin = () => {
     >
       Exportar base de datos a csv
     </button>
-
-
   </div>
   <GlassCard style={{ padding: "1rem" }}>
   <img
