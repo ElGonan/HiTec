@@ -189,22 +189,22 @@ const Admin = () => {
     }, [])
 
     return (
-       <div style={{
-  display: "flex",
-  flexDirection: "column",
-  alignItems: "center",
-  padding: "20px",
-  width: "100%",
-  boxSizing: "border-box"
-}}>
-  <button
-    onClick={getOut}
-    style={{ position: "absolute", top: "10px", left: "10px" }}
-  >
-    Cerrar sesión
-  </button>
+      <div style={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        padding: "20px",
+        width: "100%",
+        boxSizing: "border-box"
+      }}>
+        <button
+          onClick={getOut}
+          className="logoutButton"
+          >
+          Cerrar sesión
+        </button>
 
-  <div className="csvArea" style={{ position: "absolute", top: "10px", right: "10px" }}>
+  <div className="csvArea">
     <input
         type="file"
         accept=".csv"
@@ -215,7 +215,6 @@ const Admin = () => {
       <button
         style={{ marginLeft: "5px", marginRight: "5px" }}
         onClick={handleImportClick}
-        disabled={false} // Puedes agregar estado de loading aquí si necesitas
       >
         Importar usuarios desde CSV
       </button>
@@ -229,7 +228,6 @@ const Admin = () => {
       <button
         style={{ marginLeft: "5px", marginRight: "5px" }}
         onClick={handleImportClick}
-        disabled={false} // Puedes agregar estado de loading aquí si necesitas
       >
         Importar clases desde CSV
       </button>
@@ -238,10 +236,8 @@ const Admin = () => {
     >
       Exportar base de datos a csv
     </button>
-
-
   </div>
-  <GlassCard style={{ padding: "1rem" }}>
+  <GlassCard style={{ padding: "1rem", marginTop: "100px" }}>
   <img
     src="../../logo.webp"
     alt="Logo HiTec"
