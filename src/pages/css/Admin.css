@@ -30,3 +30,32 @@
 }.Text-dark {
     background-color: rgba(255, 255, 255, 0.15);
 }
+
+.csvArea {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
+.logoutButton {
+    position: absolute; 
+    top: 10px; 
+    left: 10px;
+}
+
+@media screen and (max-width: 768px) {
+    .csvArea {
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 10rem;
+
+}
+
+.logoutButton {
+    display: flex;
+    flex-direction: column;
+}
+div .DBtable {
+    padding: 0.1rem;
+}
+} 
