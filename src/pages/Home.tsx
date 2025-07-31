@@ -232,6 +232,7 @@ const Home = () => {
             });
             setFullInscription(false);
             setSeeScheduleButton(false);
+            setClassID([]);
             const horasDirectas = setClassesDirectas();
             checkInscriptions(horasDirectas.map(Number));
             setLoading(false); // Stop loading

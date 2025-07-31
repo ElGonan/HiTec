@@ -16,7 +16,8 @@ const Admin = () => {
     const [clases, setClases] = useState<Class[]>([])
     const [, setError] = useState<string | null>(null)
     const navigate = useNavigate()
-    const fileInputRef = useRef<HTMLInputElement>(null);
+    const fileInputRefStudent = useRef<HTMLInputElement>(null);
+    const fileInputRefClase = useRef<HTMLInputElement>(null);
 
     const getOut = async () => {
         const result = await Swal.fire({
@@ -48,8 +49,12 @@ const Admin = () => {
     }
 
     const handleImportClick = () => {
-      fileInputRef.current?.click();
+      fileInputRefStudent.current?.click();
     };
+
+    const handleImportClickClasses = () => {
+      fileInputRefClase.current?.click();
+    }
 
     const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
       const file = e.target.files?.[0];
@@ -85,7 +90,7 @@ const Admin = () => {
             text: `Total: ${result.total}, Insertados: ${result.inserted}, Actualizados: ${result.updated}`,
             icon: "success",
           });
-        }, 500); // Espera un segundo para mostrar el mensaje final
+        }, 1000); // Espera un segundo para mostrar el mensaje final
       } catch (error) {
         Swal.fire({
           title: "Error al importar",
@@ -208,28 +213,26 @@ const Admin = () => {
     <input
         type="file"
         accept=".csv"
-        ref={fileInputRef}
+        ref={fileInputRefStudent}
         onChange={handleFileChange}
         style={{ display: 'none' }}
       />
       <button
         style={{ marginLeft: "5px", marginRight: "5px" }}
         onClick={handleImportClick}
-        disabled={false} // Puedes agregar estado de loading aquí si necesitas
       >
         Importar usuarios desde CSV
       </button>
     <input
         type="file"
         accept=".csv"
-        ref={fileInputRef}
+        ref={fileInputRefClase}
         onChange={handleFileClassChange}
         style={{ display: 'none' }}
       />
       <button
         style={{ marginLeft: "5px", marginRight: "5px" }}
-        onClick={handleImportClick}
-        disabled={false} // Puedes agregar estado de loading aquí si necesitas
+        onClick={handleImportClickClasses}
       >
         Importar clases desde CSV
       </button>
