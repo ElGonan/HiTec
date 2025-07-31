@@ -58,7 +58,7 @@ const [loading, setLoading] = useState(false);
             {loading ? 
             (<Loading />)
             : 
-            <GlassCard>
+            <GlassCard style={{marginTop:"3rem"}}>
                 <h2 className="text-md font-bold mb-4">Seleccione una Area</h2>
             <div className="Area">
                 {areas.map((areas, index) => (
