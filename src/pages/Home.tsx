@@ -194,6 +194,7 @@ const Home = () => {
             if (classID.length === 0) {
                 Swal.fire({
                     title: "¡No tienes inscripciones!",
+                    text: "Recuerda que las clases de Mentoría y Academia no se pueden eliminar.",
                     icon: "error"
                 })
                 return;
@@ -255,38 +256,42 @@ useEffect(() => {
 
     return (
         <div>
-            <button onClick={getOut} style={{ position: "absolute", bottom: "20px", left: "50px", fontSize:"14px", backgroundColor: "#ff8c24", color:"white"}}>Cerrar Sesión</button>
-            <button onClick={deleteInscription} style={{ position: "absolute", bottom: "20px", right: "50px", fontSize:"14px", backgroundColor: "#ff8c24", color:"white"}} >Borrar inscripción</button>
             {loading ? (<Loading /> ) :
-            <GlassCard>
-                <div style={{display: "flex", flexDirection:"column", alignItems: "center", margin: 0, padding:"10px"}}>
-                <img src="../../logo.webp" alt="Logo HiTec" style={{ width: "30%", }} />
-                <span style={{fontSize:'24px', fontWeight: 'bold'}}>Arma tu horario</span>
-                <p style={{ margin: 0, padding: 0}}>Selecciona el bloque que deseas inscribir</p>
+            <div>
+                <GlassCard>
+                    <div style={{display: "flex", flexDirection:"column", alignItems: "center", margin: 0, padding:"10px"}}>
+                    <img src="../../logo.webp" alt="Logo HiTec" style={{ width: "30%", }} />
+                    <span style={{fontSize:'24px', fontWeight: 'bold'}}>Arma tu horario</span>
+                    <p style={{ margin: 0, padding: 0}}>Selecciona el bloque que deseas inscribir</p>
+                    </div>
+                    
+                    {fullInscription && (
+                        <p style={{ color: "red",  margin: ".5rem", padding: 0}}>No puedes inscribirte a más de {INSCRIPTIONLIMIT} clases.</p>
+                    )}
+                    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "12px" }}>
+                        {[10, 11, 12, 13].map((hour, index) => (
+                            <button
+                            key={hour}
+                            className="TimeButton"
+                            style={{ '--hover-bg-color': buttonColors[index + 1] } as React.CSSProperties}
+                            onClick={() => goToArea(hour)}
+                            disabled={disableClasses[hour]}
+                            >
+                        {`${hour}:00`}
+                        </button>
+                    ))}
+                    </div>
+                    {seeScheduleButton ? 
+                    <a onClick={goToSchedule} style={{ color: "#ff8c24", textDecoration: "underline", cursor: "pointer", padding: "6px 0px",  display: "block", fontSize:"16px"}}>
+                    Ver mi horario
+                    </a> : null}
+                </GlassCard>
+                <div style={{ display: "flex", justifyContent: "center", alignItems: "center", marginTop: "20px", gap: "32px" }}>
+                    <button onClick={getOut} style={{  fontSize:"14px", backgroundColor: "#ff8c24", color:"white"}}>Cerrar Sesión</button>
+                    <button onClick={deleteInscription} style={{fontSize:"14px", backgroundColor: "#ff8c24", color:"white"}} >Borrar inscripción</button>
                 </div>
-                
-                {fullInscription && (
-                    <p style={{ color: "red",  margin: ".5rem", padding: 0}}>No puedes inscribirte a más de {INSCRIPTIONLIMIT} clases.</p>
-                )}
-                <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "12px" }}>
-                    {[10, 11, 12, 13].map((hour, index) => (
-                        <button
-                        key={hour}
-                        className="TimeButton"
-                        style={{ '--hover-bg-color': buttonColors[index + 1] } as React.CSSProperties}
-                        onClick={() => goToArea(hour)}
-                        disabled={disableClasses[hour]}
-                        >
-                    {`${hour}:00`}
-                    </button>
-                ))}
-                </div>
-                {seeScheduleButton ? 
-                <a onClick={goToSchedule} style={{ color: "#ff8c24", textDecoration: "underline", cursor: "pointer", padding: "6px 0px",  display: "block", fontSize:"16px"}}>
-                Ver mi horario
-                </a> : null}
-            </GlassCard>
-            }     
+            </div>
+            }
         </div>
     );
 };
