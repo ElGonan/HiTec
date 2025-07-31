@@ -59,7 +59,6 @@ export const importStudentsCSV = async (
         if (!row.matricula || !row.clase1 || !row.clase2) {
           throw new Error('Faltan campos obligatorios (matrícula, clase1 o clase2)');
         }
-
         studentsData.push({
           alumno_matricula: String(row.matricula).trim(),
           alumno_class_1: String(row.clase1).trim(),
