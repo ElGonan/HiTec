@@ -8,6 +8,7 @@ import supabaseDelete from '../lib/supabaseDelete';
 import Swal from 'sweetalert2';
 import { useUser } from '../hooks/useUserContext';
 import GlassCard from '../components/GlassCard';
+import supabaseGet from '../lib/supabaseGet';
 
 
 
@@ -121,7 +122,7 @@ const Home = () => {
             .eq("alumno_id", alumno_id)
         
         if (error) {
-            console.log("Error al recuperar los datos: " + error.message);
+            //console.log("Error al recuperar los datos: " + error.message);
             setLoading(false); 
             return;
         }
@@ -147,7 +148,7 @@ const Home = () => {
             }
             return null;
             }).filter((hour): hour is number => hour !== null);
-            console.log("Horas de inscripción:", times);
+            //console.log("Horas de inscripción:", times);
             const totalTimes = horasDirectas.map(Number).concat(times);
             checkInscriptions(totalTimes);
 
@@ -155,7 +156,7 @@ const Home = () => {
             row.clase ? row.clase.capacidad_clase : null
         ).filter((capacity): capacity is number => capacity !== null);
         setClassCapacities(classCapacities);
-        console.log("Capacidades de las clases:", classCapacities);
+        //console.log("Capacidades de las clases:", classCapacities);
 
         const classIDs = data.map(row =>
             row.clase ? row.clase.clase_id : null
@@ -182,6 +183,30 @@ const Home = () => {
     };
 
     const deleteInscription = async () => {
+        // obtener el valor de la clase secreta
+        const {data, error} = await supabaseGet("alumno", "alumno_id", "1");
+        if (error) {
+            Swal.fire({
+            title: "Error al intentar eliminar clases",
+            text: error.message,
+            icon: 'error',
+            })
+        }
+        
+        //console.log(data[0]?.alumno_class_1 !== null)
+
+        if (data[0]?.alumno_class_1 !== null) {
+            Swal.fire({
+                title: "Eliminar clases bloqueado",
+                text: "El espacio para eliminar clases ha sido cerrado. Acercate a un miembro de staff si tienes dudas.",
+                icon: 'warning',
+            })
+
+            return;
+        }
+
+
+
         const result = await Swal.fire({
             title: "¿Segurx que deseas borrar tu inscripcion?",
             text: "Esta acción no se puede deshacer. Si continúas, deberás volver a inscribirte manualmente. Además, recuerda que no puedes eliminar las clases de Mentoría y Academia.",

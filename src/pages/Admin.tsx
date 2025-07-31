@@ -10,6 +10,7 @@ import { useUser } from '../hooks/useUserContext'
 import GlassCard from '../components/GlassCard'
 import { importStudentsCSV } from '../lib/importStudentsCSV'
 import { importClassesCSV } from '../lib/importClassesCSV'
+import supabaseUpdate from '../lib/supabaseUpdate'
 
 const Admin = () => {
     const { logout } = useUser();
@@ -156,7 +157,6 @@ const Admin = () => {
                     text: error.message,
                     icon: "error"
                 })
-                console.log(error);
                 return;
                 }
                 Swal.fire({
@@ -187,6 +187,84 @@ const Admin = () => {
             }));
           setClases(formatted);
         }
+    }
+
+    const blockInscriptions = async () => {
+      // Este codigo debe bloquear todas las inscripciones en el sistema. Un valor de la DB modificable unicamente
+      // por el admin
+
+      // puedo añadirle al admin un valor a una clase, si el campo es NULL, todo es modificable, de lo contrario,
+      // no
+
+
+      // Primero revisemos si tenemos algo
+      const {data} = await supabaseGet("alumno", "alumno_id", "1");
+
+      if (data[0]?.alumno_class_1 !== null) {
+        const result = await Swal.fire({
+          title: "El borrar clases está bloqueado actualmente",
+          text: "¿Quieres desactivar el bloqueo? Los alumnos podrán borrar sus inscripciones actuales.",
+          icon: 'question',
+          showCancelButton: true,
+          cancelButtonText: 'No',
+          confirmButtonText: 'Si'
+        })
+
+        // si si hay datos, significa que las clases estan bloqueadas, por lo que damos la oportunidad de
+        // desvloquearlas
+        if (result.isConfirmed) {
+          const updates = {alumno_class_1 : null}
+          const {data, error} = await supabaseUpdate("alumno", "alumno_id", "1", updates);
+
+          if (error) {
+            Swal.fire({
+              title: "Error! Pasale este mensaje a Alan o a algún encargado",
+              text: error.message,
+              icon: "error"
+            })
+          }
+
+          if (data) {
+          Swal.fire({
+          title: "Borrar clases desbloqueado",
+          icon: "success"
+        })
+      }
+
+        }
+      } else {
+
+        // Si aun no se bloquean las clases
+        const result = await Swal.fire({
+          title: "¿Quieres bloquear el borrar clases?",
+          text: "Esto evitará que los alumnos borren su inscripcion, sin embargo les permite seguir inscribiendo clases si tienen espacio.",
+          icon: 'question',
+          showCancelButton: true,
+          cancelButtonText: 'No',
+          confirmButtonText: 'Si'
+        })
+
+        if (result.isConfirmed) {
+
+      const {data, error} = await supabaseUpdate("alumno", "alumno_id", "1", {alumno_class_1 : "11:00:00"})
+      
+      if (error) {
+      Swal.fire({
+        title: "Error! Pasale este mensaje a Alan o a algún encargado",
+        text: error.message,
+        icon: "error"
+      
+      })
+      }
+
+      if (data) {
+          Swal.fire({
+          title: "Borrar clases bloqueado",
+          icon: "success"
+        })
+      }
+
+    }}
     }
 
     useEffect(() => {
@@ -252,10 +330,15 @@ const Admin = () => {
   <h1 style={{ textAlign: "center", marginTop: "60px" }}>
     Hola miembro de Staff de Hitec!
   </h1>
-
-  <button onClick={createClass} style={{ marginBottom: "10px" }}>
-    Crear Clase
-  </button>
+  
+  <div style={{ display: "flex", flexDirection: "column", alignItems:"center", gap:"16px"  }} >
+    <button onClick={createClass}>
+      Crear Clase
+    </button>
+    <button onClick={blockInscriptions}>
+      Bloquear inscripciones
+    </button>
+  </div>
 
   <p>Estas son las clases:</p>
 

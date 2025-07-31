@@ -29,7 +29,6 @@ const navigate = useNavigate();
 
     }; useEffect(() => {
 if (user){
-        console.log(user);
         if(user.alumno_id === 1) {navigate("/admin");}
         else{navigate("/Home");}
         
@@ -54,11 +53,13 @@ if (user){
                             const value = e.target.value.toUpperCase();
                             if (value.length <= 9) setInputMatricula(value);
                         }} maxLength={9} required></input>
+                        <br/>
                         <span style={{ fontSize: "0.8rem", color: "gray" }}>
                             {inputMatricula.length}/9 caracteres
                         </span>
                         <br/>
                         <br/>
+                        
                         <button disabled={isLoading} type="submit" style={{backgroundColor:"white", color:`rgba(16,18,60,1)`, border: 'none', fontSize: '14px'}}>Entrar</button>
                     </form>
                 </div>
