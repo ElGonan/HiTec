@@ -13,8 +13,8 @@ import Papa from "papaparse";
 
 type StudentClassData = {
   alumno_matricula: string;  // Clave única
-  alumno_class_1: string;
-  alumno_class_2: string;
+  alumno_class_1: string | null;
+  alumno_class_2: string | null;
 };
 
 type ImportResult = {
@@ -56,13 +56,13 @@ export const importStudentsCSV = async (
     const studentsData: StudentClassData[] = [];
     parsedData.data.forEach((row: any, index: any) => {
       try {
-        if (!row.matricula || !row.clase1 || !row.clase2) {
+        if (!row.matricula) {
           throw new Error('Faltan campos obligatorios (matrícula, clase1 o clase2)');
         }
         studentsData.push({
           alumno_matricula: String(row.matricula).trim(),
-          alumno_class_1: String(row.clase1).trim(),
-          alumno_class_2: String(row.clase2).trim(),
+          alumno_class_1: row.clase1 ? String(row.clase1).trim() : null,
+          alumno_class_2: row.clase2 ? String(row.clase2).trim() : null,
         });
       } catch (error) {
         result.errors.push(`Fila ${index + 1}: ${error instanceof Error ? error.message : 'Datos inválidos'}`);
