@@ -88,10 +88,10 @@ const Admin = () => {
         setTimeout(() => {
           Swal.fire({
             title: "Importación completada",
-            text: `Total: ${result.total}, Insertados: ${result.inserted}, Actualizados: ${result.updated}`,
+            text: `Total: ${result.total}, Insertados o actualizados: ${result.updated}`,
             icon: "success",
           });
-        }, 1000); // Espera un segundo para mostrar el mensaje final
+        }, 500); // Espera un segundo para mostrar el mensaje final
       } catch (error) {
         Swal.fire({
           title: "Error al importar",
@@ -116,7 +116,7 @@ const Admin = () => {
         setTimeout(() => {
           Swal.fire({
             title: "Importación completada",
-            text: `Total: ${result.total}, Insertados: ${result.inserted}, Actualizados: ${result.updated}`,
+            text: `Total: ${result.total}, Insertados o actualizados: ${result.updated}`,
             icon: "success",
           });
         }, 500); // Espera un segundo para mostrar el mensaje final
