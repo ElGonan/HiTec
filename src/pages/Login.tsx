@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { useUser } from '../hooks/useUserContext';
 import { useNavigate } from 'react-router-dom';
 import LoginCard from '../components/LoginCard';
+import Swal from 'sweetalert2';
 
 
 const Login = () => {
@@ -12,6 +13,14 @@ const navigate = useNavigate();
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        if (inputMatricula.length !== 9) {
+            await Swal.fire({
+                title: "Matrícula no válida",
+                text: "No olvides siempre comenzar con una 'A'",
+                icon: 'error',
+            })
+            return;
+        }
         try{
             await login(inputMatricula);
         } catch(error) {
@@ -41,7 +50,13 @@ if (user){
                         <span>Por favor, ingresa tu matrícula</span>
                     </div>
                     <form onSubmit={handleSubmit}>
-                        <input type="string" placeholder="A0000000" name="id" value={inputMatricula} onChange={(e) => setInputMatricula(e.target.value.toUpperCase())} required></input>
+                        <input type="text" placeholder="A0000000" name="id" value={inputMatricula} onChange={(e) => {
+                            const value = e.target.value.toUpperCase();
+                            if (value.length <= 9) setInputMatricula(value);
+                        }} maxLength={9} required></input>
+                        <span style={{ fontSize: "0.8rem", color: "gray" }}>
+                            {inputMatricula.length}/9 caracteres
+                        </span>
                         <br/>
                         <br/>
                         <button disabled={isLoading} type="submit" style={{backgroundColor:"white", color:`rgba(16,18,60,1)`, border: 'none', fontSize: '14px'}}>Entrar</button>
