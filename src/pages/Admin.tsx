@@ -1,3 +1,10 @@
+/*
+  @TODO
+  Seccionar la lógica. Es insostenible este monolito de código, 
+  hay que secccionarlo y revisar qué se sigue usando
+ */
+
+
 import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import supabaseGet from '../lib/supabaseGet'
@@ -146,7 +153,7 @@ const Admin = () => {
             cancelButtonText: "No",
             confirmButtonText: "Si"
                 })
- 
+
         if (result.isConfirmed) {
             const { error } = await supabaseDelete("clase", "clase_id", clase_id);
     
@@ -268,7 +275,8 @@ const Admin = () => {
     }
 
     useEffect(() => {
-      if (!user) {
+      // verificación sencilla de que el usuario es el admin
+      if (user?.alumno_id !== 1) {
         navigate("/")
       }
       else{
