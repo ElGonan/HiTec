@@ -67,7 +67,8 @@ const Classes = () => {
                         }
                     });
                 });
-        }}
+        }
+    }
 
     const goBack = () =>
     {
