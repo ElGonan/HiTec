@@ -6,6 +6,7 @@ import supabase from '../supabase/supabaseClient'
 
 const SupabaseInscription = async (alumno_id : number, clase_id: number) => {
   try {
+    // El rpc está dado de alta en supabase, puedes verlo desde misc/querys.sql
     const { data: updatedClass, error : updateError } = await supabase
       .rpc('decrementar_capacidad', { 
       p_clase_id: clase_id 
