@@ -44,15 +44,15 @@ const Home = () => {
         16: false,
         17: false,
     });
-    const [ classID, setClassID ] = useState<number[]>([]); // Variable to store the class ID
-    const [ classCapacities, setClassCapacities ] = useState<number[]>([]); // Array to store class capacities
+    const [ classID, setClassID ] = useState<number[]>([]); 
+    const [ classCapacities, setClassCapacities ] = useState<number[]>([]); 
     const navigate = useNavigate();
     const [ fullInscription, setFullInscription ] = useState<boolean>(false);
     const [ seeScheduleButton, setSeeScheduleButton ] = useState<boolean>(false);
-    const [userClassData, setUserClassData] = useState<unknown>(null); // 
+    const [userClassData, setUserClassData] = useState<unknown>(null); 
 
     const checkInscriptions = (inscriptionHours: number[]) => {
-        setLoading(true); // Start loading
+        setLoading(true); 
         const newDisableClasses: { [key: number]: boolean } = {
         10: false,
         11: false,
@@ -80,7 +80,7 @@ const Home = () => {
         }
 
         setDisableClasses(newDisableClasses);
-        setLoading(false); // Stop loading
+        setLoading(false);
     };
 
 
@@ -186,7 +186,7 @@ const Home = () => {
     };
 
     const deleteInscription = async () => {
-        // obtener el valor de la clase secreta
+        // obtener el valor de la clase secreta, la encargada de bloquear las clases
         const {data, error} = await supabaseGet("alumno", "alumno_id", "1");
         if (error) {
             Swal.fire({

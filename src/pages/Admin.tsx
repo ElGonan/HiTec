@@ -218,7 +218,7 @@ const Admin = () => {
         })
 
         // si si hay datos, significa que las clases estan bloqueadas, por lo que damos la oportunidad de
-        // desvloquearlas
+        // desbloquearlas
         if (result.isConfirmed) {
           const updates = {alumno_class_1 : null}
           const {data, error} = await supabaseUpdate("alumno", "alumno_id", "1", updates);

@@ -30,7 +30,7 @@ const navigate = useNavigate();
     }; useEffect(() => {
 if (user){
         if(user.alumno_id === 1) {navigate("/admin");}
-        else{navigate("/Home");}
+        else{navigate("/home");}
         
     }
 },[navigate, user])
