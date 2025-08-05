@@ -18,13 +18,16 @@ import supabaseGet from '../lib/supabaseGet';
 
 const INSCRIPTIONLIMIT = 4;
 
-// This variables are for the color of the buttons
+// Estos son los colores de los botones
 const buttonColors = {
     1: "#b8eadf", // aquamarine
     2: "#ffd902", // yellow
     3: "#f7a305", // orange
     4: "#fd7a5c", // secondary orange
 };
+
+// Array con las clases que puede inscribir el alumno
+const classArray = [10, 11, 12, 13]
 
 
 const Home = () => {
@@ -46,7 +49,7 @@ const Home = () => {
     const navigate = useNavigate();
     const [ fullInscription, setFullInscription ] = useState<boolean>(false);
     const [ seeScheduleButton, setSeeScheduleButton ] = useState<boolean>(false);
-    const [userClassData, setUserClassData] = useState<unknown>(null);
+    const [userClassData, setUserClassData] = useState<unknown>(null); // 
 
     const checkInscriptions = (inscriptionHours: number[]) => {
         setLoading(true); // Start loading
@@ -262,7 +265,8 @@ const Home = () => {
             const horasDirectas = setClassesDirectas();
             checkInscriptions(horasDirectas.map(Number));
             setLoading(false); // Stop loading
-    }}
+        }
+    }
 
     const goToSchedule = () =>
     {
@@ -294,7 +298,7 @@ useEffect(() => {
                         <p style={{ color: "red",  margin: ".5rem", padding: 0}}>No puedes inscribirte a más de {INSCRIPTIONLIMIT} clases.</p>
                     )}
                     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "12px" }}>
-                        {[10, 11, 12, 13].map((hour, index) => (
+                        {classArray.map((hour, index) => (
                             <button
                             key={hour}
                             className="TimeButton"
