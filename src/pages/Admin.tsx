@@ -13,7 +13,7 @@ import { importClassesCSV } from '../lib/importClassesCSV'
 import supabaseUpdate from '../lib/supabaseUpdate'
 
 const Admin = () => {
-    const { logout } = useUser();
+    const { logout, user } = useUser();
     const [clases, setClases] = useState<Class[]>([])
     const [, setError] = useState<string | null>(null)
     const navigate = useNavigate()
@@ -268,7 +268,12 @@ const Admin = () => {
     }
 
     useEffect(() => {
+      if (!user) {
+        navigate("/")
+      }
+      else{
         getClases()
+      }
     }, [])
 
     return (

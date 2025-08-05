@@ -7,14 +7,12 @@ import supabase from '../supabase/supabaseClient'
 const SupabaseInscription = async (alumno_id : number, clase_id: number) => {
   try {
     const { data: updatedClass, error : updateError } = await supabase
-    .from("clase")
-    .update({ capacidad_clase: supabase.rpc('decrement_if_positive') })
-    .eq("clase_id", clase_id)
-    .gt("capacidad_clase", 0)
-    .select("capacidad_clase")
-    .single();
+      .rpc('decrementar_capacidad', { 
+      p_clase_id: clase_id 
+    });
+    console.log(updatedClass)
 
-    if (updateError || !updatedClass) {
+    if (updateError || !updatedClass || updatedClass.length === 0) {
       return { data: null, error: new Error("No hay más lugares disponibles.") };
     }
 
