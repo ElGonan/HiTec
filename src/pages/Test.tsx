@@ -1,98 +1,138 @@
-import Swal from 'sweetalert2';
-import { useEffect, useState } from 'react';
+
+import { useState } from 'react';
 import supabase from '../supabase/supabaseClient';
-import { PostgrestError } from '@supabase/supabase-js';
-import ClassCard from '../components/ClassCard';
+
 
 const Test = () => {
-  const [error, setError] = useState<PostgrestError | null | string>(null)
-  const [clases, setClases] = useState<any[] | null>(null)
-  const [alumno_name, setName] = useState<string>("")
-  const [strPhone, setStrPhone] = useState<string>("")
-  const [alumno_phone, setPhone] = useState<number>(0)
+  const [claseId, setClaseId] = useState<number>(1);
+  const [requests, setRequests] = useState<number>(5);
+  const [results, setResults] = useState<Array<{ success: boolean; message: string }>>([]);
+  const [capacity, setCapacity] = useState<number | null>(null);
 
-
-  const fetchClases = async () => {
-    const { data, error } = await supabase
-    .from('clase')
-    .select()
-
-    if (error) {
-      setError(error)
-      setClases(null)
-      console.error('Error fetching data:', error)
-
-    }
-
-    if (data) {
-      setClases(data)
-      setError(null)
-    }
-      }
-
-  const addStudent = async (e : any) => {
-    e.preventDefault()
-
-  
-    if (!alumno_name || !strPhone)
-    {
-      setError("Favor de llenar el valor de Nombre o telefono")
-      return
-    }
-
-    const parsedPhone = Number(strPhone)
-    if (isNaN(parsedPhone)) {
-      setError("Teléfono inválido")
-      return
-    }
-    setPhone(parsedPhone)
-
-    setError(null)
-
-   
-    const estudiante = { alumno_name, alumno_phone}
-
-
-    console.log(estudiante)
-
-    const { data, error } = await supabase
-    .from("alumno")
-    .insert([estudiante])
-    .select()
-
-    if(error)
-    {
-      if(error.code = "400")
-      {
-        alert("Error en alguna regla!!")
-        return
-      }
-      alert(error.message)
-    }
+  // 1. Función para probar la inscripción concurrente
+  const testConcurrency = async () => {
+    setResults([]);
     
-    if(data)
-    {
-      alert("Alumno creado correctamente")
-      setName("")
-      setStrPhone("")   
-    }
+    // Obtener capacidad inicial
+    const { data: initialData } = await supabase
+      .from('clase')
+      .select('capacidad_clase')
+      .eq('clase_id', claseId)
+      .single();
+      
+    setCapacity(initialData?.capacidad_clase || 0);
 
-  }
+    // Simular 'requests' inscripciones simultáneas
+    const promises = Array.from({ length: requests }).map(async (_, i) => {
+      try {
+        const { data, error } = await supabase
+          .rpc('decrementar_capacidad', { p_clase_id: claseId });
 
+        if (error) {
+          return { success: false, message: `Error en solicitud ${i + 1}: ${error.message}` };
+        }
 
-useEffect(() => {
-fetchClases()
-  }, [])
+        return data?.error 
+          ? { success: false, message: `Solicitud ${i + 1}: ${data.error}` }
+          : { success: true, message: `Solicitud ${i + 1}: ¡Éxito!` };
+      } catch (err) {
+        return { success: false, message: `Error crítico en ${i + 1}: ${err instanceof Error ? err.message : String(err)}` };
+      }
+    });
 
-  return(
+    // Esperar todas las respuestas
+    const results = await Promise.all(promises);
+    setResults(results);
 
-    <>
-    <ClassCard className="pako" teacherName="Pilates"/>
-    </>
+    // Obtener capacidad final
+    const { data: finalData } = await supabase
+      .from('clase')
+      .select('capacidad_clase')
+      .eq('clase_id', claseId)
+      .single();
+      
+    setCapacity(finalData?.capacidad_clase);
+  };
 
-  )
+  // 2. Resetear capacidad (para pruebas repetidas)
+  const resetCapacity = async (newCapacity: number) => {
+    await supabase
+      .from('clase')
+      .update({ capacidad_clase: newCapacity })
+      .eq('clase_id', claseId);
+      
+    setCapacity(newCapacity);
+    setResults([]);
+  };
 
-}
+  return (
+    <div style={{ padding: '20px', maxWidth: '600px' }}>
+      <h2>Prueba de Concurrencia</h2>
+      
+      <div style={{ marginBottom: '15px' }}>
+        <label>
+          ID de Clase: 
+          <input 
+            type="number" 
+            value={claseId}
+            onChange={(e) => setClaseId(Number(e.target.value))}
+            style={{ marginLeft: '10px' }}
+          />
+        </label>
+      </div>
+
+      <div style={{ marginBottom: '15px' }}>
+        <label>
+          N° de Solicitudes: 
+          <input 
+            type="number" 
+            value={requests}
+            onChange={(e) => setRequests(Number(e.target.value))}
+            min="1"
+            style={{ marginLeft: '10px' }}
+          />
+        </label>
+      </div>
+
+      <div style={{ marginBottom: '15px' }}>
+        <button 
+          onClick={testConcurrency}
+          style={{ marginRight: '10px', padding: '8px 15px' }}
+        >
+          Probar Concurrencia
+        </button>
+        
+        <button 
+          onClick={() => resetCapacity(40)}
+          style={{ padding: '8px 15px' }}
+        >
+          Resetear Capacidad a 40
+        </button>
+      </div>
+
+      {capacity !== null && (
+        <p>
+          <strong>Capacidad actual:</strong> {capacity}
+        </p>
+      )}
+
+      <div style={{ marginTop: '20px' }}>
+        <h3>Resultados:</h3>
+        <ul>
+          {results.map((result, index) => (
+            <li 
+              key={index}
+              style={{ color: result.success ? 'green' : 'red' }}
+            >
+              {result.message}
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  );
+};
+
 export default Test
 
 
