@@ -185,31 +185,10 @@ const Home = () => {
         }
     };
 
+    // @TODO
+    // corregir error de race condition. Desde supabase
     const deleteInscription = async () => {
-        // obtener el valor de la clase secreta, la encargada de bloquear las clases
-        const {data, error} = await supabaseGet("alumno", "alumno_id", "1");
-        if (error) {
-            Swal.fire({
-            title: "Error al intentar eliminar clases",
-            text: error.message,
-            icon: 'error',
-            })
-        }
-        
-        //console.log(data[0]?.alumno_class_1 !== null)
-
-        if (data[0]?.alumno_class_1 !== null) {
-            Swal.fire({
-                title: "Eliminar clases bloqueado",
-                text: "El espacio para eliminar clases ha sido cerrado. Acercate a un miembro de staff si tienes dudas.",
-                icon: 'warning',
-            })
-
-            return;
-        }
-
-
-
+        // Confirmación del usuario
         const result = await Swal.fire({
             title: "¿Segurx que deseas borrar tu inscripcion?",
             text: "Esta acción no se puede deshacer. Si continúas, deberás volver a inscribirte manualmente. Además, recuerda que no puedes eliminar las clases de Mentoría y Academia.",
@@ -217,38 +196,41 @@ const Home = () => {
             showCancelButton: true,
             cancelButtonText: 'No',
             confirmButtonText: 'Si'
-        })
-        if (result.isConfirmed) {
-            if (classID.length === 0) {
-                Swal.fire({
-                    title: "¡No tienes inscripciones!",
-                    text: "Recuerda que las clases de Mentoría y Academia no se pueden eliminar.",
-                    icon: "error"
-                })
-                return;
-            }
-            setLoading(true); // Start loading
-            const newCapacities = [...classCapacities];
-            for (let i = 0; i < newCapacities.length; i++) {
-                newCapacities[i] = newCapacities[i] + 1;
-            }
-            for (let i = 0; i < classID.length; i++) {
-            const { error } = await supabaseUpdate("clase", "clase_id",classID[i], {capacidad_clase: newCapacities[i]});
-            if (error) {
-                alert("Error al actualizar la capacidad de la clase: " + error.message);
-                return;
-            }
-            }
-            const { error } = await supabaseDelete("alumno_clase", "alumno_id", id!);
-            if (error) {
-                alert(error.message);
-                setLoading(false); // Stop loading on error
-                return;
-            }
+        });
+        
+        if (!result.isConfirmed) return;
+
+        if (classID.length === 0) {
             Swal.fire({
-                    title: "Inscripción borrada correctamente.",
-                    icon: "success"
-                });
+                title: "¡No tienes inscripciones!",
+                text: "Recuerda que las clases de Mentoría y Academia no se pueden eliminar.",
+                icon: "error"
+            });
+            return;
+        }
+
+        setLoading(true);
+        
+        try {
+            // Llamar a la función almacenada
+            const { error } = await supabase.rpc('delete_inscription', {
+                p_alumno_id: id!
+            });
+
+            if (error) {
+                // Manejar errores específicos
+                if (error.message.includes('Eliminar clases bloqueado')) {
+                    throw new Error('El espacio para eliminar clases ha sido cerrado. Acercate a un miembro de staff si tienes dudas.');
+                }
+                throw error;
+            }
+
+            Swal.fire({
+                title: "Inscripción borrada correctamente.",
+                icon: "success"
+            });
+            
+            // Actualizar el estado local
             setDisableClasses({
                 10: false,
                 11: false,
@@ -264,9 +246,18 @@ const Home = () => {
             setClassID([]);
             const horasDirectas = setClassesDirectas();
             checkInscriptions(horasDirectas.map(Number));
-            setLoading(false); // Stop loading
+            
+        } catch (error: any) {
+            Swal.fire({
+                title: "Error",
+                text: error.message || "Ocurrió un error al eliminar la inscripción. Por favor intenta nuevamente.",
+                icon: "error"
+            });
+            console.error(error);
+        } finally {
+            setLoading(false);
         }
-    }
+    };
 
     const goToSchedule = () =>
     {
