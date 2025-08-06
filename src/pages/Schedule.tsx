@@ -45,7 +45,7 @@ const Schedule = () => {
     const transformTime = (date: string) => {
         const isoDate = date.replace(' ', 'T')
         const dateObj = new Date(isoDate)
-        const options: Intl.DateTimeFormatOptions = {
+        const options: Intl.DateTimeFormatOpticons = {
         hour: '2-digit',
         minute: '2-digit',
         second: '2-digit',
@@ -63,6 +63,9 @@ useEffect(() => {
 
     return(
         <>
+        <br></br>
+        <br></br>
+        <br></br>
         <button onClick={goBack} style={{ position: "absolute", top: "20px", left: "20px", background:"#ff8c24",color:"white", fontSize: "12px"}}>Regresar</button>
         {loading ? <Loading /> : 
         <>
