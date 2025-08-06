@@ -32,10 +32,10 @@ const SupabaseInscription = async (alumno_id : number, clase_id: number) => {
       return { data : enrollment, error : enrollmentError };
     }
 
-    return { data: null, error: enrollmentError };
+    return { data : enrollment, error: enrollmentError };
 
   } catch (err) {
-    return { data : null, error: err as Error };
+    return { error: err as Error };
   }
 };
 
