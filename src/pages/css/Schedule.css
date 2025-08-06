@@ -17,6 +17,7 @@
 .tableTitle {
     font-size: 32px;
     padding: 8px;
+    background-color: rgba(0,0,255,0.3);
 }
 .tableTitleMid {
     font-size: 32px;
@@ -24,6 +25,7 @@
     padding: 4px;
     border-top: 0cap;
     padding: 8px;
+    background-color: rgba(0,0,255,0.3)
 }
 
 .tableEvent {
@@ -40,6 +42,10 @@
     padding: 4px;
     font-size: large;
 
+}
+
+.campus {
+    max-width: 50%;
 }
 
 @media (max-width: 768px) {
@@ -77,5 +83,8 @@
     font-size: medium;
 
 }
-    
+
+.campus {
+    max-width: 80%;
+}
 }
