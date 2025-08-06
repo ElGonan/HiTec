@@ -13,10 +13,11 @@ const SupabaseInscription = async (alumno_id : number, clase_id: number) => {
     });
     console.log(updatedClass)
 
-    if (updateError || !updatedClass || updatedClass.length === 0) {
+    if (updatedClass.error || updateError) {
       return { data: null, error: new Error("No hay más lugares disponibles.") };
     }
 
+    if(updatedClass.success) {
     const { data: enrollment, error: enrollmentError } = await supabase
     .from("alumno_clase")
     .insert([{ alumno_id, clase_id }])
@@ -33,6 +34,7 @@ const SupabaseInscription = async (alumno_id : number, clase_id: number) => {
     }
 
     return { data : enrollment, error: enrollmentError };
+  };
 
   } catch (err) {
     return { error: err as Error };
