@@ -47,7 +47,8 @@ const Classes = () => {
             })
             if (result.isConfirmed) {
                 setLoading(true);
-                SupabaseInscription(alumno_id, clase_id).then(({ error }) => {
+                SupabaseInscription(alumno_id, clase_id).then(({ data, error }) => {
+                    console.log(data);
                     if (error) {
                         Swal.fire({
                     title: "No hay más lugares para esta clase!",
