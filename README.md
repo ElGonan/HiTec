@@ -7,7 +7,7 @@ App sencilla para inscripción a las diferentes clases.
 - Framework:
     - React
 - Deployment:
-    - Vercell
+    - Vercel
 
 ### Ejecutar en local
 Clona o copia el repo, después ejecuta
