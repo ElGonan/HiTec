@@ -67,7 +67,7 @@ useEffect(() => {
         {loading ? <Loading /> : 
         <>
         <div>
-            <h2 className="context">Toma una Screenshot de esto, es tu horario! Si tienes dudas acercate a cualquer miembro del staff</h2>
+            <h2 className="context">¡Este es tu horario! Toma un screenshot y consérvalo para consultarlo durante el día. Cualquier duda, acércate a un miembro del staff.</h2>
         </div>
         <GlassCard>
         <h1 className="title">Horario del usuario con ID: {user?.alumno_id}</h1>
@@ -94,7 +94,8 @@ useEffect(() => {
 
         </>
         }
-        
+        <h2>Mapa del campus</h2>
+        <img className="campus" src={"/hitec_map.webp"} alt="Mapa del campus" />
         </>
     )
 
