@@ -57,6 +57,7 @@ const Classes = () => {
                         setLoading(false);
                         return;
                     }
+                    if (data) {
                     Swal.fire({
                         title: "Inscripción exitosa.",
                         icon: "success"
@@ -67,7 +68,7 @@ const Classes = () => {
                             alumno_id: alumno_id,
                         }
                     });
-                });
+                }});
         }
     }
 

@@ -9,6 +9,7 @@ import Swal from 'sweetalert2';
 import { useUser } from '../hooks/useUserContext';
 import GlassCard from '../components/GlassCard';
 import supabaseGet from '../lib/supabaseGet';
+import SupabaseDeleteInscription from '../lib/supabaseDeleteInscription';
 
 
 
@@ -213,9 +214,7 @@ const Home = () => {
         
         try {
             // Llamar a la función almacenada
-            const { error } = await supabase.rpc('delete_inscription', {
-                p_alumno_id: id!
-            });
+            const { data, error } = await SupabaseDeleteInscription(id)
 
             if (error) {
                 // Manejar errores específicos
@@ -225,6 +224,9 @@ const Home = () => {
                 throw error;
             }
 
+            console.log(data);
+
+            if (data) {
             Swal.fire({
                 title: "Inscripción borrada correctamente.",
                 icon: "success"
@@ -246,6 +248,7 @@ const Home = () => {
             setClassID([]);
             const horasDirectas = setClassesDirectas();
             checkInscriptions(horasDirectas.map(Number));
+        }
             
         } catch (error: any) {
             Swal.fire({
