@@ -16,7 +16,11 @@ const SupabaseDeleteInscription = async (alumno_id : number) => {
       p_alumno_id: alumno_id
     });
 
-    console.log(deletedData, updateError);
+    //console.log("deletedData", deletedData);
+
+    if (deletedData.error == "Eliminar clases bloqueado") {
+      return { data: "blocked", error: null };
+    }
 
     if (deletedData.error || updateError) {
       return { data: null, error: new Error("Error reduciendo la capacidad") };
