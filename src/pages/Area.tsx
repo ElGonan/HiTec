@@ -5,6 +5,7 @@ import supabaseGetTime from '../lib/supabaseGetTime';
 import Loading from '../components/Loading';
 import './css/Area.css';
 import GlassCard from '../components/GlassCard';
+import { useUser } from '../hooks/useUserContext';
 
 type AreaType = { 
     area: string; [key: string]: unknown 
@@ -12,6 +13,7 @@ type AreaType = {
 
 
 const Area = () => {
+const { user } = useUser();
 const location = useLocation();
 const navigate = useNavigate();
 const [areas, setAreas] = useState<AreaType[]>([]);
@@ -49,6 +51,10 @@ const [loading, setLoading] = useState(false);
     }
 
     useEffect(() => {
+        if (!user) {
+        navigate("/");
+        return;
+        }
         getClases();
     }, []);
 

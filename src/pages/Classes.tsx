@@ -80,6 +80,10 @@ const Classes = () => {
     }
 
 useEffect(()=> {
+    if (!user) {
+        navigate("/");
+        return;
+    }
     getClases();
 },[])
     return (

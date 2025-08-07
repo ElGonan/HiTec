@@ -271,6 +271,9 @@ useEffect(() => {
     setClassesDirectas();
     retrieveData(user?.alumno_id);
     }
+    else {
+        navigate('/')
+    }
 }, [user]);
 
 
