@@ -58,7 +58,9 @@ const Schedule = () => {
 useEffect(() => {
     if (user){
         getData(user.alumno_id.toString())
-    }
+    } else {
+        navigate("/");
+        return;}
 },[user]);
 
     return(

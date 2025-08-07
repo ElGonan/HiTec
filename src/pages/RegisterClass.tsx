@@ -7,8 +7,10 @@ import transformDate from '../lib/transformDate'
 import './css/Register.css'
 import Swal from 'sweetalert2';
 import GlassCard from '../components/GlassCard'
+import { useUser } from '../hooks/useUserContext';
 
 const RegisterClass = () => {
+  const { user } = useUser();
 const [id, setId] = useState<number | null>(null)
  const [instructor, setInstructor] = useState<string>("")
  const [fecha, setFecha] = useState<string>("")
@@ -153,6 +155,11 @@ const location = useLocation();
 
   }
 useEffect(() => {
+
+    if (user?.alumno_id !== 1) {
+        navigate("/")
+      }
+
     if(location.state)
   {
     retrieveClass(location.state.clase_id)

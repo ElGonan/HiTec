@@ -9,6 +9,7 @@ import Swal from 'sweetalert2';
 import { useUser } from '../hooks/useUserContext';
 import GlassCard from '../components/GlassCard';
 import supabaseGet from '../lib/supabaseGet';
+import SupabaseDeleteInscription from '../lib/supabaseDeleteInscription';
 
 
 
@@ -213,22 +214,36 @@ const Home = () => {
         
         try {
             // Llamar a la función almacenada
-            const { error } = await supabase.rpc('delete_inscription', {
-                p_alumno_id: id!
-            });
-
-            if (error) {
-                // Manejar errores específicos
-                if (error.message.includes('Eliminar clases bloqueado')) {
-                    throw new Error('El espacio para eliminar clases ha sido cerrado. Acercate a un miembro de staff si tienes dudas.');
-                }
-                throw error;
-            }
-
+            const { data, error } = await SupabaseDeleteInscription(id)
+            
+            if (data) {
             Swal.fire({
                 title: "Inscripción borrada correctamente.",
                 icon: "success"
             });
+
+            if (data == "blocked") {
+                // Manejar errores específicos
+                Swal.fire({
+                title: "¡Eliminar clases bloqueado!",
+                text: "El eliminado de clases está bloqueado, acercate a un administrador si tienes dudas.",
+                icon: "error"
+                });
+            return;
+            }
+
+            if (error) {
+                Swal.fire({
+                    title: "Error",
+                    text: error.message || "Ocurrió un error al eliminar la inscripción. Por favor intenta nuevamente.",
+                    icon: "error"
+                });
+                console.error(error);
+                return;
+            }
+
+
+            //console.log(data)
             
             // Actualizar el estado local
             setDisableClasses({
@@ -246,6 +261,7 @@ const Home = () => {
             setClassID([]);
             const horasDirectas = setClassesDirectas();
             checkInscriptions(horasDirectas.map(Number));
+        }
             
         } catch (error: any) {
             Swal.fire({
@@ -270,6 +286,9 @@ useEffect(() => {
     if (user) {
     setClassesDirectas();
     retrieveData(user?.alumno_id);
+    }
+    else {
+        navigate('/')
     }
 }, [user]);
 
