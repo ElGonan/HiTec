@@ -10,7 +10,6 @@ import { useNavigate } from 'react-router-dom'
 import supabaseGet from '../lib/supabaseGet'
 import supabaseDelete from '../lib/supabaseDelete'
 import exportToCSV from '../lib/exportCSV'
-import transformDate from '../lib/transformDate'
 import './css/Admin.css'
 import Swal from 'sweetalert2'
 import { useUser } from '../hooks/useUserContext'
@@ -19,9 +18,9 @@ import { importStudentsCSV } from '../lib/importStudentsCSV'
 import { importClassesCSV } from '../lib/importClassesCSV'
 import supabaseUpdate from '../lib/supabaseUpdate'
 
-const Admin = () => {
+const AdminUsers = () => {
     const { logout, user } = useUser();
-    const [clases, setClases] = useState<Class[]>([])
+    const [users, setUsers] = useState<User[]>([])
     const [, setError] = useState<string | null>(null)
     const navigate = useNavigate()
     const fileInputRefStudent = useRef<HTMLInputElement>(null);
@@ -136,18 +135,14 @@ const Admin = () => {
       }
     }
 
-    const editClass = (clase_id: number) => {
-        navigate("/registerClass", { state: { clase_id } })
-    }
-
-    const createClass = () => {
-            navigate("/registerClass") 
+    const createUser = () => {
+            navigate("/register") 
     }
 
 
-    const deleteClass = async (clase_id: number) => {
+    const deleteuser = async (alumno_id: number) => {
             const result = await Swal.fire({
-            text: "¿Estás segurx de que deseas eliminar la clase?",
+            text: "¿Estás segurx de que deseas eliminar el usuario",
             icon: "question",
             showCancelButton: true,
             cancelButtonText: "No",
@@ -155,7 +150,7 @@ const Admin = () => {
                 })
 
         if (result.isConfirmed) {
-            const { error } = await supabaseDelete("clase", "clase_id", clase_id);
+            const { error } = await supabaseDelete("alumno", "alumno_id", alumno_id);
     
             if (error) {
                 setError(error.message);
@@ -167,16 +162,16 @@ const Admin = () => {
                 return;
                 }
                 Swal.fire({
-                    title: "Clase eliminada correctamente.",
+                    title: "Usuario correctamente.",
                     icon: "success"
                 })
-            getClases(); 
+            getUsers(); 
         }
     };
 
 
-    const getClases = async () => {
-        const { data, error } = await supabaseGet("clase")
+    const getUsers = async () => {
+        const { data, error } = await supabaseGet("alumno")
         if (error) {
             setError(error.message)
                 Swal.fire({
@@ -187,12 +182,8 @@ const Admin = () => {
             return
         }
         if (data) {
-          const sorted = data.sort((a: Class, b: Class) => a.clase_id - b.clase_id); // orden ascendente
-          const formatted = sorted.map((clase: Class) => ({
-            ...clase,
-            fecha_hora: transformDate(clase.fecha_hora)
-            }));
-          setClases(formatted);
+          const sorted = data.sort((a: User, b: User) => a.alumno_id - b.alumno_id); // orden ascendente
+        setUsers(sorted);
         }
     }
 
@@ -274,10 +265,9 @@ const Admin = () => {
     }}
     }
 
-     const goToAdminUsers = () => {
-        navigate("/adminUsers");
+    const goToAdmin = () => {
+        navigate("/admin");
     }
-
 
     useEffect(() => {
       // verificación sencilla de que el usuario es el admin
@@ -285,7 +275,7 @@ const Admin = () => {
         navigate("/")
       }
       else{
-        getClases()
+        getUsers()
       }
     }, [])
 
@@ -348,22 +338,22 @@ const Admin = () => {
   <h1 style={{ textAlign: "center", marginTop: "60px" }}>
     Hola miembro de Staff de Hitec!
   </h1>
-
+  
 
   <div style={{ display: "flex", flexDirection: "column", alignItems:"center", gap:"16px"  }} >
-    <button onClick={goToAdminUsers}>
-    Ver listas de alumnos
+      <button onClick={goToAdmin}>
+    Ver listas de clases
     </button>
   
-    <button onClick={createClass}>
-      Crear Clase
+    <button onClick={createUser}>
+      Crear Usuario
     </button>
     <button onClick={blockInscriptions}>
       Bloquear inscripciones
     </button>
   </div>
 
-  <p>Estas son las clases:</p>
+  <p>Estos son los usuarios:</p>
 
   <div className="DBtable" style={{
     overflowX: "auto",
@@ -379,30 +369,23 @@ const Admin = () => {
       <thead>
         <tr style={{ textAlign: "center" }}>
           <th className="Title" style={{ width: "60px" }}>ID</th>
-          <th className="Title">Nombre de la clase</th>
-          <th className="Title">Instructor</th>
-          <th className="Title">Área</th>
-          <th className="Title">Lugar</th>
-          <th className="Title">Fecha y hora</th>
-          <th className="Title">Capacidad</th>
-          <th className="Title" style={{ width: "160px" }}>Acción</th>
+          <th className="Title">Matrícula</th>
+          <th className="Title">Primera Clase</th>
+          <th className="Title">Segunda Clase</th>
+          <th className="Title">Acción</th>
         </tr>
       </thead>
       <tbody>
-        {clases.map((clase, index) => {
+        {users.map((user, index) => {
           const textClass = `Text ${index % 2 === 0 ? "Text-light" : "Text-dark"}`;
           return (
-            <tr key={clase.clase_id} style={{ textAlign: "center" }}>
-              <td className={textClass} style={{ width: "60px" }}>{clase.clase_id}</td>
-              <td className={textClass}>{clase.nombre_clase}</td>
-              <td className={textClass}>{clase.instructor}</td>
-              <td className={textClass}>{clase.area}</td>
-              <td className={textClass}>{clase.lugar}</td>
-              <td className={textClass}>{clase.fecha_hora}</td>
-              <td className={textClass}>{clase.capacidad_clase}</td>
-              <td className={textClass} style={{ width: "160px", whiteSpace: "nowrap" }}>
-                <button style={{ margin: "4px" }} onClick={() => editClass(clase.clase_id)}>Editar</button>
-                <button style={{ margin: "4px" }} onClick={() => deleteClass(clase.clase_id)}>Eliminar</button>
+            <tr key={user.alumno_id} style={{ textAlign: "center" }}>
+              <td className={textClass} style={{ width: "60px" }}>{user.alumno_id}</td>
+              <td className={textClass}>{user.alumno_matricula}</td>
+              <td className={textClass}>{user.alumno_class_1}</td>
+              <td className={textClass}>{user.alumno_class_2}</td>
+              <td className={textClass} >
+                <button style={{ margin: "4px" }} onClick={() => deleteuser(user.alumno_id)}>Eliminar</button>
               </td>
             </tr>
           );
@@ -418,4 +401,4 @@ const Admin = () => {
 }
 
 
-export default Admin
+export default AdminUsers
