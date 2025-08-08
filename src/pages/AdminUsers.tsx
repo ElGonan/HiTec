@@ -372,7 +372,7 @@ const AdminUsers = () => {
           <th className="Title">Matrícula</th>
           <th className="Title">Primera Clase</th>
           <th className="Title">Segunda Clase</th>
-          <th className="Title">Acción</th>
+          <th className="Title" style={{ width: "160px" }}>Acción</th>
         </tr>
       </thead>
       <tbody>
