@@ -10,14 +10,13 @@ type AlumnoClase = {
 const getAlumnosPorClase = async () => {
 
 
-let { data: alumno_clase, error } = await supabase
+const { data: alumno_clase, error } = await supabase
   .from('alumno_clase')
   .select(`
     inscripcion_id,
     alumno (
         alumno_id,
-        alumno_name,
-        alumno_phone
+        alumno_matricula,
     ),
     clase (
         clase_id,

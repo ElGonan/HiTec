@@ -9,7 +9,9 @@ import Admin from './pages/Admin'
 import Area from './pages/Area'
 import Classes from './pages/Classes'
 import Schedule from './pages/Schedule'
+import NotFound from './pages/NotFound'
 import { UserProvider } from './hooks/useUserContext'
+import AdminUsers from './pages/AdminUsers'
 
 function App() {
 
@@ -24,9 +26,11 @@ function App() {
             <Route path="/registerClass" element={<RegisterClass />} />
             <Route path="/register" element={<RegisterUser />} />
             <Route path="/admin" element={<Admin />} />
+            <Route path="/adminUsers" element={<AdminUsers />} />
             <Route path="/area" element={<Area />} />
             <Route path="/clases" element={<Classes />} />
             <Route path="/schedule" element={<Schedule />}/>
+            <Route path="*" element={<NotFound />}/>
           </Routes>
         </Router>
       </UserProvider>
