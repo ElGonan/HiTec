@@ -325,7 +325,7 @@ const AdminUsers = () => {
     <button style={{ marginLeft: "5px", marginRight: "5px" }}
       onClick={csvExport}
     >
-      Exportar base de datos a csv
+      Exportar tabla de alumno y clase a CSV
     </button>
   </div>
   <GlassCard style={{ padding: "1rem", marginTop: "100px" }}>
@@ -372,7 +372,7 @@ const AdminUsers = () => {
           <th className="Title">Matrícula</th>
           <th className="Title">Primera Clase</th>
           <th className="Title">Segunda Clase</th>
-          <th className="Title">Acción</th>
+          <th className="Title" style={{ width: "160px" }}>Acción</th>
         </tr>
       </thead>
       <tbody>
