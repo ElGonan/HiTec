@@ -26,17 +26,21 @@ const Schedule = () => {
     
     const getData = async (id: string) => {
         setLoading(true);
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 5000);
+
         try {
-        const result = await getSchedule(id);
-        setData(result);
-        setLoading(false);
+            const result = await getSchedule(id);
+            setData(result);
+        } catch (error) {
+            console.error("Error fetching schedule:", error);
+            setTimeout(() => getData(id), 2000); // Reintento tras 2s
+        } finally {
+            clearTimeout(timeoutId);
+            setLoading(false);
         }
-        catch (error) {
-          console.error("Error fetching schedule:", error);
-            setData([]); 
-        setLoading(false);
-        }
-    }
+    };
+
 
     const goBack = () => {
         navigate("/home")

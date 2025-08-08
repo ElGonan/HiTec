@@ -29,7 +29,7 @@ const location = useLocation();
       return
     }
     if (data) {
-      console.log(data)
+      //console.log(data)
       setId(data[0].clase_id)
       setInstructor(data[0].instructor)
       setFecha(data[0].fecha_hora.split("T")[0])
