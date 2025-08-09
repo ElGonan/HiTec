@@ -1,3 +1,5 @@
+![logo del grupo](public/logo.webp)
+
 # HiTec
 App sencilla para inscripción a las diferentes clases.
 
