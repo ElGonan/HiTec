@@ -20,7 +20,7 @@ createRoot(document.getElementById('root')!).render(
               fontSize: '8px',
               padding: '5px',
             }}>
-              <p>v0.9.12</p>
+              <p>v1.0.0</p>
             </div>
     </footer>
   </StrictMode>,
