@@ -1,6 +1,6 @@
-<div style="text-align:center">
-  <img src="public/logo.webp" style="width:200px; height:200px;" alt="logo del grupo">
-</div>
+<p align="center">
+  <img src="public/logo.webp" width="200" height="200" alt="logo del grupo">
+</p>
 
 
 # ¡Bienvenido al repo de la app de gestión de eventos de Hi!Tec!
@@ -30,7 +30,7 @@ El alumno puede inscribir N cantidad de actvidades, a modificarse dentro del có
 Las actividades están organizadas por hora -> área -> actividad. Lo que permite que el alumno inscriba unicamente 1 activicad por hora.
 
 Una vez cuente con las actividades inscritas, el alumno puede consultar su horario, junto con un mapa del campus. También cuenta con la capacidad de eliminar sus inscripciones, siempre y cuando el administrador no haya bloqueado el botón.
-
+#
 ### Frameworks
 - Backend:
     - Supabase
